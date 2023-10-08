@@ -11,15 +11,25 @@ document.body.appendChild( renderer.domElement );
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 
 class Box extends THREE.Mesh{
-    constructor(){
+    constructor({
+		width,
+		height,
+		depth
+	}){
         super(
-            new THREE.BoxGeometry( 1, 1, 1 ), 
+            new THREE.BoxGeometry( width, height, depth ), 
             new THREE.MeshStandardMaterial( { color: 0x00ff00 } )
             );
+
+			this.height = height;
     }
 }
 
-const cube = new Box();
+const cube = new Box({
+	width: 1,
+	height: 1,
+	depth: 1
+});
 cube.castShadow = true;
 
 const direcLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -42,7 +52,6 @@ camera.position.z = 5;
 
 function animate() {
 	requestAnimationFrame( animate );
-	cube.position.y += -0.01;
 	renderer.render( scene, camera );
 }
 
