@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from './node_modules/three/examples/jsm/controls/OrbitControls';
 
-
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -11,9 +10,16 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
+class Box extends THREE.Mesh{
+    constructor(){
+        super(
+            new THREE.BoxGeometry( 1, 1, 1 ), 
+            new THREE.MeshStandardMaterial( { color: 0x00ff00 } )
+            );
+    }
+}
+
+const cube = new Box();
 cube.castShadow = true;
 
 const direcLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -36,7 +42,7 @@ camera.position.z = 5;
 
 function animate() {
 	requestAnimationFrame( animate );
-
+	cube.position.y += -0.01;
 	renderer.render( scene, camera );
 }
 
