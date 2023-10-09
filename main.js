@@ -14,21 +14,44 @@ class Box extends THREE.Mesh{
     constructor({
 		width,
 		height,
-		depth
+		depth,
+		color = '#00ff00',
+		velocity = {
+			x: 0,
+			y:0,
+			z:0
+		}
 	}){
         super(
-            new THREE.BoxGeometry( width, height, depth ), 
-            new THREE.MeshStandardMaterial( { color: 0x00ff00 } )
+            new THREE.BoxGeometry( width, height, depth), 
+            new THREE.MeshStandardMaterial( { color} )
             );
 
 			this.height = height;
+			this.width = width;
+			this.depth = depth;
+			this.velocity = velocity;
     }
+	FindBottomOfCube(){
+		return this.position.y - this.height / 2;
+	}
+	FindTopOfCube(){
+		return this.position.y + this.height / 2;
+	}
+	Update(){
+		this.position.y += this.velocity.y;
+	}
 }
 
 const cube = new Box({
 	width: 1,
 	height: 1,
-	depth: 1
+	depth: 1,
+	velocity:{
+		x:0,
+		y:-0.01,
+		z:0
+	}
 });
 cube.castShadow = true;
 
@@ -37,11 +60,9 @@ direcLight.position.z = 2;
 direcLight.position.y = 3;
 direcLight.castShadow = true;
 
-const ground = new THREE.Mesh( 
-	new THREE.BoxGeometry( 5, 0.5, 10 ), 
-	new THREE.MeshStandardMaterial( { color: 0x0000ff } ) 
-	);
-	ground.receiveShadow = true;
+
+const ground = new Box({width:5, height:0.5, depth:10, color: '#0000ff'});
+ground.receiveShadow = true;
 ground.position.y = -2;
 
 scene.add( cube );
@@ -53,6 +74,8 @@ camera.position.z = 5;
 function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
+	cube.Update();
 }
+
 
 animate();
