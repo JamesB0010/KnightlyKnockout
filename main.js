@@ -18,7 +18,7 @@ const orbitControls = new OrbitControls(camera, renderer.domElement);
 
 const loader = new GLTFLoader();
 
-const direcLight = new THREE.PointLight(0xffffff, 100);
+const direcLight = new THREE.PointLight(0xffffff, 200);
 const helper = new THREE.PointLightHelper( direcLight, 1.5 );
 direcLight.position.y = 4;
 direcLight.castShadow = true;
