@@ -32,7 +32,14 @@ class Game{
         this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
 
         //add player
-        this.gameObjects.push(new GameObject({}));
+        this.gameObjects.push(new GameObject({
+            gravityEnabled: true,
+            position: {
+                x: 0,
+                y: 4,
+                z: 0
+            }
+        }));
 
         //add floor
         this.gameObjects.push(new GameObject({
@@ -51,6 +58,15 @@ class Game{
         });
 
     }
+    Update(){
+        this.gameObjects.forEach(element => {
+            element.Update();
+        });
+
+
+        this.Render();
+    }
+
     Render(){
         this.renderer.render(this.scene, this.camera);
     }

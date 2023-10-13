@@ -8,7 +8,7 @@ game.Init();
 
 function Animate(){
 	requestAnimationFrame(Animate);
-	game.Render();
+	game.Update();
 }
 
 Animate();
