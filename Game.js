@@ -38,8 +38,44 @@ class Game{
                 x: 0,
                 y: 4,
                 z: 0
-            }
+            },
+            color: 0x00ff00,
+            inputEnabled: true,
         }));
+
+        {
+            let target = this.gameObjects[0];
+        this.gameObjects[0].SetupInput({
+            keyUp:{
+                forwards: () =>{
+                    target.velocity.z = 0;
+                },
+                backwards: () =>{
+                    target.velocity.z = 0;
+                },
+                left: () =>{
+                    target.velocity.x = 0;
+                },
+                right: ()=>{
+                    target.velocity.x = 0;
+                }
+            },
+            keyDown:{
+                forwards: () =>{
+                    target.velocity.z = -0.03;
+                },
+                backwards: () =>{
+                    target.velocity.z = 0.03;
+                },
+                left: () =>{
+                    target.velocity.x = -0.03;
+                },
+                right: ()=>{
+                    target.velocity.x = 0.03;
+                }
+            }
+        });
+    }
 
         //add floor
         this.gameObjects.push(new GameObject({
@@ -56,7 +92,6 @@ class Game{
         this.gameObjects.forEach(element => {
             this.scene.add(element);
         });
-
     }
     Update(){
         this.gameObjects.forEach(element => {

@@ -12,11 +12,13 @@ class GameObject extends THREE.Mesh{
             y: 0,
             z: 0
         },
-        gravityEnabled = false
+        gravityEnabled = false,
+        color = 0xffffff,
+        inputEnabled = false
     }){
         super(
             new THREE.BoxGeometry( width, height, depth), 
-            new THREE.MeshStandardMaterial( { color: 0xffffff} )
+            new THREE.MeshStandardMaterial( { color} )
             );
             this.castShadow = true;
             this.position.x = position.x;
@@ -57,6 +59,70 @@ class GameObject extends THREE.Mesh{
     GetBackOfCube(){
         return this.position.z + this.depth / 2;
     }
+    SetupInput({
+        keyUp = {
+            forwards: () =>{
+                console.log("Up Forwards Default");
+            },
+            backwards: () =>{
+                console.log("Up Backwards Default")
+            },
+            left: () =>{
+                console.log("Up left Default");
+            },
+            right: ()=>{
+                console.log("Up right Default");
+            }
+        },
+        keyDown = {
+            forwards: () =>{
+                console.log("Down Forwards Default");
+            },
+            backwards: () =>{
+                console.log("Down Backwards Default")
+            },
+            left: () =>{
+                console.log("Down left Default");
+            },
+            right: ()=>{
+                console.log("Down right Default");
+            }
+        }
+    }){
+        window.addEventListener("keydown", e => {
+            switch (e.code){
+                case "KeyW":
+                    keyDown.forwards();
+                    break;
+                case "KeyS":
+                    keyDown.backwards();
+                    break;
+                case "KeyA":
+                    keyDown.left();
+                    break;
+                case "KeyD":
+                    keyDown.right();
+                    break;
+            }
+        })
+
+        window.addEventListener("keyup", e =>{
+            switch (e.code){
+                case "KeyW":
+                    keyUp.forwards();
+                    break;
+                case "KeyS":
+                    keyUp.backwards();
+                    break;
+                case "KeyA":
+                    keyUp.left();
+                    break;
+                case "KeyD":
+                    keyUp.right();
+                    break;
+            }
+        })
+    }
     ApplyGravity(){
         this.velocity.y += gravity;
 
@@ -69,12 +135,20 @@ class GameObject extends THREE.Mesh{
         }
     }
 
-    Update(){
-        if(!this.gravityEnabled){
-            return;
-        }
+    ApplyXVelocity(){
+        this.position.x += this.velocity.x;
+    };
 
-        this.ApplyGravity();
+    ApplyZVelocity(){
+        this.position.z += this.velocity.z;
+    };
+
+    Update(){
+        if(this.gravityEnabled){
+            this.ApplyGravity();
+        }
+        this.ApplyXVelocity();
+        this.ApplyZVelocity();
     }
 }
 
