@@ -15,17 +15,18 @@ class Game{
         this.renderer = new THREE.WebGLRenderer({
             antialias: true
         });
-        this.camera.position.z = -5;
+        this.camera.position.z = 5;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 10));
 
         let direcLight = new THREE.DirectionalLight(0xffffff, 1)
+        direcLight.position.y = 2;
 
         this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
 
-        console.log(this.scene);
+        this.scene.add(new GameObject());
     }
     Render(){
         this.renderer.render(this.scene, this.camera);
