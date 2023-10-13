@@ -1,15 +1,19 @@
-import *  as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+//reference for setup/hello world code:  Threejs.org/docs
+import * as THREE from 'three';
+import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from "./node_modules/three/examples/jsm/loaders/GLTFLoader";
 
-// SCENE
 const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
 
-// CAMERA
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-// RENDERER
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({
+  alpha:true,
+  antialias:true
+});
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
+<<<<<<< HEAD
 renderer.shadowMap.enabled = true
 
 // CONTROLS
@@ -65,5 +69,41 @@ function animate() {
 }
 
 
+=======
+>>>>>>> parent of 1d432df (copied working shadow code)
 document.body.appendChild(renderer.domElement);
+const orbitControls = new OrbitControls(camera, renderer.domElement);
+
+const loader = new GLTFLoader();
+
+const direcLight = new THREE.PointLight(0xffffff, 200);
+const helper = new THREE.PointLightHelper( direcLight, 1.5 );
+direcLight.position.y = 4;
+direcLight.castShadow = true;
+scene.add(direcLight, helper);
+
+const geometry = new THREE.TorusKnotGeometry( 1.8, 0.6, 100, 16 ); 
+const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+cube.castShadow = true;
+scene.add(cube);
+
+const floor = new THREE.BoxGeometry(100,0.5,100);
+const floorMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+const floorCube = new THREE.Mesh(floor, floorMaterial);
+floorCube.position.y = -4;
+floorCube.recieveShadow = true;
+scene.add(floorCube);
+
+
+const ambLight = new THREE.AmbientLight(0xffffff, 0.1);
+scene.add(ambLight);
+
+function animate() {
+  requestAnimationFrame(animate);
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+
 animate();
