@@ -40,25 +40,6 @@ class GameObject extends THREE.Mesh{
 
             this.bounciness = 0.6;
     }
-
-    GetTopOfCube(){
-        return this.position.y + this.height / 2;
-    }
-    GetBottomOfCube(){
-        return this.position.y - this.height / 2;
-    }
-    GetLeftOfCube(){
-        return this.position.x - this.width / 2;
-    }
-    GetRightOfCube(){
-        return this.position.x + this.width / 2;
-    }
-    GetFrontOfCube(){
-        return this.position.z + this.depth / 2;
-    }
-    GetBackOfCube(){
-        return this.position.z + this.depth / 2;
-    }
     SetupInput({
         keyUp = {
             forwards: () =>{
