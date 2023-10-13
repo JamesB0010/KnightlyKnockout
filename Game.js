@@ -15,15 +15,20 @@ class Game{
         this.renderer = new THREE.WebGLRenderer({
             antialias: true
         });
-        this.camera.position.z = -5;
+        this.camera.position.z = 5;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
+
+        const controls =  new OrbitControls(this.camera, this.renderer.domElement);
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 10));
 
         let direcLight = new THREE.DirectionalLight(0xffffff, 1)
+        direcLight.position.y = 2;
 
         this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
+
+        this.scene.add(new GameObject());
 
         console.log(this.scene);
     }
