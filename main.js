@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
-import {GameObject} from './GameObject.js';
+import {GameObject} from '/GameObject.js';
 
 new GameObject();
 
