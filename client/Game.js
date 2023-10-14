@@ -34,7 +34,74 @@ class Game{
         this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
 
         //add player
+    //     this.gameObjects.push(new GameObject({
+    //         gravityEnabled: true,
+    //         position: {
+    //             x: 0,
+    //             y: 4,
+    //             z: 0
+    //         },
+    //         color: 0x00ff00,
+    //         inputEnabled: true,
+    //     }));
+
+    //     //setup input
+    //     {
+    //         let target = this.gameObjects[0];
+    //     this.gameObjects[0].SetupInput({
+    //         keyUp:{
+    //             forwards: () =>{
+    //                 target.velocity.z = 0;
+    //             },
+    //             backwards: () =>{
+    //                 target.velocity.z = 0;
+    //             },
+    //             left: () =>{
+    //                 target.velocity.x = 0;
+    //             },
+    //             right: ()=>{
+    //                 target.velocity.x = 0;
+    //             }
+    //         },
+    //         keyDown:{
+    //             forwards: () =>{
+    //                 target.velocity.z = -0.03;
+    //             },
+    //             backwards: () =>{
+    //                 target.velocity.z = 0.03;
+    //             },
+    //             left: () =>{
+    //                 target.velocity.x = -0.03;
+    //             },
+    //             right: ()=>{
+    //                 target.velocity.x = 0.03;
+    //             }
+    //         }
+    //     });
+    // }
+
+    // this.player = this.gameObjects[0];
+
+        //add floor
         this.gameObjects.push(new GameObject({
+            height: 0.5,
+            width: 50,
+            depth: 50,
+            position: {
+                x: 0,
+                y: -1,
+                z: 0
+            }
+        }));
+
+        this.gameObjects.forEach(element => {
+            this.scene.add(element);
+        });
+    
+    }
+
+    NewLocalPlayer(id){
+        let localPlayer = new GameObject({
             gravityEnabled: true,
             position: {
                 x: 0,
@@ -43,12 +110,15 @@ class Game{
             },
             color: 0x00ff00,
             inputEnabled: true,
-        }));
+            socketId: id
+        });
+
+        this.gameObjects.push(localPlayer);
 
         //setup input
         {
-            let target = this.gameObjects[0];
-        this.gameObjects[0].SetupInput({
+            let target = localPlayer;
+        localPlayer.SetupInput({
             keyUp:{
                 forwards: () =>{
                     target.velocity.z = 0;
@@ -80,42 +150,19 @@ class Game{
         });
     }
 
-    this.player = this.gameObjects[0];
+    this.player = localPlayer;
 
-        //add floor
-        this.gameObjects.push(new GameObject({
-            height: 0.5,
-            width: 50,
-            depth: 50,
-            position: {
-                x: 0,
-                y: -1,
-                z: 0
-            }
-        }));
+    this.scene.add(localPlayer);
 
-        this.gameObjects.forEach(element => {
-            this.scene.add(element);
-        });
-    
-    }
-
-    CleanInvalidPlayers(){
-        this.players.forEach(player =>{
-            if (player.socketId == -1){
-                this.scene.remove(player);
-            }
-        })
     }
 
     Update(socket){
-        console.log(this.scene);
-
-        this.CleanInvalidPlayers();
         this.gameObjects.forEach(element => {
             element.Update();
         });
+
         socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
+
         this.Render();
     }
 
