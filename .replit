@@ -1,6 +1,6 @@
 
 hidden = [".config", "package-lock.json"]
-run = 'cd client^ npx vite --host^ cd "../Server"^ node server.js'
+run = 'npx vite --host'
 
 [[hints]]
 regex = "Error \\[ERR_REQUIRE_ESM\\]"
