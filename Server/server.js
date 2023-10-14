@@ -20,3 +20,5 @@ io.on("connection", socket =>{
         socket.broadcast.emit("RemovePlayer", socket.id)
     })
 })
+
+console.log("server running");
