@@ -14,7 +14,8 @@ class GameObject extends THREE.Mesh{
         },
         gravityEnabled = false,
         color = 0xffffff,
-        inputEnabled = false
+        inputEnabled = false,
+        socketId = -1
     }){
         super(
             new THREE.BoxGeometry( width, height, depth), 
@@ -39,6 +40,8 @@ class GameObject extends THREE.Mesh{
             this.grounded = false;
 
             this.bounciness = 0.6;
+
+            this.socketId = socketId;
     }
     SetupInput({
         keyUp = {

@@ -7,5 +7,15 @@ const io = require('socket.io')(3000, {
 
 
 io.on("connection", socket =>{
-    console.log("Someone joined");
+    console.log("Someone joined with id" + socket.id);
+
+    socket.emit('setId', socket.id);
+
+    socket.on("playerUpdatePosition", data =>{
+        socket.broadcast.emit("updateNetworkedPlayerPosition", {pos: data.pos,id: data.id})
+    })
+
+    socket.on('disconnect', ()=>{
+        console.log(socket.id + " Disconnected");
+    })
 })

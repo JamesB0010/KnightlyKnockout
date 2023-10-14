@@ -8,6 +8,8 @@ class Game{
         this.camera;
         this.renderer;
         this.gameObjects = [];
+        this.player;
+        this.players = [];
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -43,6 +45,7 @@ class Game{
             inputEnabled: true,
         }));
 
+        //setup input
         {
             let target = this.gameObjects[0];
         this.gameObjects[0].SetupInput({
@@ -77,6 +80,8 @@ class Game{
         });
     }
 
+    this.player = this.gameObjects[0];
+
         //add floor
         this.gameObjects.push(new GameObject({
             height: 0.5,
@@ -93,17 +98,60 @@ class Game{
             this.scene.add(element);
         });
     }
-    Update(){
+    Update(socket){
         this.gameObjects.forEach(element => {
             element.Update();
         });
 
-
+        socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         this.Render();
     }
 
     Render(){
         this.renderer.render(this.scene, this.camera);
+    }
+
+    NewPlayer(id){
+        console.log("New Player");
+        this.gameObjects.push(new GameObject({
+            gravityEnabled: true,
+            position: {
+                x: 2,
+                y: 4,
+                z: 0
+            },
+            color: 0x00ff00,
+            inputEnabled: false,
+            socketId: id
+        }));
+
+        this.players.push(this.gameObjects[this.gameObjects.length - 1]);
+        this.scene.add(this.players[this.players.length - 1]);
+        return this.players[this.players.length - 1]
+    };
+
+    UpdateNetworkedObjectPos(data){
+        console.log(data.id);
+        let playerFound = false;
+        let _player;
+        this.players.forEach(player => {
+            if(player.socketId == data.id){
+                playerFound = true;
+                _player = player;
+            }
+        });
+
+        if (playerFound == true){
+            _player.position.x = data.pos.x;
+            _player.position.y = data.pos.y;
+            _player.position.z = data.pos.z;
+        }
+        else{
+            _player = this.NewPlayer(data.id);
+            _player.position.x = data.pos.x;
+            _player.position.y = data.pos.y;
+            _player.position.z = data.pos.z;
+        }
     }
 }
 

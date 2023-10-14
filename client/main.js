@@ -10,9 +10,17 @@ const socket = io("http://localhost:3000");
 let game = new Game();
 game.Init();
 
+socket.on("setId", id =>{
+	game.player.socketId = id;
+})
+
+socket.on("updateNetworkedPlayerPosition", data =>{
+	game.UpdateNetworkedObjectPos(data);
+})
+
 function Animate(){
 	requestAnimationFrame(Animate);
-	game.Update();
+	game.Update(socket);
 }
 
 Animate();
