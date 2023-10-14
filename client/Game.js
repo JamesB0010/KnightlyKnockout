@@ -125,7 +125,10 @@ class Game{
         this.renderer.render(this.scene, this.camera);
     }
 
-    NewPlayer(id){
+    NewPlayer({
+        id,
+        color = 0xff0000
+    }){
         console.log("New Player");
         let _newPlayer = new GameObject({
             gravityEnabled: true,
@@ -134,7 +137,7 @@ class Game{
                 y: 4,
                 z: 0
             },
-            color: 0x00ff00,
+            color: color,
             inputEnabled: false,
             socketId: id
         });
@@ -161,7 +164,9 @@ class Game{
             _player.position.z = data.pos.z;
         }
         else{
-            _player = this.NewPlayer(data.id);
+            _player = this.NewPlayer({
+                id: data.id
+            });
             _player.position.x = data.pos.x;
             _player.position.y = data.pos.y;
             _player.position.z = data.pos.z;
