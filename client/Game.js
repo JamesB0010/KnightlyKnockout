@@ -9,7 +9,7 @@ class Game{
         this.renderer;
         this.gameObjects = [];
         this.player;
-        this.players = [];
+        this.players = {};
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -32,55 +32,6 @@ class Game{
         direcLight.castShadow = true;
 
         this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
-
-        //add player
-    //     this.gameObjects.push(new GameObject({
-    //         gravityEnabled: true,
-    //         position: {
-    //             x: 0,
-    //             y: 4,
-    //             z: 0
-    //         },
-    //         color: 0x00ff00,
-    //         inputEnabled: true,
-    //     }));
-
-    //     //setup input
-    //     {
-    //         let target = this.gameObjects[0];
-    //     this.gameObjects[0].SetupInput({
-    //         keyUp:{
-    //             forwards: () =>{
-    //                 target.velocity.z = 0;
-    //             },
-    //             backwards: () =>{
-    //                 target.velocity.z = 0;
-    //             },
-    //             left: () =>{
-    //                 target.velocity.x = 0;
-    //             },
-    //             right: ()=>{
-    //                 target.velocity.x = 0;
-    //             }
-    //         },
-    //         keyDown:{
-    //             forwards: () =>{
-    //                 target.velocity.z = -0.03;
-    //             },
-    //             backwards: () =>{
-    //                 target.velocity.z = 0.03;
-    //             },
-    //             left: () =>{
-    //                 target.velocity.x = -0.03;
-    //             },
-    //             right: ()=>{
-    //                 target.velocity.x = 0.03;
-    //             }
-    //         }
-    //     });
-    // }
-
-    // this.player = this.gameObjects[0];
 
         //add floor
         this.gameObjects.push(new GameObject({
@@ -161,7 +112,10 @@ class Game{
             element.Update();
         });
 
-        socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
+        if(this.player){
+            socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
+            
+        }
 
         this.Render();
     }
@@ -172,7 +126,7 @@ class Game{
 
     NewPlayer(id){
         console.log("New Player");
-        this.gameObjects.push(new GameObject({
+        _newPlayer = new GameObject({
             gravityEnabled: true,
             position: {
                 x: 2,
@@ -182,11 +136,14 @@ class Game{
             color: 0x00ff00,
             inputEnabled: false,
             socketId: id
-        }));
+        });
 
-        this.players.push(this.gameObjects[this.gameObjects.length - 1]);
-        this.scene.add(this.players[this.players.length - 1]);
-        return this.players[this.players.length - 1]
+        Object.defineProperty(this.players,id,{
+            value: _newPlayer
+        } )
+        this.scene.add(_newPlayer);
+        console.log(this.players);
+        return _newPlayer
     };
 
     RemovePlayer(id){
