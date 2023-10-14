@@ -97,12 +97,24 @@ class Game{
         this.gameObjects.forEach(element => {
             this.scene.add(element);
         });
+    
     }
+
+    CleanInvalidPlayers(){
+        this.players.forEach(player =>{
+            if (player.socketId == -1){
+                this.scene.remove(player);
+            }
+        })
+    }
+
     Update(socket){
+        console.log(this.scene);
+
+        this.CleanInvalidPlayers();
         this.gameObjects.forEach(element => {
             element.Update();
         });
-
         socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         this.Render();
     }
@@ -129,6 +141,17 @@ class Game{
         this.scene.add(this.players[this.players.length - 1]);
         return this.players[this.players.length - 1]
     };
+
+    RemovePlayer(id){
+        this.players.forEach(player =>{
+            if (player.socketId == id){
+                this.scene.remove(player);
+            }
+            if (player.socketId == -1){
+                this.scene.remove(player);
+            }
+        })
+    }
 
     UpdateNetworkedObjectPos(data){
         console.log(data.id);

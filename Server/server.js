@@ -17,5 +17,6 @@ io.on("connection", socket =>{
 
     socket.on('disconnect', ()=>{
         console.log(socket.id + " Disconnected");
+        socket.broadcast.emit("RemovePlayer", socket.id)
     })
 })

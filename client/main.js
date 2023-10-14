@@ -12,10 +12,15 @@ game.Init();
 
 socket.on("setId", id =>{
 	game.player.socketId = id;
+	game.CleanInvalidPlayers();
 })
 
 socket.on("updateNetworkedPlayerPosition", data =>{
 	game.UpdateNetworkedObjectPos(data);
+})
+
+socket.on("RemovePlayer", id=>{
+	game.RemovePlayer(id);
 })
 
 function Animate(){
