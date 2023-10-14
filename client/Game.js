@@ -9,7 +9,7 @@ class Game{
         this.renderer;
         this.gameObjects = [];
         this.player;
-        this.players = [];
+        this.players = new Map();
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -33,8 +33,27 @@ class Game{
 
         this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
 
-        //add player
+        //add floor
         this.gameObjects.push(new GameObject({
+            height: 0.5,
+            width: 50,
+            depth: 50,
+            position: {
+                x: 0,
+                y: -1,
+                z: 0
+            }
+        }));
+
+        this.gameObjects.forEach(element => {
+            this.scene.add(element);
+        });
+    
+    }
+
+    NewLocalPlayer(id){
+        console.log("new local player");
+        let localPlayer = new GameObject({
             gravityEnabled: true,
             position: {
                 x: 0,
@@ -43,12 +62,15 @@ class Game{
             },
             color: 0x00ff00,
             inputEnabled: true,
-        }));
+            socketId: id
+        });
+
+        this.gameObjects.push(localPlayer);
 
         //setup input
         {
-            let target = this.gameObjects[0];
-        this.gameObjects[0].SetupInput({
+            let target = localPlayer;
+        localPlayer.SetupInput({
             keyUp:{
                 forwards: () =>{
                     target.velocity.z = 0;
@@ -80,42 +102,22 @@ class Game{
         });
     }
 
-    this.player = this.gameObjects[0];
+    this.player = localPlayer;
 
-        //add floor
-        this.gameObjects.push(new GameObject({
-            height: 0.5,
-            width: 50,
-            depth: 50,
-            position: {
-                x: 0,
-                y: -1,
-                z: 0
-            }
-        }));
+    this.scene.add(localPlayer);
 
-        this.gameObjects.forEach(element => {
-            this.scene.add(element);
-        });
-    
-    }
-
-    CleanInvalidPlayers(){
-        this.players.forEach(player =>{
-            if (player.socketId == -1){
-                this.scene.remove(player);
-            }
-        })
     }
 
     Update(socket){
-        console.log(this.scene);
-
-        this.CleanInvalidPlayers();
         this.gameObjects.forEach(element => {
             element.Update();
         });
-        socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
+
+        if(this.player){
+
+            socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
+        }
+
         this.Render();
     }
 
@@ -125,7 +127,7 @@ class Game{
 
     NewPlayer(id){
         console.log("New Player");
-        this.gameObjects.push(new GameObject({
+        let _newPlayer = new GameObject({
             gravityEnabled: true,
             position: {
                 x: 2,
@@ -135,36 +137,25 @@ class Game{
             color: 0x00ff00,
             inputEnabled: false,
             socketId: id
-        }));
+        });
 
-        this.players.push(this.gameObjects[this.gameObjects.length - 1]);
-        this.scene.add(this.players[this.players.length - 1]);
-        return this.players[this.players.length - 1]
+        this.gameObjects.push(_newPlayer);
+        this.players.set(id, _newPlayer);
+        this.scene.add(_newPlayer);
+        return _newPlayer;
     };
 
     RemovePlayer(id){
-        this.players.forEach(player =>{
-            if (player.socketId == id){
-                this.scene.remove(player);
-            }
-            if (player.socketId == -1){
-                this.scene.remove(player);
-            }
-        })
+
+        let _player = this.players.get(id);
+        this.scene.remove(_player);
     }
 
     UpdateNetworkedObjectPos(data){
-        console.log(data.id);
-        let playerFound = false;
-        let _player;
-        this.players.forEach(player => {
-            if(player.socketId == data.id){
-                playerFound = true;
-                _player = player;
-            }
-        });
 
-        if (playerFound == true){
+        let _player = this.players.get(data.id);
+
+        if(_player){
             _player.position.x = data.pos.x;
             _player.position.y = data.pos.y;
             _player.position.z = data.pos.z;
