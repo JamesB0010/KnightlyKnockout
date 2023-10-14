@@ -23,7 +23,7 @@ class Game{
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
-        const controls =  new OrbitControls(this.camera, this.renderer.domElement);
+        //const controls =  new OrbitControls(this.camera, this.renderer.domElement);
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
@@ -66,6 +66,8 @@ class Game{
         });
 
         this.gameObjects.push(localPlayer);
+
+        this.camera.parent = localPlayer;
 
         //setup input
         {
