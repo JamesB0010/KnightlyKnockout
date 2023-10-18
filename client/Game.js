@@ -3,7 +3,6 @@ import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitC
 import {GameObject} from '/GameObject.js';
 
 //fps camera controls from https://www.youtube.com/watch?v=oqKzxPMLWxo
-import {FirstPersonControls} from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
 
 class Game{
     constructor(){
@@ -13,8 +12,6 @@ class Game{
         this.gameObjects = [];
         this.player;
         this.players = new Map();
-        this.controls;
-        this.clock = new THREE.Clock();
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -27,12 +24,6 @@ class Game{
         this.renderer.shadowMap.enabled = true;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
-
-        //this.controls =  new OrbitControls(this.camera, this.renderer.domElement);
-
-        this.controls = new FirstPersonControls(this.camera, this.renderer.domElement);
-        this.controls.lookSpeed = 0.1;
-        this.controls.movementSpeed = 3;
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
@@ -118,8 +109,6 @@ class Game{
     }
 
     Update(socket){
-        let deltaTime = this.clock.getDelta();
-
         this.gameObjects.forEach(element => {
             element.Update();
         });
@@ -129,7 +118,6 @@ class Game{
             socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         }
 
-        this.controls.update(deltaTime);
         this.Render();
     }
 
