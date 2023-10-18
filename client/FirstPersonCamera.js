@@ -1,6 +1,9 @@
 import {InputController} from './InputController';
 import * as THREE from 'three';
 
+function clamp(x, a, b) {
+    return Math.min(Math.max(x, a), b);
+  }
 //credits https://www.youtube.com/watch?v=oqKzxPMLWxo
 class FirstPersonCamera{
     constructor(camera){
@@ -18,7 +21,7 @@ class FirstPersonCamera{
     }
 
     updateCamera_(deltaTime){
-        this.camera_.quaternion.copy(this.rotation_);
+        //this.camera_.quaternion.copy(this.rotation_);
     }
 
     updateRotation_(deltaTime){

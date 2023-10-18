@@ -5,7 +5,7 @@ class InputController{
     }
 
     initialise_(){
-        this.current = {
+        this.current_ = {
             leftButton: false,
             rightButton: false,
             mouseX: 0,

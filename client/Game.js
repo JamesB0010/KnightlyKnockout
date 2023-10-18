@@ -30,7 +30,7 @@ class Game{
 
         this.fpsCamera = new FirstPersonCamera(this.camera);
 
-        this.scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        this.scene.add(new THREE.AmbientLight(0xffffff, 0.4), this.camera);
 
         let direcLight = new THREE.DirectionalLight(0xffffff, 1)
         direcLight.position.y = 2;
@@ -124,7 +124,7 @@ class Game{
         }
 
         this.fpsCamera.update(this.clock.getDelta());
-
+        console.log(this.scene);
         this.Render();
     }
 
