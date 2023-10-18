@@ -2,6 +2,9 @@ import * as THREE from 'three';
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
 import {GameObject} from '/GameObject.js';
 
+//fps camera controls from https://www.youtube.com/watch?v=oqKzxPMLWxo
+import {FirstPersonControls} from './node_modules/three/examples/jsm/controls/FirstPersonControls.js';
+
 class Game{
     constructor(){
         this.scene;
@@ -10,6 +13,7 @@ class Game{
         this.gameObjects = [];
         this.player;
         this.players = new Map();
+        this.controls;
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -23,7 +27,11 @@ class Game{
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
-        //const controls =  new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls =  new OrbitControls(this.camera, this.renderer.domElement);
+
+        // this.controls = new FirstPersonControls(this.camera, this.renderer.domElement);
+        // controls.lookSpeed = 0.8;
+        // controls.movementSpeed = 5;
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
@@ -66,8 +74,6 @@ class Game{
         });
 
         this.gameObjects.push(localPlayer);
-
-        this.camera.parent = localPlayer;
 
         //setup input
         {
@@ -121,6 +127,8 @@ class Game{
         }
 
         this.Render();
+
+        this.controls.update();
     }
 
     Render(){

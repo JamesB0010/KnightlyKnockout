@@ -3,6 +3,7 @@ import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitC
 import {GameObject} from '/GameObject.js';
 import {Game} from './Game.js';
 import {io} from 'socket.io-client';
+import {FirstPersonControls} from './node_modules/three/examples/jsm/controls/FirstPersonControls';
 
 //setup socket io
 const socket = io("http://localhost:3000");
