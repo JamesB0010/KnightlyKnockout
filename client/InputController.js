@@ -10,6 +10,8 @@ class InputController{
             rightButton: false,
             mouseX: 0,
             mouseY:0,
+            mouseXDelta: 0,
+            mouseYDelta: 0
         };
         this.previous = null;
         this.keys = {};
@@ -53,6 +55,9 @@ class InputController{
         if (this.previous === null){
             this.previous = {...this.current_};
         }
+
+        this.current_.mouseXDelta = this.current_.mouseX - this.previous_mouseX;
+        this.current_.mouseYDelta = this.current_.mouseY - this.previous_mouseY;
     };
     onKeyDown_(e){
         this.keys_[e.keyCode] = true;
@@ -62,6 +67,8 @@ class InputController{
     };
 
     update(){
-        //pass
+        this.previous_ = {...this.current_};
     }
 }
+
+export {InputController};
