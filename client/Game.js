@@ -14,6 +14,7 @@ class Game{
         this.player;
         this.players = new Map();
         this.controls;
+        this.clock = new THREE.Clock();
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -27,11 +28,11 @@ class Game{
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
 
-        this.controls =  new OrbitControls(this.camera, this.renderer.domElement);
+        //this.controls =  new OrbitControls(this.camera, this.renderer.domElement);
 
-        // this.controls = new FirstPersonControls(this.camera, this.renderer.domElement);
-        // controls.lookSpeed = 0.8;
-        // controls.movementSpeed = 5;
+        this.controls = new FirstPersonControls(this.camera, this.renderer.domElement);
+        this.controls.lookSpeed = 0.1;
+        this.controls.movementSpeed = 3;
 
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
@@ -117,6 +118,8 @@ class Game{
     }
 
     Update(socket){
+        let deltaTime = this.clock.getDelta();
+
         this.gameObjects.forEach(element => {
             element.Update();
         });
@@ -126,9 +129,8 @@ class Game{
             socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         }
 
+        this.controls.update(deltaTime);
         this.Render();
-
-        this.controls.update();
     }
 
     Render(){
