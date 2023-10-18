@@ -9,7 +9,7 @@ class Game{
         this.renderer;
         this.gameObjects = [];
         this.player;
-        this.players = new Map();
+        this.players = [];
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -145,20 +145,22 @@ class Game{
         });
 
         this.gameObjects.push(_newPlayer);
-        this.players.set(id, _newPlayer);
+        this.players.push(_newPlayer);
         this.scene.add(_newPlayer);
         return _newPlayer;
     };
 
     RemovePlayer(id){
 
-        let _player = this.players.get(id);
+        let index = this.players.findIndex(element =>{element.socketId == id});
+        let _player = this.players[index];
+        this.players.splice(index, 1);
         this.scene.remove(_player);
     }
 
     UpdateNetworkedObjectPos(data){
 
-        let _player = this.players.get(data.id);
+        let _player = this.players.find(element => element.socketId == data.id);
 
         if(_player){
             _player.position.x = data.pos.x;
