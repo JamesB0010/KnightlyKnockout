@@ -124,7 +124,6 @@ class Game{
         }
 
         this.fpsCamera.update(this.clock.getDelta());
-        console.log(this.scene);
         this.Render();
     }
 

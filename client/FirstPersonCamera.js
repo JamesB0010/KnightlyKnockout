@@ -10,9 +10,11 @@ class FirstPersonCamera{
         this.camera_ = camera;
         this.input_ = new InputController();
         this.rotation_ = new THREE.Quaternion();
-        this.translation_ = new THREE.Vector3();
+        this.translation_ = new THREE.Vector3(0,0,5);
         this.phi_ = 0;
-        this.theta_ - 0;
+        this.phiSpeed_ = 8;
+        this.theta_ = 0;
+        this.thetaSpeed_ = 5;
     }
 
     update(deltaTime){
@@ -21,21 +23,22 @@ class FirstPersonCamera{
     }
 
     updateCamera_(deltaTime){
-        //this.camera_.quaternion.copy(this.rotation_);
+        this.camera_.quaternion.copy(this.rotation_);
     }
 
     updateRotation_(deltaTime){
         const xh = this.input_.current_.mouseXDelta / window.innerWidth;
         const yh = this.input_.current_.mouseYDelta / window.innerHeight;
 
-        this.phi_ += -xh * 5;
-        this.theta_ = clamp(this.theta_ + -yh * 5 - Math.PI / 3, Math.PI / 3);
+        this.phi_ += -xh * this.phiSpeed_;
 
+        this.theta_ = clamp(this.theta_ + -yh * this.thetaSpeed_, -Math.PI / 3, Math.PI / 3);
+
+        //console.log(this.theta_);
         const qx = new THREE.Quaternion();
-        qx.setFromAxisAngle(new THREE.Vector3(0,1,0), this.phi_);
-
+        qx.setFromAxisAngle(new THREE.Vector3(0, 1, 0), this.phi_);
         const qz = new THREE.Quaternion();
-        qz.setFromAxisAngle(new THREE.Vector3(1,0,0), this.theta_);
+        qz.setFromAxisAngle(new THREE.Vector3(1, 0, 0), this.theta_);
 
         const q = new THREE.Quaternion();
         q.multiply(qx);

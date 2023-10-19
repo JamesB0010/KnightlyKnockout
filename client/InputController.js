@@ -13,7 +13,7 @@ class InputController{
             mouseXDelta: 0,
             mouseYDelta: 0
         };
-        this.previous = null;
+        this.previous_ = null;
         this.keys = {};
         this.previousKeys = {};
 
@@ -52,12 +52,12 @@ class InputController{
         this.current_.mouseX = e.pageX - window.innerWidth /2;
         this.current_.mouseY = e.pageY - window.innerWidth / 2;
 
-        if (this.previous === null){
-            this.previous = {...this.current_};
+        if (this.previous_ === null){
+            this.previous_ = {...this.current_};
         }
 
-        this.current_.mouseXDelta = this.current_.mouseX - this.previous_mouseX;
-        this.current_.mouseYDelta = this.current_.mouseY - this.previous_mouseY;
+        this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
+        this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
     };
     onKeyDown_(e){
         this.keys_[e.keyCode] = true;
