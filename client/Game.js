@@ -111,7 +111,8 @@ class Game{
             socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         }
 
-        this.fpsCamera.update(timeElapsedS);
+        //this.fpsCamera.update(timeElapsedS);
+        this.fpsCamera.update(this.clock.getDelta());
         this.Render();
     }
 
