@@ -67,6 +67,9 @@ class GameObject extends THREE.Mesh{
     };
 
     Update(){
+        if(this.PlayerControlled){
+            return;
+        }
         if(this.gravityEnabled){
             this.ApplyGravity();
         }
