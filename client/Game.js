@@ -20,6 +20,13 @@ class Game{
         this.gltfLoader = new GLTFLoader();
         this.prevReqAnimFrame = null;
     };
+    OnWindowResize(game){
+        game.camera.aspect = window.innerWidth / window.innerHeight;
+
+        game.camera.updateProjectionMatrix();
+
+        game.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
     Init(){
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -30,6 +37,12 @@ class Game{
         this.camera.position.z = 5;
         this.renderer.shadowMap.enabled = true;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.renderer.domElement);
+
+        window.addEventListener('resize', ()=>{
+            this.OnWindowResize(this);
+        });
+
 
         const textureLoader = new THREE.TextureLoader();
         textureLoader.load('./Assets/LowPolyTownSkyBox.jpg', texture =>{
@@ -70,8 +83,6 @@ class Game{
         this.gameObjects.forEach(element => {
             this.scene.add(element);
         });
-
-        document.body.appendChild(this.renderer.domElement);
     
     }
 
