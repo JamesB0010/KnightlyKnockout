@@ -28,7 +28,16 @@ class Game{
         this.camera.position.z = 5;
         this.renderer.shadowMap.enabled = true;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
+
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.load('./Assets/LowPolyTownSkyBox.jpg', texture =>{
+            const skySphere = new THREE.SphereGeometry(100, 60, 40);
+            const material = new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.DoubleSide
+            })
+            this.scene.add(new THREE.Mesh(skySphere, material));
+        });
 
         this.fpsCamera = new FirstPersonCamera(this.camera);
 
@@ -55,6 +64,8 @@ class Game{
         this.gameObjects.forEach(element => {
             this.scene.add(element);
         });
+
+        document.body.appendChild(this.renderer.domElement);
     
     }
 
