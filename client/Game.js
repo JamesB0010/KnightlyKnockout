@@ -72,43 +72,6 @@ class Game{
             socketId: id
         });
 
-        this.gameObjects.push(localPlayer);
-
-        //setup input
-        {
-            let target = localPlayer;
-        localPlayer.SetupInput({
-            keyUp:{
-                forwards: () =>{
-                    target.velocity.z = 0;
-                },
-                backwards: () =>{
-                    target.velocity.z = 0;
-                },
-                left: () =>{
-                    target.velocity.x = 0;
-                },
-                right: ()=>{
-                    target.velocity.x = 0;
-                }
-            },
-            keyDown:{
-                forwards: () =>{
-                    target.velocity.z = -0.03;
-                },
-                backwards: () =>{
-                    target.velocity.z = 0.03;
-                },
-                left: () =>{
-                    target.velocity.x = -0.03;
-                },
-                right: ()=>{
-                    target.velocity.x = 0.03;
-                }
-            }
-        });
-    }
-
     this.player = localPlayer;
 
     this.scene.add(localPlayer);
@@ -126,6 +89,11 @@ class Game{
         this.gameObjects.forEach(element => {
             element.Update();
         });
+
+        if(this.player){
+            this.player.Update();
+            this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+        }
 
         if(this.player){
 
