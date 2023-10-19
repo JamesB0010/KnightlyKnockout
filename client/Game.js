@@ -72,7 +72,6 @@ class Game{
     NewLocalPlayer(id){
         console.log("new local player");
         let localPlayer = new GameObject({
-            gravityEnabled: true,
             position: {
                 x: 0,
                 y: 4,
@@ -80,7 +79,7 @@ class Game{
             },
             color: 0x00ff00,
             inputEnabled: true,
-            socketId: id
+            socketId: id,
         });
 
     this.player = localPlayer;
@@ -160,7 +159,7 @@ class Game{
         }
         else{
             _player = this.NewPlayer({
-                id: data.id
+                id: data.id,
             });
             _player.position.x = data.pos.x;
             _player.position.y = data.pos.y;

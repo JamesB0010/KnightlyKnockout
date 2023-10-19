@@ -12,11 +12,9 @@ class GameObject extends THREE.Mesh{
             y: 0,
             z: 0
         },
-        gravityEnabled = false,
         color = 0xffffff,
         inputEnabled = false,
         socketId = -1,
-        thisPlayerControlled = false
     }){
         super(
             new THREE.BoxGeometry( width, height, depth), 
@@ -37,44 +35,14 @@ class GameObject extends THREE.Mesh{
                 y: 0,
                 z: 0
             };
-            this.gravityEnabled = gravityEnabled;
             this.grounded = false;
 
             this.bounciness = 0.6;
 
             this.socketId = socketId;
-
-            this.thisPlayerControlled = thisPlayerControlled;
     }
-    ApplyGravity(){
-        this.velocity.y += gravity;
-
-        if(this.position.y + this.velocity.y <= -0.25){
-            this.velocity.y *= this.bounciness;
-            this.velocity.y *= -1;
-        }
-        else{
-            this.position.y += this.velocity.y;
-        }
-    }
-
-    ApplyXVelocity(){
-        this.position.x += this.velocity.x;
-    };
-
-    ApplyZVelocity(){
-        this.position.z += this.velocity.z;
-    };
 
     Update(){
-        if(this.PlayerControlled){
-            return;
-        }
-        if(this.gravityEnabled){
-            this.ApplyGravity();
-        }
-        this.ApplyXVelocity();
-        this.ApplyZVelocity();
     }
 }
 
