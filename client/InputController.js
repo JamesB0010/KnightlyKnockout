@@ -14,7 +14,7 @@ class InputController{
             mouseYDelta: 0
         };
         this.previous_ = null;
-        this.keys = {};
+        this.keys_ = {};
         this.previousKeys = {};
 
         document.addEventListener("mousedown", e => this.onMouseDown_(e), false);
@@ -68,6 +68,10 @@ class InputController{
 
     update(){
         this.previous_ = {...this.current_};
+    }
+
+    key(keyCode){
+        return !!this.keys_[keyCode];
     }
 }
 

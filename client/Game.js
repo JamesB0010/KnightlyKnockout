@@ -3,7 +3,7 @@ import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitC
 import {GameObject} from '/GameObject.js';
 
 //fps camera controls from https://www.youtube.com/watch?v=oqKzxPMLWxo
-import {FirstPersonCamera} from './FirstPersonCamera';
+import {FirstPersonCamera, KEYS} from './FirstPersonCamera';
 
 class Game{
     constructor(){
