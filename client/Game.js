@@ -41,7 +41,9 @@ class Game{
             this.scene.add(new THREE.Mesh(skySphere, material));
         });
 
-        //this.gltfLoader.load();
+        this.gltfLoader.load('./Assets/Models/Player/KnightMan.glb', (gltf)=>{
+            this.scene.add(gltf.scene);
+        });
 
         this.fpsCamera = new FirstPersonCamera(this.camera);
 
