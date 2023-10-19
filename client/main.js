@@ -25,8 +25,10 @@ socket.on("RemovePlayer", id=>{
 })
 
 function Animate(){
-	requestAnimationFrame(Animate);
-	game.Update(socket);
+	requestAnimationFrame(t =>{
+		game.Update(socket, t);
+		Animate();
+	});
 }
 
 Animate();

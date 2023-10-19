@@ -12,9 +12,9 @@ class FirstPersonCamera{
         this.rotation_ = new THREE.Quaternion();
         this.translation_ = new THREE.Vector3(0,0,5);
         this.phi_ = 0;
-        this.phiSpeed_ = 8;
+        this.phiSpeed_ = 0.1;
         this.theta_ = 0;
-        this.thetaSpeed_ = 5;
+        this.thetaSpeed_ = 0.1;
     }
 
     update(deltaTime){

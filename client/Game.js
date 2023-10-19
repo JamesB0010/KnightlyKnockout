@@ -15,6 +15,8 @@ class Game{
         this.players = new Map();
         this.fpsCamera;
         this.clock = new THREE.Clock();
+
+        this.prevReqAnimFrame = null;
     };
     Init(){
         this.scene = new THREE.Scene();
@@ -113,7 +115,14 @@ class Game{
 
     }
 
-    Update(socket){
+    Update(socket, t){
+        if(this.prevReqAnimFrame === null){
+            this.prevReqAnimFrame = t;
+        }
+
+        const timeElapsedS = (t - this.prevReqAnimFrame) * 0.001;
+
+
         this.gameObjects.forEach(element => {
             element.Update();
         });
@@ -123,7 +132,7 @@ class Game{
             socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         }
 
-        this.fpsCamera.update(this.clock.getDelta());
+        this.fpsCamera.update(timeElapsedS);
         this.Render();
     }
 
