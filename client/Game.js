@@ -17,7 +17,7 @@ class Game{
         this.players = new Map();
         this.fpsCamera;
         this.clock = new THREE.Clock();
-
+        this.gltfLoader = new GLTFLoader();
         this.prevReqAnimFrame = null;
     };
     Init(){
@@ -40,6 +40,8 @@ class Game{
             })
             this.scene.add(new THREE.Mesh(skySphere, material));
         });
+
+        //this.gltfLoader.load();
 
         this.fpsCamera = new FirstPersonCamera(this.camera);
 
