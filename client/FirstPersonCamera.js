@@ -20,15 +20,16 @@ class FirstPersonCamera{
         this.rotation_ = new THREE.Quaternion();
         this.translation_ = new THREE.Vector3(0,0,5);
         this.phi_ = 0;
-        this.phiSpeed_ = 0.1;
+        this.phiSpeed_ = 8;
         this.theta_ = 0;
-        this.thetaSpeed_ = 0.1;
+        this.thetaSpeed_ = 5;
     }
 
     update(timeElapsedS){
         this.updateRotation_(timeElapsedS);
         this.updateCamera_(timeElapsedS);
         this.updateTranslation_(timeElapsedS);
+        this.input_.update();
     }
 
     updateCamera_(timeElapsedS){

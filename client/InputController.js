@@ -67,7 +67,12 @@ class InputController{
     };
 
     update(){
-        this.previous_ = {...this.current_};
+        if(this.previous_ !== null){
+            this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
+            this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
+
+            this.previous_ = {...this.current_};
+        }
     }
 
     key(keyCode){
