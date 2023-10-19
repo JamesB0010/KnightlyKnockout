@@ -5,6 +5,8 @@ import {GameObject} from '/GameObject.js';
 //fps camera controls from https://www.youtube.com/watch?v=oqKzxPMLWxo
 import {FirstPersonCamera, KEYS} from './FirstPersonCamera';
 
+import {GLTFLoader} from './node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+
 class Game{
     constructor(){
         this.scene;
