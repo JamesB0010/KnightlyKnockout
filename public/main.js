@@ -1,28 +1,28 @@
-import * as THREE from 'three';
+import {Game} from './Game.js';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const socket = io(); // create new socket instance
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+let game = new Game();
+game.Init();
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+socket.on("setId", id =>{
+  game.NewLocalPlayer(id);
+  game.player.socketId = id;
+})
 
-camera.position.z = 5;
+socket.on("updateNetworkedPlayerPosition", data =>{
+  game.UpdateNetworkedObjectPos(data);
+})
 
-function animate() {
-  requestAnimationFrame(animate);
+socket.on("RemovePlayer", id=>{
+  game.RemovePlayer(id);
+})
 
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
-  renderer.render(scene, camera);
+function Animate(){
+  requestAnimationFrame(t =>{
+    game.Update(socket, t);
+    Animate();
+  });
 }
 
-animate();
-
-const socket = io();
+Animate();
