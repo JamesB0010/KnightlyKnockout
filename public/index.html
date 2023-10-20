@@ -6,9 +6,18 @@
 		<style>
 			body { margin: 0; }
 		</style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@v0.149.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@v0.149.0/examples/jsm/"
+        }
+      }
+    </script>
 	</head>
 	<body>
-    <h1>Hello THREE</h1>
+    <script src="/socket.io/socket.io.js"></script> <!-- use the library -->
+
 		<script type="module" src="/main.js"></script>
 	</body>
 </html>
