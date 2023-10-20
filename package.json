@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "esbuild": "^0.18.20",
+    "express": "^4.18.2",
     "nanoid": "^3.3.6",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.31",

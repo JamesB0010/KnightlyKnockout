@@ -1,6 +1,8 @@
 
 hidden = [".config", "package-lock.json"]
 run = 'npx vite --host'
+entrypoint = "index.js"
+modules = ["nodejs-18:v3-20230608-f4cd419"]
 
 [[hints]]
 regex = "Error \\[ERR_REQUIRE_ESM\\]"
