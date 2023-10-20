@@ -8,7 +8,6 @@ const io = require("socket.io")(server); // create instance of socketio
 
 
 app.use(express.static("public")); // use "public" directory for static files
-app.use(express.static(""))
 
 
 io.on("connection", socket => {
