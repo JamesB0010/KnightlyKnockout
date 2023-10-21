@@ -3,11 +3,6 @@ body{
     background-color: white;
   background: skyblue;
 }
-
-*{
-  cursor:none;
-}
-
 .overlay-text{
   position: absolute;
   top: 20%;
