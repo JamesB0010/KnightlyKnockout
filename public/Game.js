@@ -121,7 +121,6 @@ class Game{
         }
 
         if(this.player){
-
             socket.emit("playerUpdatePosition", {pos: this.player.position, id: this.player.socketId});
         }
 
