@@ -1,9 +1,24 @@
 body{
-  background-color: black;
+  margin:0;
+  padding:0;
+}
+
+#backgroundDiv{
+  margin:0;
+  height: 100vh;
+  width: 100vw;
+  background-image: linear-gradient(#432475, #1d72c1);
+  background-repeat: no-repeat;
+  text-align: center;
 }
 
 h1{
-  color: white;
+  color: #fffffe;
+  margin-top: 0;
+}
+
+a{
+  
 }
 
 a:link{
@@ -11,13 +26,17 @@ a:link{
 }
 
 a:visited{
-  color: purple;
+  color: #ffffff;
 }
 
 a:hover{
-  color:blue;
+  color:#fdb937;
 }
 
 a:active{
-  color: orangered;
+  color: #0ab0e3;
+}
+
+p{
+  color: #ffffff;
 }
