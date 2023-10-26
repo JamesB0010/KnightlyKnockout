@@ -54,6 +54,7 @@ class Game {
     this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
       this.scene.add(gltf.scene);
     });
+    //
 
     this.fpsCamera = new FirstPersonCamera(this.camera);
 
