@@ -1,0 +1,23 @@
+body{
+  background-color: black;
+}
+
+h1{
+  color: white;
+}
+
+a:link{
+  color: white;
+}
+
+a:visited{
+  color: purple;
+}
+
+a:hover{
+  color:blue;
+}
+
+a:active{
+  color: orangered;
+}
