@@ -39,4 +39,4 @@ io.on("connection", socket => {
 });
 
 server.listen(3000); // run server
-console.log("server running");
+console.log("server running on http://localhost:3000");
