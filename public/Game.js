@@ -86,22 +86,17 @@ class Game {
   }
 
   NewLocalPlayer(id) {
-    let localPlayer;
-    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
-      console.log(gltf.scene.children[0]);
-      localPlayer = new GameObject({
-        position: {
-          x: 0,
-          y: 4,
-          z: 0
-        },
-        color: 0x00ff00,
-        inputEnabled: true,
-        socketId: id,
-        geometry: gltf.scene.children
-      });
-    });
     console.log("new local player");
+    let localPlayer = new GameObject({
+      position: {
+        x: 0,
+        y: 4,
+        z: 0
+      },
+      color: 0x00ff00,
+      inputEnabled: true,
+      socketId: id,
+    });
 
     this.player = localPlayer;
 
