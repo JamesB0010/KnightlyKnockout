@@ -14,7 +14,10 @@ class Game {
     this.fpsCamera;
     this.clock = new THREE.Clock();
     this.gltfLoader = new GLTFLoader();
-    this.prevReqAnimFrame = null;
+    //an array of socket id's each id being a client connected to the server
+    this.connectionArray =[];
+    //this clients socket id
+    this.clientId;
   };
   OnWindowResize(game) {
     game.camera.aspect = window.innerWidth / window.innerHeight;
@@ -87,51 +90,10 @@ class Game {
 
   }
 
-  NewLocalPlayer(id) {
-    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
-      let mesh = gltf.scene.children[0].geometry;
-      console.log(mesh);
-      let localPlayer = new GameObject({
-        position: {
-          x: 0,
-          y: 4,
-          z: 0
-        },
-        color: 0x00ff00,
-        inputEnabled: true,
-        socketId: id,
-        Geometry: mesh,
-        scale: 0.1
-      });
-  
-      this.player = localPlayer;
-  
-      this.scene.add(localPlayer);
-    });
-  }
-
-  Update(socket, t) {
-    if (this.prevReqAnimFrame === null) {
-      this.prevReqAnimFrame = t;
-    }
-
-    const timeElapsedS = (t - this.prevReqAnimFrame) * 0.001;
-
-
-    this.gameObjects.forEach(element => {
-      element.Update();
-    });
-
+  Update() {
     if (this.player) {
-      this.player.Update();
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
     }
-
-    if (this.player) {
-      socket.emit("playerUpdatePosition", { pos: this.player.position, id: this.player.socketId });
-    }
-
-    //this.fpsCamera.update(timeElapsedS);
     this.fpsCamera.update(this.clock.getDelta());
     this.Render();
   }
@@ -140,51 +102,39 @@ class Game {
     this.renderer.render(this.scene, this.camera);
   }
 
-  NewPlayer({
-    id,
-    color = 0xff0000
+  NewPlayer(id ,{
+    color = 0xff0000,
+    inputEnabled = false
   }) {
     let _newPlayer = new GameObject({
-      gravityEnabled: true,
-      position: {
-        x: 2,
-        y: 4,
-        z: 0
-      },
-      color: color,
-      inputEnabled: false,
-      socketId: id,
-    });
-
-    this.gameObjects.push(_newPlayer);
-    this.players.set(id, _newPlayer);
-    this.scene.add(_newPlayer);
-    return _newPlayer;
+        gravityEnabled: true,
+        position: {
+          x: 0,
+          y: -0.245,
+          z: 5
+        },
+        color: color,
+        inputEnabled: inputEnabled,
+        socketId: id,
+      });
+      if(inputEnabled){
+        this.player = _newPlayer;
+      }
+      this.gameObjects.push(_newPlayer);
+      this.players.set(id, _newPlayer);
+      console.log(this.players);
+      this.scene.add(_newPlayer);
   };
 
   RemovePlayer(id) {
 
     let _player = this.players.get(id);
     this.scene.remove(_player);
+    this.players.remove(id);
   }
 
-  UpdateNetworkedObjectPos(data) {
-
-    let _player = this.players.get(data.id);
-
-    if (_player) {
-      _player.position.x = data.pos.x;
-      _player.position.y = data.pos.y;
-      _player.position.z = data.pos.z;
-    }
-    else {
-      _player = this.NewPlayer({
-        id: data.id
-      });
-      _player.position.x = data.pos.x;
-      _player.position.y = data.pos.y;
-      _player.position.z = data.pos.z;
-    }
+  UpdateNetworkedPlayer(id, position){
+    this.players.get(id).position.set(position.x, position.y, position.z);
   }
 }
 

@@ -14,6 +14,9 @@ const KEYS = {
   'd': 68,
 };
 
+//create an event which will be dispached any time we move
+const moveEvent = new Event("OnClientMove");
+
 class FirstPersonCamera{
   constructor(camera){
       this.camera_ = camera;
@@ -66,6 +69,12 @@ class FirstPersonCamera{
       const forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0);
       const strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0);
 
+      //if moving dispach the onMove event
+      const moving = forwardVelocity != 0 || strafeVelocity != 0;
+      if(moving){
+        //dispach moving event which can be responded to elsewhere
+        document.dispatchEvent(moveEvent);
+      }
       const walkSpeed = 1.75;
 
       const qx = new THREE.Quaternion();

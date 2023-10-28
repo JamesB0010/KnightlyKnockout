@@ -46,9 +46,6 @@ class GameObject extends THREE.Mesh{
 
             this.socketId = socketId;
     }
-
-    Update(){
-    }
 }
 
 export {GameObject};
