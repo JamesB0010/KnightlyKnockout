@@ -15,10 +15,13 @@ class GameObject extends THREE.Mesh{
         color = 0xffffff,
         inputEnabled = false,
         socketId = -1,
+        Geometry = new THREE.BoxGeometry(1, 1,1),
+        Material = new THREE.MeshStandardMaterial({color: 0xffffff}),
+        scale = 1
     }){
         super(
-            new THREE.BoxGeometry( width, height, depth), 
-            new THREE.MeshStandardMaterial( { color} )
+            Geometry,
+            Material
             );
             this.castShadow = true;
             this.position.x = position.x;
@@ -29,6 +32,8 @@ class GameObject extends THREE.Mesh{
             this.height = height;
             this.width = width;
             this.depth = depth;
+            //not optimal better to scale actual mesh
+            this.scale.set(scale,scale,scale);
 
             this.velocity = {
                 x: 0,

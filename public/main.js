@@ -9,7 +9,9 @@ game.Init();
 
 socket.on("setId", id => {
   game.NewLocalPlayer(id);
-  game.player.socketId = id;
+  try{
+    game.player.socketId = id;
+  }catch{};
 })
 
 socket.on("updateNetworkedPlayerPosition", data => {

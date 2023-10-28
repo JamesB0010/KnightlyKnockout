@@ -76,7 +76,9 @@ class Game {
         y: -1,
         z: 0
       },
-      color: "#808080"
+      color: "#808080",
+      Geometry: new THREE.BoxGeometry(50, 0.5, 50),
+      Material: new THREE.MeshStandardMaterial({color: 0x808080})
     }));
 
     this.gameObjects.forEach(element => {
@@ -86,22 +88,26 @@ class Game {
   }
 
   NewLocalPlayer(id) {
-    console.log("new local player");
-    let localPlayer = new GameObject({
-      position: {
-        x: 0,
-        y: 4,
-        z: 0
-      },
-      color: 0x00ff00,
-      inputEnabled: true,
-      socketId: id,
+    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
+      let mesh = gltf.scene.children[0].geometry;
+      console.log(mesh);
+      let localPlayer = new GameObject({
+        position: {
+          x: 0,
+          y: 4,
+          z: 0
+        },
+        color: 0x00ff00,
+        inputEnabled: true,
+        socketId: id,
+        Geometry: mesh,
+        scale: 0.1
+      });
+  
+      this.player = localPlayer;
+  
+      this.scene.add(localPlayer);
     });
-
-    this.player = localPlayer;
-
-    this.scene.add(localPlayer);
-
   }
 
   Update(socket, t) {
@@ -138,7 +144,6 @@ class Game {
     id,
     color = 0xff0000
   }) {
-    console.log("New Player");
     let _newPlayer = new GameObject({
       gravityEnabled: true,
       position: {
@@ -148,7 +153,7 @@ class Game {
       },
       color: color,
       inputEnabled: false,
-      socketId: id
+      socketId: id,
     });
 
     this.gameObjects.push(_newPlayer);
@@ -174,7 +179,7 @@ class Game {
     }
     else {
       _player = this.NewPlayer({
-        id: data.id,
+        id: data.id
       });
       _player.position.x = data.pos.x;
       _player.position.y = data.pos.y;
