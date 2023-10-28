@@ -15,6 +15,10 @@ class Game {
     this.clock = new THREE.Clock();
     this.gltfLoader = new GLTFLoader();
     this.prevReqAnimFrame = null;
+    //an array of socket id's each id being a client connected to the server
+    this.connectionArray =[];
+    //this clients socket id
+    this.clientId;
   };
   OnWindowResize(game) {
     game.camera.aspect = window.innerWidth / window.innerHeight;
@@ -87,29 +91,6 @@ class Game {
 
   }
 
-  NewLocalPlayer(id) {
-    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
-      let mesh = gltf.scene.children[0].geometry;
-      console.log(mesh);
-      let localPlayer = new GameObject({
-        position: {
-          x: 0,
-          y: 4,
-          z: 0
-        },
-        color: 0x00ff00,
-        inputEnabled: true,
-        socketId: id,
-        Geometry: mesh,
-        scale: 0.1
-      });
-  
-      this.player = localPlayer;
-  
-      this.scene.add(localPlayer);
-    });
-  }
-
   Update(socket, t) {
     if (this.prevReqAnimFrame === null) {
       this.prevReqAnimFrame = t;
@@ -175,22 +156,6 @@ class Game {
   }
 
   UpdateNetworkedObjectPos(data) {
-
-    let _player = this.players.get(data.id);
-
-    if (_player) {
-      _player.position.x = data.pos.x;
-      _player.position.y = data.pos.y;
-      _player.position.z = data.pos.z;
-    }
-    else {
-      _player = this.NewPlayer({
-        id: data.id
-      });
-      _player.position.x = data.pos.x;
-      _player.position.y = data.pos.y;
-      _player.position.z = data.pos.z;
-    }
   }
 }
 

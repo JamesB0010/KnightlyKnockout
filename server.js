@@ -22,11 +22,21 @@ app.use(function(req, res, next){
   res.status(404).sendFile(path.join(__dirname, "views", "404.html"))
 });
 
+let connections = [];
+
 
 io.on("connection", socket => {
+  //when someone joins send their socket id to the client to be saved
   console.log("someone joined with id " + socket.id);
-
   socket.emit('setId', socket.id);
+
+
+  //add this new clients id to the connections array
+  connections.push(socket.id);
+
+
+  io.emit("updateConnectionsArr", connections);
+
 
   socket.on("playerUpdatePosition", data => {
     socket.broadcast.emit("updateNetworkedPlayerPosition", { pos: data.pos, id: data.id })
@@ -34,7 +44,9 @@ io.on("connection", socket => {
 
   socket.on('disconnect', () => {
     console.log(socket.id + " Disconnected");
-    socket.broadcast.emit("RemovePlayer", socket.id)
+    //remove current socket from server
+    connections = connections.filter(connection =>{connection != socket.id});
+    io.emit("removeId", socket.id);
   })
 });
 
