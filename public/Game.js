@@ -98,13 +98,7 @@ class Game {
 
     const timeElapsedS = (t - this.prevReqAnimFrame) * 0.001;
 
-
-    this.gameObjects.forEach(element => {
-      element.Update();
-    });
-
     if (this.player) {
-      this.player.Update();
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
     }
     //this.fpsCamera.update(timeElapsedS);
