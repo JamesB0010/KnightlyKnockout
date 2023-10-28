@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GameObject } from './GameObject.js';
 import { FirstPersonCamera, KEYS } from './FirstPersonCamera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFGameObject } from './GLTFGameObject.js';
 
 class Game {
   constructor() {
@@ -54,7 +55,6 @@ class Game {
     this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
       this.scene.add(gltf.scene);
     });
-    //
 
     this.fpsCamera = new FirstPersonCamera(this.camera);
 
@@ -86,6 +86,9 @@ class Game {
   }
 
   NewLocalPlayer(id) {
+    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
+      this.scene.add(gltf.scene);
+    });
     console.log("new local player");
     let localPlayer = new GameObject({
       position: {
