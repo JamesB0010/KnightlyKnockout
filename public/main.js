@@ -44,6 +44,10 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
   game.UpdateNetworkedPlayer(info.id, info.position);
 })
 
+socket.on("GetClientPlayerIdPosition", () =>{
+  socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
+})
+
 
 socket.on("removeId", id =>{
   game.connectionArray = game.connectionArray.filter(connection => {connection != id});

@@ -109,9 +109,9 @@ class Game {
     let _newPlayer = new GameObject({
         gravityEnabled: true,
         position: {
-          x: 2,
-          y: 4,
-          z: 0
+          x: 0,
+          y: -0.245,
+          z: 5
         },
         color: color,
         inputEnabled: inputEnabled,

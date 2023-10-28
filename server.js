@@ -37,6 +37,8 @@ io.on("connection", socket => {
 //update all clients using new list of connections
   io.emit("updateConnectionsArr", connections);
 
+  io.emit("GetClientPlayerIdPosition");
+
 
   socket.on("UpdatePlayerMovement", info =>{
     socket.broadcast.emit("UpdateNetworkedPlayerPos", info);
