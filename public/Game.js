@@ -107,11 +107,6 @@ class Game {
       this.player.Update();
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
     }
-
-    if (this.player) {
-      socket.emit("playerUpdatePosition", { pos: this.player.position, id: this.player.socketId });
-    }
-
     //this.fpsCamera.update(timeElapsedS);
     this.fpsCamera.update(this.clock.getDelta());
     this.Render();
@@ -121,15 +116,11 @@ class Game {
     this.renderer.render(this.scene, this.camera);
   }
 
-  NewPlayer({
-    id,
-    color = 0xff0000
+  NewPlayer(id ,{
+    color = 0xff0000,
+    inputEnabled = false
   }) {
-
-    let _newPlayer;
-    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
-      let mesh = gltf.scene.children[0].geometry;
-      _newPlayer = new GameObject({
+    let _newPlayer = new GameObject({
         gravityEnabled: true,
         position: {
           x: 2,
@@ -137,25 +128,19 @@ class Game {
           z: 0
         },
         color: color,
-        inputEnabled: false,
+        inputEnabled: inputEnabled,
         socketId: id,
-        Geometry: mesh,
-        scale: 0.1
       });
       this.gameObjects.push(_newPlayer);
       this.players.set(id, _newPlayer);
+      this.player = _newPlayer;
       this.scene.add(_newPlayer);
-    });
-    return _newPlayer;
   };
 
   RemovePlayer(id) {
 
     let _player = this.players.get(id);
     this.scene.remove(_player);
-  }
-
-  UpdateNetworkedObjectPos(data) {
   }
 }
 

@@ -10,7 +10,7 @@ game.Init();
 socket.on("setId", id => {
   game.clientId = id;
   game.connectionArray.push(id);
-  //create local player
+  game.NewPlayer(id, {color:0xffffff, inputEnabled: true});
 })
 
 socket.on("updateConnectionsArr", (connections)=>{
@@ -28,6 +28,10 @@ socket.on("updateConnectionsArr", (connections)=>{
      //do something with this info
     console.log(game.clientId);
     console.log("new client " + newClient);
+    newClient.forEach(clientId => {
+      console.log("new player");
+      game.NewPlayer(clientId, {});
+    });
 
 
     //update local copy of connections

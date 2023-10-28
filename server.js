@@ -34,14 +34,12 @@ io.on("connection", socket => {
   //add this new clients id to the connections array
   connections.push(socket.id);
 
-
+//update all clients using new list of connections
   io.emit("updateConnectionsArr", connections);
 
 
-  socket.on("playerUpdatePosition", data => {
-    socket.broadcast.emit("updateNetworkedPlayerPosition", { pos: data.pos, id: data.id })
-  })
 
+  //on disconnect
   socket.on('disconnect', () => {
     console.log(socket.id + " Disconnected");
     //remove current socket from server
