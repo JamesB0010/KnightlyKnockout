@@ -14,7 +14,6 @@ class Game {
     this.fpsCamera;
     this.clock = new THREE.Clock();
     this.gltfLoader = new GLTFLoader();
-    this.prevReqAnimFrame = null;
     //an array of socket id's each id being a client connected to the server
     this.connectionArray =[];
     //this clients socket id
@@ -91,17 +90,10 @@ class Game {
 
   }
 
-  Update(socket, t) {
-    if (this.prevReqAnimFrame === null) {
-      this.prevReqAnimFrame = t;
-    }
-
-    const timeElapsedS = (t - this.prevReqAnimFrame) * 0.001;
-
+  Update() {
     if (this.player) {
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
     }
-    //this.fpsCamera.update(timeElapsedS);
     this.fpsCamera.update(this.clock.getDelta());
     this.Render();
   }
@@ -125,9 +117,12 @@ class Game {
         inputEnabled: inputEnabled,
         socketId: id,
       });
+      if(inputEnabled){
+        this.player = _newPlayer;
+      }
       this.gameObjects.push(_newPlayer);
       this.players.set(id, _newPlayer);
-      this.player = _newPlayer;
+      console.log(this.players);
       this.scene.add(_newPlayer);
   };
 
@@ -135,6 +130,11 @@ class Game {
 
     let _player = this.players.get(id);
     this.scene.remove(_player);
+    this.players.remove(id);
+  }
+
+  UpdateNetworkedPlayer(id, position){
+    this.players.get(id).position.set(position.x, position.y, position.z);
   }
 }
 

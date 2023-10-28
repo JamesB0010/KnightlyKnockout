@@ -38,6 +38,9 @@ io.on("connection", socket => {
   io.emit("updateConnectionsArr", connections);
 
 
+  socket.on("UpdatePlayerMovement", info =>{
+    socket.broadcast.emit("UpdateNetworkedPlayerPos", info);
+  })
 
   //on disconnect
   socket.on('disconnect', () => {

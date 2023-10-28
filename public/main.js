@@ -39,21 +39,29 @@ socket.on("updateConnectionsArr", (connections)=>{
   }
 });
 
-socket.on("updateNetworkedPlayerPosition", data => {
-  game.UpdateNetworkedObjectPos(data);
+socket.on("UpdateNetworkedPlayerPos", info=>{
+  //use info.id to find a player and then update its position using info.position
+  game.UpdateNetworkedPlayer(info.id, info.position);
 })
+
 
 socket.on("removeId", id =>{
   game.connectionArray = game.connectionArray.filter(connection => {connection != id});
 })
 
+//whenever the local player moves send it to the server
+document.addEventListener("OnClientMove", e =>{
+  socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
+})
+
+
+
 function Animate() {
   requestAnimationFrame(t => {
-    game.Update(socket, t);
+    game.Update();
     Animate();
   });
 }
-
 //credits to https://www.youtube.com/watch?v=leAbQ0yfVX0 for how to use pointer lock
 game.renderer.domElement.onclick = () => {
   document.body.requestPointerLock();
