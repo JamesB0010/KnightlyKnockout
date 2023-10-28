@@ -144,21 +144,27 @@ class Game {
     id,
     color = 0xff0000
   }) {
-    let _newPlayer = new GameObject({
-      gravityEnabled: true,
-      position: {
-        x: 2,
-        y: 4,
-        z: 0
-      },
-      color: color,
-      inputEnabled: false,
-      socketId: id,
-    });
 
-    this.gameObjects.push(_newPlayer);
-    this.players.set(id, _newPlayer);
-    this.scene.add(_newPlayer);
+    let _newPlayer;
+    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
+      let mesh = gltf.scene.children[0].geometry;
+      _newPlayer = new GameObject({
+        gravityEnabled: true,
+        position: {
+          x: 2,
+          y: 4,
+          z: 0
+        },
+        color: color,
+        inputEnabled: false,
+        socketId: id,
+        Geometry: mesh,
+        scale: 0.1
+      });
+      this.gameObjects.push(_newPlayer);
+      this.players.set(id, _newPlayer);
+      this.scene.add(_newPlayer);
+    });
     return _newPlayer;
   };
 
