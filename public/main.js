@@ -8,7 +8,6 @@ let game = new Game();
 game.Init();
 
 socket.on("setId", id => {
-  console.log(game.player);
   game.NewLocalPlayer(id);
   game.player.socketId = id;
 })
