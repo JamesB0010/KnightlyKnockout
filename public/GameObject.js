@@ -15,9 +15,10 @@ class GameObject extends THREE.Mesh{
         color = 0xffffff,
         inputEnabled = false,
         socketId = -1,
-        Geometry = new THREE.BoxGeometry(1, 1,1),
+        Geometry = new THREE.BoxGeometry(0, 0,0),
         Material = new THREE.MeshStandardMaterial({color: 0xffffff}),
-        scale = 1
+        scale = 1,
+        gltfScene = null
     }){
         super(
             Geometry,
@@ -35,6 +36,19 @@ class GameObject extends THREE.Mesh{
             //not optimal better to scale actual mesh
             this.scale.set(scale,scale,scale);
 
+            this.gltfScene = gltfScene;
+
+            if (inputEnabled){
+                this.gltfScene.children[0].visible = false;
+            }
+
+            if(gltfScene){
+                this.gltfScene.position.x = position.x;
+                this.gltfScene.position.y = -0.78;
+                this.gltfScene.position.z = position.z;
+                this.gltfScene.scale.multiplyScalar(0.6);
+            }
+
             this.velocity = {
                 x: 0,
                 y: 0,
@@ -45,6 +59,10 @@ class GameObject extends THREE.Mesh{
             this.bounciness = 0.6;
 
             this.socketId = socketId;
+    }
+    updateGltfPosition(){
+        this.gltfScene.position.x = this.position.x;
+        this.gltfScene.position.z = this.position.z;
     }
 }
 

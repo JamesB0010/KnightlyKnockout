@@ -54,10 +54,9 @@ class Game {
       this.scene.add(skyBoxMesh);
     });
 
-    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
-      this.scene.add(gltf.scene);
-    });
-    //
+    // this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
+    //   this.scene.add(gltf.scene);
+    // });
 
     this.fpsCamera = new FirstPersonCamera(this.camera);
 
@@ -93,6 +92,7 @@ class Game {
   Update() {
     if (this.player) {
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+      this.player.updateGltfPosition();
     }
     this.fpsCamera.update(this.clock.getDelta());
     this.Render();
@@ -106,24 +106,28 @@ class Game {
     color = 0xff0000,
     inputEnabled = false
   }) {
-    let _newPlayer = new GameObject({
-        gravityEnabled: true,
-        position: {
-          x: 0,
-          y: -0.245,
-          z: 5
-        },
-        color: color,
-        inputEnabled: inputEnabled,
-        socketId: id,
-      });
-      if(inputEnabled){
-        this.player = _newPlayer;
-      }
-      this.gameObjects.push(_newPlayer);
-      this.players.set(id, _newPlayer);
-      console.log(this.players);
-      this.scene.add(_newPlayer);
+    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', gltf =>{
+      this.scene.add(gltf.scene);
+      let _newPlayer = new GameObject({
+          gravityEnabled: true,
+          position: {
+            x: 0,
+            y: -0.245,
+            z: 5
+          },
+          color: color,
+          inputEnabled: inputEnabled,
+          socketId: id,
+          gltfScene: gltf.scene
+        });
+        if(inputEnabled){
+          this.player = _newPlayer;
+        }
+        this.gameObjects.push(_newPlayer);
+        this.players.set(id, _newPlayer);
+        console.log(this.players);
+        this.scene.add(_newPlayer);
+    })
   };
 
   RemovePlayer(id) {
@@ -134,7 +138,13 @@ class Game {
   }
 
   UpdateNetworkedPlayer(id, position){
-    this.players.get(id).position.set(position.x, position.y, position.z);
+    try{
+      this.players.get(id).position.set(position.x, position.y, position.z);
+      this.players.get(id).updateGltfPosition();
+    }
+    catch{
+
+    }
   }
 }
 

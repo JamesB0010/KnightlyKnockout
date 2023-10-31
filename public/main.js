@@ -1,4 +1,5 @@
 import { Game } from './Game.js';
+import * as THREE from 'three';
 
 const socket = io(); // create new socket instance
 
@@ -45,7 +46,12 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
 })
 
 socket.on("GetClientPlayerIdPosition", () =>{
-  socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
+  try{
+    socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
+  }
+  catch{
+    socket.emit("UpdatePlayerMovement", {position: new THREE.Vector3(0, -0.245, 5), id: game.clientId});
+  }
 })
 
 
