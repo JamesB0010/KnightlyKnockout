@@ -3,6 +3,7 @@ import { GameObject } from './GameObject.js';
 import { FirstPersonCamera, KEYS } from './FirstPersonCamera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+
 class Game {
   constructor() {
     this.scene;
