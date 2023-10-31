@@ -54,9 +54,11 @@ class Game {
       this.scene.add(skyBoxMesh);
     });
 
-    // this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', (gltf) => {
-    //   this.scene.add(gltf.scene);
-    // });
+    this.gltfLoader.load('./GameAssets/Models/Environment/MedivalBridge.glb', (gltf) => {
+      gltf.scene.position.y = -1.05;
+      gltf.scene.scale.multiplyScalar(0.5);
+      this.scene.add(gltf.scene);
+    });
 
     this.fpsCamera = new FirstPersonCamera(this.camera);
 
@@ -69,19 +71,19 @@ class Game {
     this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
 
     //add floor
-    this.gameObjects.push(new GameObject({
-      height: 0.5,
-      width: 50,
-      depth: 50,
-      position: {
-        x: 0,
-        y: -1,
-        z: 0
-      },
-      color: "#808080",
-      Geometry: new THREE.BoxGeometry(50, 0.5, 50),
-      Material: new THREE.MeshStandardMaterial({color: 0x808080})
-    }));
+    // this.gameObjects.push(new GameObject({
+    //   height: 0.5,
+    //   width: 50,
+    //   depth: 50,
+    //   position: {
+    //     x: 0,
+    //     y: -1,
+    //     z: 0
+    //   },
+    //   color: "#808080",
+    //   Geometry: new THREE.BoxGeometry(50, 0.5, 50),
+    //   Material: new THREE.MeshStandardMaterial({color: 0x808080})
+    // }));
 
     this.gameObjects.forEach(element => {
       this.scene.add(element);
