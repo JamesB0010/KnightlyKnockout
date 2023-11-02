@@ -2,7 +2,9 @@ import * as THREE from 'three';
 import { GameObject } from './GameObject.js';
 import { FirstPersonCamera, KEYS } from './FirstPersonCamera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.module.js";
 
+let stats;
 
 class Game {
   constructor() {
@@ -43,6 +45,8 @@ class Game {
       this.OnWindowResize(this);
     });
 
+    stats = new Stats();
+    document.body.appendChild(stats.dom);
 
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load('/GameAssets/SkyboxTextures/LowPolyTownSkybox.jpg', texture => {
@@ -99,6 +103,7 @@ class Game {
     }
     this.fpsCamera.update(this.clock.getDelta());
     this.Render();
+    stats.update();
   }
 
   Render() {
