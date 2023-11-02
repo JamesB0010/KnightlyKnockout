@@ -48,6 +48,18 @@ class Game {
     stats = new Stats();
     document.body.appendChild(stats.dom);
 
+    //add pointMaterials for lesson
+    const radius = 7;
+    const widthSegments = 12;
+    const heightSegments = 8;
+    const geometry = new THREE.SphereGeometry(radius, widthSegments,heightSegments);
+    const material = new THREE.PointsMaterial({
+      color: 'red',
+      size: 0.2
+    });
+    const points = new THREE.Points(geometry, material);
+    this.scene.add(points);
+
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load('/GameAssets/SkyboxTextures/LowPolyTownSkybox.jpg', texture => {
       const skySphere = new THREE.SphereGeometry(100, 60, 40);
