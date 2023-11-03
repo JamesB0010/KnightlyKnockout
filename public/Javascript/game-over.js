@@ -1,7 +1,7 @@
 const MainMenu = ()=>{
-  window.location.replace("./MainMenu.html");
+  window.location.replace("../HTML/main-menu.html");
 };
 
 const BackToLanding = ()=>{
-  window.location.replace("./index.html");
+  window.location.replace("../HTML/index.html");
 };
