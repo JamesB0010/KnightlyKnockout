@@ -17,7 +17,12 @@ const io = require("socket.io")(server, {
 app.use(express.static("public/HTML"));
 app.use(express.static("public/CSS")); 
 app.use(express.static("public/Javascript")); 
+app.use(express.static("public"));
 app.use(express.static("public/GameAssets"));
+app.use(express.static("public/GameAssets/SkyboxTextures"));
+app.use(express.static("public/GameAssets/Models"));
+app.use(express.static("public/GameAssets/Models/Environment"));
+app.use(express.static("public/GameAssets/Models/Player"));
 app.use(express.static("views"));
 
 //configure 404 page

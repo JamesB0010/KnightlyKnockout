@@ -61,7 +61,7 @@ class Game {
     this.scene.add(points);
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('/GameAssets/SkyboxTextures/LowPolyTownSkybox.jpg', texture => {
+    textureLoader.load('../GameAssets/SkyboxTextures/LowPolyTownSkybox.jpg', texture => {
       const skySphere = new THREE.SphereGeometry(100, 60, 40);
       const material = new THREE.MeshBasicMaterial({
         map: texture,
@@ -71,7 +71,7 @@ class Game {
       this.scene.add(skyBoxMesh);
     });
 
-    this.gltfLoader.load('./GameAssets/Models/Environment/MedivalBridge.glb', (gltf) => {
+    this.gltfLoader.load('../GameAssets/Models/Environment/MedivalBridge.glb', (gltf) => {
       gltf.scene.position.y = -1.05;
       gltf.scene.scale.multiplyScalar(0.5);
       this.scene.add(gltf.scene);
@@ -126,7 +126,7 @@ class Game {
     color = 0xff0000,
     inputEnabled = false
   }) {
-    this.gltfLoader.load('./GameAssets/Models/Player/KnightMan.glb', gltf =>{
+    this.gltfLoader.load('../GameAssets/Models/Player/KnightMan.glb', gltf =>{
       this.scene.add(gltf.scene);
       let _newPlayer = new GameObject({
           gravityEnabled: true,
