@@ -13,8 +13,16 @@ const io = require("socket.io")(server, {
   }
 }); // create instance of socketio
 
-
-app.use(express.static("public")); // use "public" directory for static files
+//setting the directiories which we will serve to the client (static files)
+app.use(express.static("public/HTML"));
+app.use(express.static("public/CSS")); 
+app.use(express.static("public/Javascript")); 
+app.use(express.static("public"));
+app.use(express.static("public/GameAssets"));
+app.use(express.static("public/GameAssets/SkyboxTextures"));
+app.use(express.static("public/GameAssets/Models"));
+app.use(express.static("public/GameAssets/Models/Environment"));
+app.use(express.static("public/GameAssets/Models/Player"));
 app.use(express.static("views"));
 
 //configure 404 page
