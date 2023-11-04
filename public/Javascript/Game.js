@@ -23,12 +23,14 @@ class Game {
     this.clientId;
   };
   OnWindowResize(game) {
+    //making window responsive
     game.camera.aspect = window.innerWidth / window.innerHeight;
 
     game.camera.updateProjectionMatrix();
 
     game.renderer.setSize(window.innerWidth, window.innerHeight);
   }
+  //init initialises and sets up the game
   Init() {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -41,10 +43,12 @@ class Game {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(this.renderer.domElement);
 
+    //register resize event
     window.addEventListener('resize', () => {
       this.OnWindowResize(this);
     });
 
+    //add fps counter
     stats = new Stats();
     document.body.appendChild(stats.dom);
 
@@ -60,6 +64,7 @@ class Game {
     const points = new THREE.Points(geometry, material);
     this.scene.add(points);
 
+    //add skybox
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load('../GameAssets/Images/SkyboxTextures/LowPolyTownSkybox.jpg', texture => {
       const skySphere = new THREE.SphereGeometry(100, 60, 40);
@@ -71,11 +76,13 @@ class Game {
       this.scene.add(skyBoxMesh);
     });
 
+    //load the medival bridge gltf into the scene
     this.gltfLoader.load('../GameAssets/Models/Environment/MedivalBridge.glb', (gltf) => {
       gltf.scene.position.y = -1.05;
       gltf.scene.scale.multiplyScalar(0.5);
       this.scene.add(gltf.scene);
     });
+
 
     this.fpsCamera = new FirstPersonCamera(this.camera);
 
@@ -87,33 +94,21 @@ class Game {
 
     this.scene.add(direcLight, new THREE.DirectionalLightHelper(direcLight));
 
-    //add floor
-    // this.gameObjects.push(new GameObject({
-    //   height: 0.5,
-    //   width: 50,
-    //   depth: 50,
-    //   position: {
-    //     x: 0,
-    //     y: -1,
-    //     z: 0
-    //   },
-    //   color: "#808080",
-    //   Geometry: new THREE.BoxGeometry(50, 0.5, 50),
-    //   Material: new THREE.MeshStandardMaterial({color: 0x808080})
-    // }));
-
     this.gameObjects.forEach(element => {
       this.scene.add(element);
     });
 
   }
 
+  //update is called every animation frame
   Update() {
+    //update the fps cameras position
+    this.fpsCamera.update(this.clock.getDelta());
+    //if player isnt null then set their position and update the gltf position
     if (this.player) {
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.player.updateGltfPosition();
     }
-    this.fpsCamera.update(this.clock.getDelta());
     this.Render();
     stats.update();
   }
@@ -122,11 +117,15 @@ class Game {
     this.renderer.render(this.scene, this.camera);
   }
 
+  //this is how new players are created and added to the game. this includes the local player and any networked player
+  //The function is called from the main.js script
   NewPlayer(id ,{
     color = 0xff0000,
     inputEnabled = false
   }) {
+    //load the player model
     this.gltfLoader.load('../GameAssets/Models/Player/KnightMan.glb', gltf =>{
+      //once the model has loaded add it to the scene then create the new player
       this.scene.add(gltf.scene);
       let _newPlayer = new GameObject({
           gravityEnabled: true,
@@ -140,6 +139,7 @@ class Game {
           socketId: id,
           gltfScene: gltf.scene
         });
+        //update appropriate game variables
         if(inputEnabled){
           this.player = _newPlayer;
         }
@@ -157,6 +157,7 @@ class Game {
     this.players.remove(id);
   }
 
+  //this sets the positions of a networked player (the enemy player)
   UpdateNetworkedPlayer(id, position){
     try{
       this.players.get(id).position.set(position.x, position.y, position.z);

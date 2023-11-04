@@ -17,6 +17,8 @@ class InputController{
         this.keys_ = {};
         this.previousKeys = {};
 
+        //add event listeners for mousemove events
+
         document.addEventListener("mousedown", e => this.onMouseDown_(e), false);
         document.addEventListener("mouseup", e => this.onMouseUp_(e), false);
         document.addEventListener("mousemove", e => this.onMouseMove_(e), false);

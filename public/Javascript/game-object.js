@@ -2,6 +2,9 @@ import * as THREE from 'three';
 
 const gravity = -0.002;
 
+//a Game object is mainly used to make the player, however can be used to make static things in the scene
+//by default a game object is a cube but a gltf scene can be passed to give it a custom model
+
 class GameObject extends THREE.Mesh{
     constructor({
         height = 1,
@@ -28,20 +31,23 @@ class GameObject extends THREE.Mesh{
             this.position.x = position.x;
             this.position.y = position.y;
             this.position.z = position.z;
-            this.castShadow = true;
             this.receiveShadow = true;
             this.height = height;
             this.width = width;
             this.depth = depth;
+
             //not optimal better to scale actual mesh
             this.scale.set(scale,scale,scale);
 
+            //if a gltf scene is passed this wont be null
             this.gltfScene = gltfScene;
 
+            //if input enabled (ie, this is the local player)
             if (inputEnabled){
                 this.gltfScene.children[0].visible = false;
             }
 
+            //set the gltf scene position if its not null
             if(gltfScene){
                 this.gltfScene.position.x = position.x;
                 this.gltfScene.position.y = -0.78;

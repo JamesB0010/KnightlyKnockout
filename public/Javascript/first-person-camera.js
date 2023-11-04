@@ -7,6 +7,7 @@ function clamp(x, a, b) {
   return Math.min(Math.max(x, a), b);
 }
 
+//the key codes for the different keys the first person camera will listen for input from
 const KEYS = {
   'a': 65,
   's': 83,
@@ -40,8 +41,10 @@ class FirstPersonCamera{
   }
 
   updateCamera_(timeElapsedS, sceneObjects){
+    //update the cameras position and rotation
       this.camera_.quaternion.copy(this.rotation_);
       this.camera_.position.copy(this.translation_);
+
       //use sin wave to make camera go up and down
       this.camera_.position.y += (Math.sin(this.headBobTimer_ * 10) * 0.04) + 0.5;
 
@@ -66,13 +69,16 @@ class FirstPersonCamera{
   }
 
   updateTranslation_(timeElapsedS){
+    //find if we are moving forwards and which direction
       const forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0);
+      //find if we are moving sideways and in which direction
       const strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0);
 
       //if moving dispach the onMove event
       const moving = forwardVelocity != 0 || strafeVelocity != 0;
       if(moving){
         //dispach moving event which can be responded to elsewhere
+        //for example whenever the player moves send its new position to the server to be relayed to the other client
         document.dispatchEvent(moveEvent);
       }
       const walkSpeed = 1.75;
@@ -105,7 +111,6 @@ class FirstPersonCamera{
 
       this.theta_ = clamp(this.theta_ + -yh * this.thetaSpeed_, -Math.PI / 3, Math.PI / 3);
 
-      //console.log(this.theta_);
       const qx = new THREE.Quaternion();
       qx.setFromAxisAngle(new THREE.Vector3(0, 1, 0), this.phi_);
       const qz = new THREE.Quaternion();

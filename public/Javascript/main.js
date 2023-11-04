@@ -5,15 +5,20 @@ const socket = io(); // create new socket instance
 
 //add a game loading screen;
 
+//create a new game and initialise it
 let game = new Game();
 game.Init();
 
+
+//setup socket listeners
+//when a client joins the server a setId message will be sent to the client, they set their client id and connection array and make a new player
 socket.on("setId", id => {
   game.clientId = id;
   game.connectionArray.push(id);
   game.NewPlayer(id, {color:0xffffff, inputEnabled: true});
 })
 
+//whenever a player joins the server send the cupdateConnectionsArr message to all clients 
 socket.on("updateConnectionsArr", (connections)=>{
   if(connections.length == 1){
     //only this client is connected
@@ -46,6 +51,7 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
 })
 
 socket.on("GetClientPlayerIdPosition", () =>{
+  //try to send the player position however if the player hasnt loaded in yet just send a default position
   try{
     socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
   }
@@ -65,7 +71,7 @@ document.addEventListener("OnClientMove", e =>{
 })
 
 
-
+//game loop
 function Animate() {
   requestAnimationFrame(t => {
     game.Update();
