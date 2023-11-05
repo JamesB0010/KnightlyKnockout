@@ -4,6 +4,8 @@ import { FirstPersonCamera, KEYS } from './first-person-camera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.module.js";
 
+import {Cloud} from "./cloud.js";
+
 let stats;
 
 class Game {
@@ -98,6 +100,15 @@ class Game {
       this.scene.add(element);
     });
 
+
+    //spawn 10 clouds and randomly disperse them along the sky
+    for (let i = 0; i < 10; i++){
+      let cloudGroup = Cloud.CreateCloud();
+      cloudGroup.position.x = Math.random() * 60 - 30;
+      cloudGroup.position.y = Math.random() * 30 - 2.5;
+      cloudGroup.position.z = Math.random() * 60 - 30;
+      this.scene.add(cloudGroup);
+    }
   }
 
   //update is called every animation frame
