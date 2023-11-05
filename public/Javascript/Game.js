@@ -68,7 +68,7 @@ class Game {
 
     //add skybox
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('../GameAssets/Images/SkyboxTextures/LowPolyTownSkybox.jpg', texture => {
+    textureLoader.load('../GameAssets/Images/SkyboxTextures/CastleInMountains1.png', texture => {
       const skySphere = new THREE.SphereGeometry(100, 60, 40);
       const material = new THREE.MeshBasicMaterial({
         map: texture,
