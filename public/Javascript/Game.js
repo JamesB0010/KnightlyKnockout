@@ -8,6 +8,25 @@ import {Cloud} from "./cloud.js";
 
 let stats;
 
+const numThingsTOLoad = 2;
+let numThingsLoaded = 0;
+let gameLoaded = false;
+
+function RemoveLoadingScreen(){
+  gameLoaded = true;
+      //add fps counter
+      stats = new Stats();
+      document.body.appendChild(stats.dom);
+  console.log("remove loading screen");
+}
+
+function CheckEverythingsLoaded(){
+  //if not everything has been loaded yet then return
+  if (numThingsLoaded >= numThingsTOLoad){
+    RemoveLoadingScreen();
+  }
+}
+
 class Game {
   constructor() {
     this.scene;
@@ -50,10 +69,6 @@ class Game {
       this.OnWindowResize(this);
     });
 
-    //add fps counter
-    stats = new Stats();
-    document.body.appendChild(stats.dom);
-
     //add pointMaterials for lesson
     const radius = 7;
     const widthSegments = 12;
@@ -76,15 +91,20 @@ class Game {
       })
       const skyBoxMesh = new THREE.Mesh(skySphere, material);
       this.scene.add(skyBoxMesh);
+      numThingsLoaded ++;
+      CheckEverythingsLoaded();
     });
 
     //load the medival bridge gltf into the scene
-    this.gltfLoader.load('../GameAssets/Models/Environment/MedivalBridge.glb', (gltf) => {
+    let loadBridgePromise =  this.gltfLoader.loadAsync('../GameAssets/Models/Environment/MedivalBridge.glb');
+
+    loadBridgePromise.then((gltf) =>{
       gltf.scene.position.y = -1.05;
       gltf.scene.scale.multiplyScalar(0.5);
       this.scene.add(gltf.scene);
+      numThingsLoaded ++;
+      setTimeout(CheckEverythingsLoaded, 500);
     });
-
 
     this.fpsCamera = new FirstPersonCamera(this.camera);
 
@@ -121,7 +141,9 @@ class Game {
       this.player.updateGltfPosition();
     }
     this.Render();
-    stats.update();
+    if(gameLoaded){
+      stats.update();
+    }
   }
 
   Render() {
