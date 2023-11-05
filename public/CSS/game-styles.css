@@ -4,6 +4,7 @@ body{
   background: skyblue;
 }
 .overlay-text{
+  display: none;
   position: absolute;
   top: 20%;
   left: 20%;

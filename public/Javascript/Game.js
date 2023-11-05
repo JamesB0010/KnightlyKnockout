@@ -12,18 +12,24 @@ const numThingsTOLoad = 2;
 let numThingsLoaded = 0;
 let gameLoaded = false;
 
-function RemoveLoadingScreen(){
+function OnEverythingLoaded(){
   gameLoaded = true;
       //add fps counter
       stats = new Stats();
       document.body.appendChild(stats.dom);
+
+      let overlayTextElements = document.getElementsByClassName("overlay-text");
+      overlayTextElements[0].style["display"] = "block";
+
+      let loadingScreenDiv = document.getElementsByClassName("loadingScreen");
+      loadingScreenDiv[0].style["display"] = "none";
   console.log("remove loading screen");
 }
 
 function CheckEverythingsLoaded(){
   //if not everything has been loaded yet then return
   if (numThingsLoaded >= numThingsTOLoad){
-    RemoveLoadingScreen();
+    OnEverythingLoaded();
   }
 }
 
