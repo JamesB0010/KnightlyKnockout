@@ -18,7 +18,7 @@ function OnEverythingLoaded(){
       stats = new Stats();
       document.body.appendChild(stats.dom);
 
-      let overlayTextElements = document.getElementsByClassName("overlay-text");
+      let overlayTextElements = document.getElementsByClassName("gameUi");
       overlayTextElements[0].style["display"] = "block";
 
       let loadingScreenDiv = document.getElementsByClassName("loadingScreen");

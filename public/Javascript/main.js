@@ -78,9 +78,5 @@ function Animate() {
     Animate();
   });
 }
-//credits to https://www.youtube.com/watch?v=leAbQ0yfVX0 for how to use pointer lock
-game.renderer.domElement.onclick = () => {
-  document.body.requestPointerLock();
-}
 
 Animate();
