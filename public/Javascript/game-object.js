@@ -104,6 +104,11 @@ class GameObject extends THREE.Mesh{
             return false;
         }
     }
+
+    ResetHealth(){
+        this.health = 100;
+        this.UpdateBloodSpatterOpacity();
+    }
 }
 
 export {GameObject};

@@ -69,6 +69,10 @@ socket.on("NetworkedPlayerDeath", info =>{
   game.roundManager.playerDead(info.id);
 })
 
+socket.on("ResetClientHealth", () =>{
+  game.player.ResetHealth();
+});
+
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
   socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});

@@ -60,6 +60,8 @@ io.on("connection", socket => {
 
   socket.on("PlayerDeath", info =>{
     socket.broadcast.emit("NetworkedPlayerDeath", info);
+    socket.emit("ResetClientHealth");
+    socket.broadcast.emit("ResetClientHealth");
   })
 
   //on disconnect
