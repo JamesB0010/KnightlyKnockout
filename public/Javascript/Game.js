@@ -3,7 +3,7 @@ import { GameObject } from './game-object.js';
 import { FirstPersonCamera, KEYS } from './first-person-camera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.module.js";
-
+import {RoundManager} from './round-manager.js';
 import {Cloud} from "./cloud.js";
 
 let stats;
@@ -11,6 +11,8 @@ let stats;
 const numThingsTOLoad = 2;
 let numThingsLoaded = 0;
 let gameLoaded = false;
+
+const playerDead = new Event("PlayerDead");
 
 function OnEverythingLoaded(){
   gameLoaded = true;
@@ -48,6 +50,8 @@ class Game {
     this.connectionArray =[];
     //this clients socket id
     this.clientId;
+
+    this.roundManager;
   };
   OnWindowResize(game) {
     //making window responsive
@@ -181,11 +185,14 @@ class Game {
         //update appropriate game variables
         if(inputEnabled){
           this.player = _newPlayer;
+          //create the round manager
+          this.roundManager = new RoundManager(this.clientId);
         }
         this.gameObjects.push(_newPlayer);
         this.players.set(id, _newPlayer);
         console.log(this.players);
         this.scene.add(_newPlayer);
+        this.roundManager.addKeyValToMap(id, 0);
     })
   };
 
@@ -206,6 +213,11 @@ class Game {
 
     }
   }
+
+  onClientDeath(){
+    this.roundManager.playerDead(this.clientId);
+    document.dispatchEvent(playerDead);
+  };
 }
 
 export { Game };

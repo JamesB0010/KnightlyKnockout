@@ -58,6 +58,10 @@ io.on("connection", socket => {
     socket.broadcast.emit("UpdateNetworkedPlayerPos", info);
   })
 
+  socket.on("PlayerDeath", info =>{
+    socket.broadcast.emit("NetworkedPlayerDeath", info);
+  })
+
   //on disconnect
   socket.on('disconnect', () => {
     console.log(socket.id + " Disconnected");
