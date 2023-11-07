@@ -12,6 +12,8 @@ const numThingsTOLoad = 2;
 let numThingsLoaded = 0;
 let gameLoaded = false;
 
+const playerDead = new Event("PlayerDead");
+
 function OnEverythingLoaded(){
   gameLoaded = true;
       //add fps counter
@@ -139,7 +141,7 @@ class Game {
     }
 
     //create the round manager
-    this.roundManager = new RoundManager();
+    this.roundManager = new RoundManager(this.clientId);
 
   }
 
@@ -216,6 +218,7 @@ class Game {
 
   onClientDeath(){
     this.roundManager.playerDead(this.clientId);
+    document.dispatchEvent(playerDead);
   };
 }
 

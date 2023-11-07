@@ -65,9 +65,18 @@ socket.on("removeId", id =>{
   game.connectionArray = game.connectionArray.filter(connection => {connection != id});
 })
 
+socket.on("NetworkedPlayerDeath", info =>{
+  game.roundManager.playerDead(info.id);
+})
+
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
   socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
+})
+
+//make listener for player death
+document.addEventListener("PlayerDead", e =>{
+  socket.emit("PlayerDeath", {id: game.clientId});
 })
 
 function ClientDeath(){
