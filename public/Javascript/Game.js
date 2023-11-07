@@ -192,6 +192,7 @@ class Game {
         this.players.set(id, _newPlayer);
         console.log(this.players);
         this.scene.add(_newPlayer);
+        this.roundManager.addKeyValToMap(id, 0);
     })
   };
 
@@ -214,7 +215,7 @@ class Game {
   }
 
   onClientDeath(){
-    //this.roundManager.clientDead();
+    this.roundManager.playerDead(this.clientId);
   };
 }
 
