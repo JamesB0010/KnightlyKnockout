@@ -14,6 +14,21 @@ body{
   color: rgb(71, 71, 71);
 }
 
+.bloodSplatter{
+   /* The image used */
+   background-image: url("../GameAssets/Images/bloodSplatterUiEffect.png");
+
+   opacity: 100%;
+
+   /* Full height */
+   height: 100%;
+ 
+   /* Center and scale the image nicely */
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+}
+
 .scoreSection{
   display:grid;
   grid-template-columns: 1fr 0.7fr 0.7fr 1fr;
@@ -85,8 +100,6 @@ body{
   border-bottom-left-radius: 20%;
   border-bottom-right-radius: 20%;
 }
-
-
 
 .loadingScreen{
   display: flex;
