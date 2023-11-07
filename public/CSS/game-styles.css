@@ -39,12 +39,26 @@ body{
 
 .scoreSection img{
   width: 50px;
-  border-radius: 50%;
+  border: 3px solid #ffffff;
+  border-radius: 10%;
 }
 
 .scoreSection .clientScoreSection{
-  display: grid;;
-  grid-column: 1fr 0.3fr;
+  display: grid;
+  grid-template-columns: 1fr 0.3fr;
+}
+
+.scoreSection .clientScoreSection img{
+  place-self: center;
+}
+
+.scoreSection .clientScoreSection div{
+  background-color: #00b4d8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
 }
 
 .scoreSection .center{
@@ -55,9 +69,24 @@ body{
 }
 
 .scoreSection .enemyScoreSection{
-  grid-column: 4;
-  background-color: #000000;
+  display: grid;
+  grid-template-columns: 0.3fr 1fr;
 }
+
+.scoreSection .enemyScoreSection img{
+  place-self: center;
+}
+
+.scoreSection .enemyScoreSection div{
+  background-color: #f17929;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+}
+
+
 
 .loadingScreen{
   display: flex;
