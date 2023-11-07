@@ -139,10 +139,6 @@ class Game {
       cloudGroup.position.z = Math.random() * 60 - 30;
       this.scene.add(cloudGroup);
     }
-
-    //create the round manager
-    this.roundManager = new RoundManager(this.clientId);
-
   }
 
   //update is called every animation frame
@@ -189,6 +185,8 @@ class Game {
         //update appropriate game variables
         if(inputEnabled){
           this.player = _newPlayer;
+          //create the round manager
+          this.roundManager = new RoundManager(this.clientId);
         }
         this.gameObjects.push(_newPlayer);
         this.players.set(id, _newPlayer);
