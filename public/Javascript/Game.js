@@ -3,7 +3,7 @@ import { GameObject } from './game-object.js';
 import { FirstPersonCamera, KEYS } from './first-person-camera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.module.js";
-
+import {RoundManager} from './round-manager.js';
 import {Cloud} from "./cloud.js";
 
 let stats;
@@ -48,6 +48,8 @@ class Game {
     this.connectionArray =[];
     //this clients socket id
     this.clientId;
+
+    this.roundManager;
   };
   OnWindowResize(game) {
     //making window responsive
@@ -135,6 +137,10 @@ class Game {
       cloudGroup.position.z = Math.random() * 60 - 30;
       this.scene.add(cloudGroup);
     }
+
+    //create the round manager
+    this.roundManager = new RoundManager();
+
   }
 
   //update is called every animation frame
