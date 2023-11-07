@@ -21,8 +21,16 @@ class RoundManager{
     #CheckPlayerHasWon(){
         this.#playerScores.forEach((value, key) =>{
             if (value >= this.#maxScore){
-                alert("Player won");
-                window.location.href = "../HTML/game-over.html";
+                if(key == this.#clientId){
+                    document.getElementsByClassName("playerWonGame")[0].style["display"] = "flex";
+                }
+                else{
+                    document.getElementsByClassName("playerLostGame")[0].style["display"] = "flex";
+                }
+                //alert("Player won");
+                setTimeout(() =>{
+                    window.location.href = "../HTML/game-over.html";
+                },3000)
             }
         })
     }
@@ -34,6 +42,10 @@ class RoundManager{
                 this.#playerScores.set(key, newScore);
 
                 if(Id != this.#clientId){
+                    document.getElementsByClassName("playerWonRound")[0].style["display"] = "flex";
+                    setTimeout(() =>{
+                        document.getElementsByClassName("playerWonRound")[0].style["display"] = "none";
+                    }, 800)
                     console.log(this.clientScoreP);
                     this.clientScoreP.innerText = newScore;
                     //alert("enemy dead");
@@ -41,6 +53,10 @@ class RoundManager{
                     return;
                 }
                 else{
+                    document.getElementsByClassName("playerLostRound")[0].style["display"] = "flex";
+                    setTimeout(() =>{
+                        document.getElementsByClassName("playerLostRound")[0].style["display"] = "none";
+                    }, 800)
                     this.enemyScoreP.innerText = newScore;
                     //alert("Player dead" + Id);
                     this.#CheckPlayerHasWon();

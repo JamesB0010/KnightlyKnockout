@@ -125,6 +125,70 @@ body{
   left: 10vw;
 }
 
+.playerLostRound{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+}
+
+.playerLostRound H1{
+  font-size: 500%;
+}
+
+.playerWonRound{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+}
+
+.playerWonRound H1{
+  font-size: 500%;
+}
+
+.playerWonGame{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+}
+
+.playerWonGame H1{
+  font-size: 500%;
+}
+
+.playerLostGame{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+}
+
+.playerLostGame H1{
+  font-size: 500%;
+}
+
 /* credits https://www.w3schools.com/howto/howto_css_loader.asp */
 .loader {
   border: 16px solid #000000; /* Light grey */
