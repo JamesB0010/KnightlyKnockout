@@ -15,15 +15,48 @@ body{
 }
 
 .scoreSection{
+  display:grid;
+  grid-template-columns: 1fr 0.7fr 0.7fr 1fr;
+  grid-template-rows: 1;
+  align-items: stretch;
+  justify-items: stretch;
   position: absolute;
-  left:40vw;
+  left:30vw;
   top: 0%;
-  width: 20vw;
+  width: 40vw;
   height: 10vh;
   background-image: linear-gradient(#5440b6, rgba(255, 255, 255, 0));
   background-repeat: no-repeat;
   border-bottom-left-radius: 20%;
   border-bottom-right-radius: 20%;
+  text-align: center;
+}
+
+.scoreSection p{
+  font-size: 150%;
+  margin:0;
+}
+
+.scoreSection img{
+  width: 50px;
+  border-radius: 50%;
+}
+
+.scoreSection .clientScoreSection{
+  display: grid;;
+  grid-column: 1fr 0.3fr;
+}
+
+.scoreSection .center{
+  grid-column: 2 / 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scoreSection .enemyScoreSection{
+  grid-column: 4;
+  background-color: #000000;
 }
 
 .loadingScreen{
