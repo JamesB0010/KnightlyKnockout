@@ -18,7 +18,7 @@ body{
    /* The image used */
    background-image: url("../GameAssets/Images/bloodSplatterUiEffect.png");
 
-   opacity: 100%;
+   opacity: 1;
 
    /* Full height */
    height: 100%;
