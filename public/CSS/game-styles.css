@@ -125,6 +125,18 @@ body{
   left: 10vw;
 }
 
+#healButton{
+  position: absolute;
+  top: 45vh;
+  left: 10vw;
+}
+
+#damageButton{
+  position: absolute;
+  top: 40vh;
+  left: 10vw;
+}
+
 .playerLostRound{
   display: none;
   justify-content: center;
