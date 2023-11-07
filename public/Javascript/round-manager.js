@@ -36,13 +36,13 @@ class RoundManager{
                 if(Id != this.#clientId){
                     console.log(this.clientScoreP);
                     this.clientScoreP.innerText = newScore;
-                    alert("enemy dead");
+                    //alert("enemy dead");
                     this.#CheckPlayerHasWon();
                     return;
                 }
                 else{
                     this.enemyScoreP.innerText = newScore;
-                    alert("Player dead" + Id);
+                    //alert("Player dead" + Id);
                     this.#CheckPlayerHasWon();
                     return;
                 }
