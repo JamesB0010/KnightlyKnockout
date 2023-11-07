@@ -7,7 +7,7 @@ class RoundManager{
     constructor(){
         this.#roundNumber = 0;
         this.#maxScore = 3;
-        this.#playerScores = [0,0];
+        this.#playerScores = new Map();
     }
 }
 

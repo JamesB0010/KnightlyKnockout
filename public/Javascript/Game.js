@@ -212,6 +212,10 @@ class Game {
 
     }
   }
+
+  onClientDeath(){
+    //this.roundManager.clientDead();
+  };
 }
 
 export { Game };

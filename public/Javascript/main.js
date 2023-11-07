@@ -70,6 +70,12 @@ document.addEventListener("OnClientMove", e =>{
   socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
 })
 
+function ClientDeath(){
+  game.onClientDeath();
+}
+
+document.getElementById("deathButton").onclick = ClientDeath;
+
 
 //game loop
 function Animate() {
