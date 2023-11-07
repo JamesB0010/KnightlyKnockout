@@ -139,6 +139,17 @@ class Game {
       cloudGroup.position.z = Math.random() * 60 - 30;
       this.scene.add(cloudGroup);
     }
+
+    document.getElementById("healButton").onclick = () =>{
+      this.player.Heal(10);
+    };
+    document.getElementById("damageButton").onclick = () =>{
+      let playerDead =this.player.Damage(10);
+      if(playerDead){
+        this.onClientDeath();
+      }
+    };
+
   }
 
   //update is called every animation frame

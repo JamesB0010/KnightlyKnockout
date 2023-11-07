@@ -6,6 +6,7 @@ const gravity = -0.002;
 //by default a game object is a cube but a gltf scene can be passed to give it a custom model
 
 class GameObject extends THREE.Mesh{
+    health = 100;
     constructor({
         height = 1,
         width = 1,
@@ -69,6 +70,31 @@ class GameObject extends THREE.Mesh{
     updateGltfPosition(){
         this.gltfScene.position.x = this.position.x;
         this.gltfScene.position.z = this.position.z;
+    }
+
+    Heal(amount){
+        if(this.health == 0){
+            return;
+        }
+        if (this.health < 100){
+            this.health += amount;
+            console.log(this.health);
+        }
+    }
+    Damage(amount){
+        //return true if this damage caused the player to die
+        if(this.health > 0){
+            this.health -= amount;
+            console.log(this.health);
+        }
+        if (this.health <= 0){
+            //player has died
+            console.log("player has died");
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
 
