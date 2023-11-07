@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 const gravity = -0.002;
 
+let bloodSplatterDom = document.getElementsByClassName("bloodSplatter")[0];
+
 //a Game object is mainly used to make the player, however can be used to make static things in the scene
 //by default a game object is a cube but a gltf scene can be passed to give it a custom model
 
@@ -72,6 +74,10 @@ class GameObject extends THREE.Mesh{
         this.gltfScene.position.z = this.position.z;
     }
 
+    UpdateBloodSpatterOpacity(){
+        bloodSplatterDom.style["opacity"] = 1 - this.health / 100;
+    }
+
     Heal(amount){
         if(this.health == 0){
             return;
@@ -79,6 +85,7 @@ class GameObject extends THREE.Mesh{
         if (this.health < 100){
             this.health += amount;
             console.log(this.health);
+            this.UpdateBloodSpatterOpacity();
         }
     }
     Damage(amount){
@@ -86,6 +93,7 @@ class GameObject extends THREE.Mesh{
         if(this.health > 0){
             this.health -= amount;
             console.log(this.health);
+            this.UpdateBloodSpatterOpacity();
         }
         if (this.health <= 0){
             //player has died
