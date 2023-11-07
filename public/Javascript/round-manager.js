@@ -18,9 +18,11 @@ class RoundManager{
         for (let [key, value] of this.#playerScores){
             if(key != Id){
                 this.#playerScores.set(key, this.#playerScores.get(key) + 1);
-                console.log(this.#playerScores);
+                alert("Player dead" + Id);
+                return;
             }
         }
+        alert("only 1 player in game error");
     }
 }
 
