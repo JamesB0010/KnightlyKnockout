@@ -16,9 +16,9 @@ body{
 
 .bloodSplatter{
    /* The image used */
-   background-image: url("../GameAssets/Images/bloodSplatterUiEffect.png");
+   background-image: url("../GameAssets/Images/BloodSplatteruiEffect2.png");
 
-   opacity: 1;
+   opacity: 0;
 
    /* Full height */
    height: 100%;
