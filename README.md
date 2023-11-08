@@ -270,6 +270,10 @@ See the [open issues](https://github.com/JamesB0010/Year2UniWebGame/issues) for 
 
 James Bland - JamesRichardBland@gmail.com or James.bland@mail.bcu.ac.uk
 
+[LinkedIn](https://www.linkedin.com/in/james-richard-bland/)
+
+[YouTube](https://www.youtube.com/channel/UCd5tdaMVhvp2SkkqIxzsuRQ)
+
 Project Link: [https://github.com/JamesB0010/Year2UniWebGame](https://github.com/JamesB0010/Year2UniWebGame)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
