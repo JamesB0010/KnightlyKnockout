@@ -34,6 +34,8 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#FileStructure">File Structure</a></li>
+    <li><a href = "#NamingConventions"> Naming Conventions</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -167,6 +169,18 @@ when a player dies the opposing player gets a point added to their score and the
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!--File structure-->
+## FileStructure
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!--Naming conventions-->
+## NamingConventions
+file naming
+
+code naming
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -200,16 +214,16 @@ when a player dies the opposing player gets a point added to their score and the
 - [ ] A presentation has been created for the project
 
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/JamesB0010/Year2UniWebGame/issues) for a list of features which are being worked on/have been worked on.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+James Bland - JamesRichardBland@gmail.com or James.bland@mail.bcu.ac.uk
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/JamesB0010/Year2UniWebGame](https://github.com/JamesB0010/Year2UniWebGame)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
