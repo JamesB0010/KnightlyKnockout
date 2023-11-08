@@ -145,7 +145,8 @@ open the website again (http://localhost:3000) in another tab and follow the sam
 
 after both tabs have been loaded you will be able to see both players are loaded into the game and their movements are replicated to each other
 
-![GamePlay](https://github.com/JamesB0010/Year2UniWebGameblob/master/MarkdownAssets/WebGameTest.gif)
+![WebGameTest](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/be295952-7c8d-4de1-a0b1-63348cd05f07)
+
 
 <h3>Player Damage and rounds</h3>
 
