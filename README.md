@@ -156,6 +156,8 @@ The heal button increases the players health and does the opposite of the damage
 
 The die button instantly kills the player
 
+the buttons are not intended for the final game and so using them can be weird. each time you click the button the game will attempt to capture the cursor so you must press esc to get the cursor back to click another button
+
 when a player dies the opposing player gets a point added to their score and the first player to get 3 points wins 
 
 
