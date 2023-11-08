@@ -121,6 +121,8 @@ How to install and setup the game to run on localhost
    git clone https://github.com/JamesB0010/Year2UniWebGame.git
    ```
 2. Install NPM packages
+
+Open your command line and set the current directory to the root of the project, then run:
    ```sh
    npm install
    ```
