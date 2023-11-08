@@ -160,6 +160,7 @@ the buttons are not intended for the final game and so using them can be weird. 
 
 when a player dies the opposing player gets a point added to their score and the first player to get 3 points wins 
 
+![DemoOfPlayerWinningGame](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/8dd401e0-3413-4f7c-b7f3-d9d38c30d278)
 
 
 
