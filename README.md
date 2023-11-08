@@ -104,12 +104,7 @@ This section will cover setting the project up locally
 
 First you will need <a href = "https://nodejs.org/en/">node</a> installed on your machine
 <br>
-if you already have node you <i>can</i> update it, if you want to, using the following command:
-
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Node version v18.15.0 was used to develop the app, this version or any later versions should work to run the project
 
 ### Installation
 
