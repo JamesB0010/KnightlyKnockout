@@ -172,13 +172,50 @@ when a player dies the opposing player gets a point added to their score and the
 <!--File structure-->
 ## FileStructure
 
+The file structure of the project is as follows
+
+* root
+    * server.js
+    * Other files (such as gitignore, readme, package.json etc...)
+    * node_modules/
+        * libraries imported by npm
+    * Presentation/
+        * GamePresentation.pptx
+    * public/
+        * CSS/
+            * game-styles.css
+            * global-styles.css
+        * GameAssets/
+            * Images/
+                * skybox textures/ (a folder containing images to be used as a skybox)
+                * (images used in game such as blood splatter effects and a default profile picture)
+            * Models/
+                * Environment/
+                    * medivalBridge.glb
+                * Player/
+                    * KnightMan.glb
+        * HTML/
+            * (html files for the game and website)
+        * Javascript/
+            * (Javascript files for the game and website)
+    * views/
+        * 404.html
+        * 404styles.css
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!--Naming conventions-->
 ## NamingConventions
-file naming
+<h3>File naming</h3>
 
-code naming
+HTML, CSS and Javascript files all follow the convention of being all lowercase and seperating words with a hyphen except for the Game.js file
+
+<h3>Code naming</h3>
+
+* camelCase is used for variables
+* PascalCase is used for functions and classes
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -235,16 +272,18 @@ Project Link: [https://github.com/JamesB0010/Year2UniWebGame](https://github.com
 <!--Badges from https://github.com/Ileriayo/markdown-badges-->
 <!--Markdown template from https://github.com/othneildrew/Best-README-Template/blob/master/README.md-->
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
+Here are references to rescources used in the project
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+* [Readme Template](https://github.com/othneildrew/Best-README-Template)
+* [Img Shields/Badges](https://github.com/Ileriayo/markdown-badges)
+* [Creating express server article](https://replit.com/talk/learn/SocketIO-Tutorial-What-its-for-and-how-to-use/143781)
+* [How to respond to a 404 with express](https://www.youtube.com/watch?v=OKGMhFgR7RY)
+* [How to send a html file in response to a 404](https://www.youtube.com/watch?v=JbwlM1Gu5aE)
+* [Loader wheel for loading page](https://www.w3schools.com/howto/howto_css_loader.asp)
+* [Pointer lock tutorial video](https://www.youtube.com/watch?v=leAbQ0yfVX0)
+* [Log in and sign up form base](https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit)
+* [Randomize matrix function used in the process of creating clouds using random spheres](https://github.com/mrdoob/three.js/blob/dev/examples/webgl_instancing_performance.html)
+* [Fps controller and Input controller](https://www.youtube.com/watch?v=oqKzxPMLWxo)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
