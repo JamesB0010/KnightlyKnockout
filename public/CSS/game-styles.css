@@ -201,6 +201,22 @@ body{
   font-size: 500%;
 }
 
+.newRound{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+}
+
+.newRound H1{
+  font-size: 450%;
+}
+
 /* credits https://www.w3schools.com/howto/howto_css_loader.asp */
 .loader {
   border: 16px solid #000000; /* Light grey */

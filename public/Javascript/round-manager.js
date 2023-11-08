@@ -1,4 +1,6 @@
 
+const roundCounterDom = document.getElementById("roundCounter");
+
 class RoundManager{
     //private:
     #roundNumber;
@@ -6,7 +8,7 @@ class RoundManager{
     #playerScores;
     #clientId;
     constructor(clientId){
-        this.#roundNumber = 0;
+        this.#roundNumber = 1;
         this.#maxScore = 3;
         this.#playerScores = new Map();
         this.enemyScoreP = document.getElementById("enemyScoreText");
@@ -35,16 +37,28 @@ class RoundManager{
         })
     }
 
+    #ShowNewRoundScreen(){
+        document.getElementsByClassName("newRound")[0].style["display"] = "flex";
+        setTimeout(() =>{
+            document.getElementsByClassName("newRound")[0].style["display"] = "none";
+        }, 1100);
+    }
+
     playerDead(Id){
         for (let [key, value] of this.#playerScores){
             if(key != Id){
                 let newScore = this.#playerScores.get(key) + 1;
                 this.#playerScores.set(key, newScore);
+                if(this.#roundNumber < 5){
+                    this.#roundNumber++;
+                }
+                roundCounterDom.innerText = "Round " + this.#roundNumber +"/5";
 
                 if(Id != this.#clientId){
                     document.getElementsByClassName("playerWonRound")[0].style["display"] = "flex";
                     setTimeout(() =>{
                         document.getElementsByClassName("playerWonRound")[0].style["display"] = "none";
+                        this.#ShowNewRoundScreen();
                     }, 800)
                     console.log(this.clientScoreP);
                     this.clientScoreP.innerText = newScore;
@@ -56,6 +70,7 @@ class RoundManager{
                     document.getElementsByClassName("playerLostRound")[0].style["display"] = "flex";
                     setTimeout(() =>{
                         document.getElementsByClassName("playerLostRound")[0].style["display"] = "none";
+                        this.#ShowNewRoundScreen();
                     }, 800)
                     this.enemyScoreP.innerText = newScore;
                     //alert("Player dead" + Id);
