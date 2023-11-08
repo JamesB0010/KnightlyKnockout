@@ -150,9 +150,15 @@ after both tabs have been loaded you will be able to see both players are loaded
 
 <h3>Player Damage and rounds</h3>
 
+You can press the damage button to damage the player this will cause the blood effect around the screen to become less transparrent alerting the player to the health they have left
+
+The heal button increases the players health and does the opposite of the damage button
+
+The die button instantly kills the player
+
+when a player dies the opposing player gets a point added to their score and the first player to get 3 points wins 
 
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
