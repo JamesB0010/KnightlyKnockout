@@ -171,13 +171,34 @@ when a player dies the opposing player gets a point added to their score and the
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [x] Game Website has: intro page, login page, new user page, 404 page, game loading page, and a game page
+- [x] Game Assets for character, environment and enemy player
+- [x] Use of lights, texture and material for the game assets
+- [x] animation (translation) of game assets 
+- [x] Game interaction (player able to control player character)
+- [x] Game ui which is fully functioning displaying score, health, rewards and penalties
+- [x] Responsive webpage design
+- [x] Responsive game page design
+- [ ] Game has a server side, and displays a 404 page correctly ✅ and is correctly deployed ❌
+- [ ] Game websites are fully working with correct login, register web interface
+- [x] Game webpages are responsive to different screen sizes
+- [ ] Data storage implementation - user login data
+- [ ] Data storage implementation - game score/ stats
+- [ ] Game score for the players login data can be reloaded correctly
+- [ ] ·	Game data storage is secured and not able to be access without authentication.
+- [ ] ·	Complicated landscape and visual effect display and with a good loading speed: For example, particles ❌and use of instance.  ✅  
+- [ ] Game increases in difficulty as the user score increases
+- [ ] Game audio is working in the game
+- [ ] Game is working on the latest google chrome web browser for both pc and mobile devices
+- [x] Has a "Readme" documentation <sub>Yay thats me️!</sub>
+- [ ] User data is encrypted and stored securley
+- [ ] Has database design and implementation for game data
+- [x] Multiple player allows at least two players to play in the same game at the same time
+- [ ] Using physics that affected the game
+- [ ] Has a systematic game messaging design. Passing the data using suitable client-server communication methods in a correct way
+- [ ] A youtube video has been made showing the game and demonstrating my work as a portfolio peice
+- [ ] A presentation has been created for the project
+
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 
