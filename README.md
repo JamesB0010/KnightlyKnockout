@@ -15,7 +15,7 @@
 <a name="readme-top"></a>
 <br />
 <div align="center">
-  <h3 align="center">Uni Web Game</h3>
+  <h3 align="center">Knightly Knockout</h3>
 
   <p align="center">
     A first person 1 vs 1 sword fighting game
