@@ -50,7 +50,7 @@ This is the web game i have created as part of my course work at Birmingham City
 <br>
 As mentioned above it is a networked multiplayer game, where two players fight 1 vs 1, the first to win 3 rounds wins!
 <br>
-The game takes inspiration from games like For Honor and Chivalry
+The game takes inspiration from games like <a href = "https://www.ubisoft.com/en-gb/game/for-honor">For Honor</a> and <a href = "https://chivalry2.com">Chivalry 2</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -59,9 +59,9 @@ The game takes inspiration from games like For Honor and Chivalry
 ### Built With
 <ul>
 <li>The game is built to run in the browser on the web. </li>
+<li>The game is a 3d game and so uses Three.js for its rendering</li>
 <li>The game will be served from a server which also handles player networking </li>
 <li>Nodemon was used during the development of the server code to make the development experience easier</li>
-<li>The game is a 3d game and so uses Three.js for its rendering</li>
 </ul>
 <br>
 
@@ -155,6 +155,9 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+
+<!--Badges from https://github.com/Ileriayo/markdown-badges-->
+<!--Markdown template from https://github.com/othneildrew/Best-README-Template/blob/master/README.md-->
 
 Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
