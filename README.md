@@ -104,7 +104,7 @@ This section will cover setting the project up locally
 
 First you will need <a href = "https://nodejs.org/en/">node</a> installed on your machine
 <br>
-if you already have node you can update it using the following command:
+if you already have node you <i>can</i> update it, if you want to, using the following command:
 
 * npm
   ```sh
