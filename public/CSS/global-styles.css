@@ -12,6 +12,10 @@ body{
   text-align: center;
 }
 
+label{
+  color:white;
+}
+
 h1{
   color: #fffffe;
   margin-top: 0;
