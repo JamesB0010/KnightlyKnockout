@@ -117,7 +117,13 @@ How to install and setup the game to run on localhost
    ```
 2. Install NPM packages
 
-Open your command line and set the current directory to the root of the project, then run:
+Open your command line and set the current directory to the root of the project, an easy way to do this is by right clicking the project folder and selecting "Open in Terminal"
+
+
+![open in terminal](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/804bff27-73f1-46c1-aa14-27ee7e63eb80)
+
+
+then run:
    ```sh
    npm install
    ```
