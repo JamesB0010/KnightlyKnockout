@@ -111,7 +111,7 @@ Node version v18.15.0 was used to develop the app, this version or any later ver
 How to install and setup the game to run on localhost
 
 
-1. Clone the repo (Url can be used with github desktop too), or download and unzip the project zip file
+1. Clone the repo (Url can be used with github desktop too)
    ```sh
    git clone https://github.com/JamesB0010/Year2UniWebGame.git
    ```
