@@ -113,13 +113,13 @@ How to install and setup the game to run on localhost
 
 1. Clone the repo (Url can be used with github desktop too)
 
-   To see the mid term submission of the game clone the mid-term-submission branch
+   * To see the mid term submission of the game clone the mid-term-submission branch
 
 ```sh
 git clone -b mid-term-submission https://github.com/JamesB0010/Year2UniWebGame.git
 ```
 
-or to see the current development version of the game then you can clone the repo from the main branch
+* or to see the current development version of the game then you can clone the repo from the main branch
 
    ```sh
    git clone https://github.com/JamesB0010/Year2UniWebGame.git
