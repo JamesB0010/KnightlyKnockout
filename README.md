@@ -106,6 +106,10 @@ First you will need <a href = "https://nodejs.org/en/">node</a> installed on you
 <br>
 Node version v18.15.0 was used to develop the app, this version or any later versions should work to run the project
 
+You will also need github desktop or git installed 
+
+it is easier to clone the project with git desktop, the steps to clone the project with git cli are below
+
 ### Installation
 
 How to install and setup the game to run on localhost
