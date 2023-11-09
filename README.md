@@ -106,22 +106,35 @@ First you will need <a href = "https://nodejs.org/en/">node</a> installed on you
 <br>
 Node version v18.15.0 was used to develop the app, this version or any later versions should work to run the project
 
+You will also need github desktop or git installed 
+
+it is easier to clone the project with git desktop, the steps to clone the project with git cli are below
+
 ### Installation
 
 How to install and setup the game to run on localhost
 
 
 1. Clone the repo (Url can be used with github desktop too)
+
+<ul>
+  <li>To see the mid term submission of the game clone the mid-term-submission branch</li>
+</ul>
+
+```sh
+git clone -b mid-term-submission https://github.com/JamesB0010/Year2UniWebGame.git
+```
+
+<ul>
+  <li>or to see the current development version of the game then you can clone the repo from the main branch</li>
+</ul>
+
    ```sh
    git clone https://github.com/JamesB0010/Year2UniWebGame.git
    ```
-
-To see the mid term submission of the game navigate to the mid term submission branch and pull the repositry
-
-To see the current version of the project navigate to the main branch of the project which is currently called main
-
+2. Make sure the current directory is Year2UniWebGame/
    
-2. Install NPM packages
+3. Install NPM packages
 
 Open your command line and set the current directory to the root of the project, an easy way to do this is by right clicking the project folder and selecting "Open in Terminal"
 
