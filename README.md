@@ -119,7 +119,7 @@ How to install and setup the game to run on localhost
 git clone -b mid-term-submission https://github.com/JamesB0010/Year2UniWebGame.git
 ```
 
-* or to see the current development version of the game then you can clone the repo from the main branch
+   * or to see the current development version of the game then you can clone the repo from the main branch
 
    ```sh
    git clone https://github.com/JamesB0010/Year2UniWebGame.git
