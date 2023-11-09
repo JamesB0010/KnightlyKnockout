@@ -106,7 +106,7 @@ class Game {
     });
 
     //load the medival bridge gltf into the scene
-    let loadBridgePromise =  this.gltfLoader.loadAsync('../GameAssets/Models/Environment/MedivalBridge.glb');
+    let loadBridgePromise =  this.gltfLoader.loadAsync('../GameAssets/Models/Environment/MedivalBridgeLowPoly.glb');
 
     loadBridgePromise.then((gltf) =>{
       gltf.scene.position.y = -1.05;
