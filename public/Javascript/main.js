@@ -73,6 +73,12 @@ socket.on("ResetClientHealth", () =>{
   game.player.ResetHealth();
 });
 
+socket.on("networkedLightAttack", id =>{
+  console.log("Networked light attack");
+  console.log(id);
+  game.players.get(id).children[0].PlayRandomAttack();
+})
+
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
   socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
@@ -82,6 +88,10 @@ document.addEventListener("OnClientMove", e =>{
 document.addEventListener("PlayerDead", e =>{
   socket.emit("PlayerDeath", {id: game.clientId});
 })
+
+document.addEventListener("lightAttack", ()=>{
+  socket.emit("PlayerLightAttack", game.clientId);
+});
 
 function ClientDeath(){
   game.onClientDeath();

@@ -207,7 +207,8 @@ class Game {
         console.log(this.players);
         this.scene.add(_newPlayer);
         this.roundManager.addKeyValToMap(id, 0);
-        this.player.add(new PlayerAudio(["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],this.listener));
+        _newPlayer.add(new PlayerAudio(["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],this.listener));
+        console.log("Add audio thingy");
     })
   };
 
