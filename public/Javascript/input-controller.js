@@ -1,4 +1,5 @@
 //credits https://www.youtube.com/watch?v=oqKzxPMLWxo
+const lightAttackDown = new Event("lightAttack");
 class InputController{
     constructor(){
         this.initialise_();
@@ -30,6 +31,7 @@ class InputController{
         switch(e.button){
             case 0:{
                 this.current_.leftButton = true;
+                document.dispatchEvent(lightAttackDown);
                 break;
             }
             case 2:{

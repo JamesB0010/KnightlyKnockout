@@ -48,6 +48,9 @@ class GameObject extends THREE.Mesh{
             //if input enabled (ie, this is the local player)
             if (inputEnabled){
                 this.gltfScene.children[0].visible = false;
+                document.addEventListener("lightAttack", () =>{
+                    this.children[0].PlayRandomAttack();
+                });
             }
 
             //set the gltf scene position if its not null

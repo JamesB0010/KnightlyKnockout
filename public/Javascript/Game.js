@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.module.js";
 import {RoundManager} from './round-manager.js';
 import {Cloud} from "./cloud.js";
+import { PlayerAudio } from './player-audio.js';
 
 let stats;
 
@@ -65,6 +66,8 @@ class Game {
   Init() {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.listener = new THREE.AudioListener();
+    this.camera.add(this.listener);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true
@@ -204,6 +207,7 @@ class Game {
         console.log(this.players);
         this.scene.add(_newPlayer);
         this.roundManager.addKeyValToMap(id, 0);
+        this.player.add(new PlayerAudio(["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],this.listener));
     })
   };
 
