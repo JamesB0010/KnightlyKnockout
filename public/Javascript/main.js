@@ -1,4 +1,4 @@
-import { Game } from './Game.js';
+import { Game } from '/game.js';
 import * as THREE from 'three';
 
 const socket = io(); // create new socket instance
