@@ -81,9 +81,8 @@ socket.on("ResetClientHealth", () =>{
 });
 
 socket.on("networkedLightAttack", id =>{
-  console.log("Networked light attack");
-  console.log(id);
   game.players.get(id).children[0].PlayRandomAttack();
+  game.players.get(id).SetAnimation(2);
 })
 
 //whenever the local player moves send it to the server

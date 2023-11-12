@@ -87,6 +87,11 @@ class GameObject extends THREE.Mesh{
         if(this.#currentAnimation == index){
             return;
         }
+        if(index == 2){
+            setTimeout(() =>{
+                console.log("attack anim complete");
+            }, 3730);
+        }
         this.#animationMixer.clipAction(this.gltfFile.animations[this.#currentAnimation]).stop();
         this.#currentAnimation = index;
         this.#animationMixer.clipAction(this.gltfFile.animations[index]).play();
