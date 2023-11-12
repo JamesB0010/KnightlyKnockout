@@ -26,7 +26,6 @@ function OnEverythingLoaded(){
 
       let loadingScreenDiv = document.getElementsByClassName("loadingScreen");
       loadingScreenDiv[0].style["display"] = "none";
-  console.log("remove loading screen");
 }
 
 function CheckEverythingsLoaded(){
@@ -43,6 +42,7 @@ class Game {
     this.renderer;
     this.gameObjects = [];
     this.player;
+    this.enemy;
     this.players = new Map();
     this.fpsCamera;
     this.clock = new THREE.Clock();
@@ -157,17 +157,21 @@ class Game {
 
   //update is called every animation frame
   Update() {
+    let deltaTime = this.clock.getDelta();
     //update the fps cameras position
-    this.fpsCamera.update(this.clock.getDelta());
+    this.fpsCamera.update(deltaTime);
     //if player isnt null then set their position and update the gltf position
     if (this.player) {
       this.player.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.player.updateGltfPosition();
     }
-    this.Render();
     if(gameLoaded){
       stats.update();
     }
+    if(this.enemy){
+      this.enemy.UpdateAnimMixer(deltaTime);
+    }
+    this.Render();
   }
 
   Render() {
@@ -194,7 +198,8 @@ class Game {
           color: color,
           inputEnabled: inputEnabled,
           socketId: id,
-          gltfScene: gltf.scene
+          gltfScene: gltf.scene,
+          gltfFile: gltf
         });
         //update appropriate game variables
         if(inputEnabled){
@@ -202,13 +207,15 @@ class Game {
           //create the round manager
           this.roundManager = new RoundManager(this.clientId);
         }
+        else{
+          this.enemy = _newPlayer;
+        }
         this.gameObjects.push(_newPlayer);
         this.players.set(id, _newPlayer);
-        console.log(this.players);
+        //console.log(this.players);
         this.scene.add(_newPlayer);
         this.roundManager.addKeyValToMap(id, 0);
         _newPlayer.add(new PlayerAudio(["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],this.listener));
-        console.log("Add audio thingy");
     })
   };
 

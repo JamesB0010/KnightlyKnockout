@@ -25,7 +25,8 @@ class GameObject extends THREE.Mesh{
         Geometry = new THREE.BoxGeometry(0, 0,0),
         Material = new THREE.MeshStandardMaterial({color: 0xffffff}),
         scale = 1,
-        gltfScene = null
+        gltfScene = null,
+        gltfFile = null
     }){
         super(
             Geometry,
@@ -60,6 +61,8 @@ class GameObject extends THREE.Mesh{
                 this.gltfScene.position.y = -0.78;
                 this.gltfScene.position.z = position.z;
                 this.gltfScene.scale.multiplyScalar(0.6);
+                this.#animationMixer = new THREE.AnimationMixer(gltfScene);
+                this.#animationMixer.clipAction(gltfFile.animations[1]).play();
             }
 
             this.velocity = {
@@ -76,6 +79,10 @@ class GameObject extends THREE.Mesh{
     updateGltfPosition(){
         this.gltfScene.position.x = this.position.x;
         this.gltfScene.position.z = this.position.z;
+    }
+
+    UpdateAnimMixer(deltaTime){
+        this.#animationMixer.update(deltaTime);
     }
 
     UpdateBloodSpatterOpacity(){
