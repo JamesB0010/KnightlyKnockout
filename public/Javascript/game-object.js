@@ -9,6 +9,7 @@ let bloodSplatterDom = document.getElementsByClassName("bloodSplatter")[0];
 
 class GameObject extends THREE.Mesh{
     health = 100;
+    #animationMixer;
     constructor({
         height = 1,
         width = 1,

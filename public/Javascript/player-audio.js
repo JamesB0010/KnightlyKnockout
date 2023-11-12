@@ -8,7 +8,7 @@ class PlayerAudio extends THREE.PositionalAudio{
         soundsToLoad.forEach(sound => {
             audioLoader.load(soundsRootDirectory + sound, buffer =>{
                 this.#attackSoundBuffers.push(buffer);
-                this.setRefDistance(20);
+                this.setRefDistance(0.6);
             });
         });
     }
