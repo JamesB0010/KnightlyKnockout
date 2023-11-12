@@ -1,5 +1,6 @@
 //credits https://www.youtube.com/watch?v=oqKzxPMLWxo
 const lightAttackDown = new Event("lightAttack");
+const heavyAttack = new Event("HeavyAttack");
 class InputController{
     constructor(){
         this.initialise_();
@@ -36,6 +37,7 @@ class InputController{
             }
             case 2:{
                 this.current_.leftButton = true;
+                document.dispatchEvent(heavyAttack);
                 break;
             }
         }

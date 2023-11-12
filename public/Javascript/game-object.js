@@ -92,7 +92,12 @@ class GameObject extends THREE.Mesh{
             setTimeout(() =>{
                 this.SetAnimation(1);
             }, 1800);
-        }
+        };
+        if(index == 0){
+            setTimeout(() =>{
+                this.SetAnimation(1);
+            }, 2230);
+        };
         this.#animationMixer.clipAction(this.gltfFile.animations[this.#currentAnimation]).stop();
         this.#currentAnimation = index;
         this.#animationMixer.clipAction(this.gltfFile.animations[index]).play();

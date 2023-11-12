@@ -66,6 +66,10 @@ io.on("connection", socket => {
     socket.broadcast.emit("networkedLightAttack", id);
   })
 
+  socket.on("PlayerHeavyAttack", id =>{
+    socket.broadcast.emit("networkedHeavyAttack", id);
+  })
+
   socket.on("PlayerDeath", info =>{
     socket.broadcast.emit("NetworkedPlayerDeath", info);
     socket.emit("ResetClientHealth");

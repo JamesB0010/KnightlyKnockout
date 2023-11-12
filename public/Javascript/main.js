@@ -85,6 +85,11 @@ socket.on("networkedLightAttack", id =>{
   game.players.get(id).SetAnimation(2);
 })
 
+socket.on("networkedHeavyAttack", id =>{
+  game.players.get(id).children[0].PlayRandomAttack();
+  game.players.get(id).SetAnimation(0);
+})
+
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
   socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId, velocities: e.detail});
@@ -99,9 +104,13 @@ document.addEventListener("PlayerDead", e =>{
   socket.emit("PlayerDeath", {id: game.clientId});
 })
 
-document.addEventListener("lightAttack", ()=>{
+document.addEventListener("lightAttack", e=>{
   socket.emit("PlayerLightAttack", game.clientId);
 });
+
+document.addEventListener("HeavyAttack", e =>{
+  socket.emit("PlayerHeavyAttack", game.clientId);
+})
 
 function ClientDeath(){
   game.onClientDeath();
