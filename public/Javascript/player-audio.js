@@ -6,7 +6,8 @@ class PlayerAudio extends THREE.PositionalAudio{
     constructor(soundsToLoad, listener, soundsRootDirectory = "../GameAssets/Sounds/"){
         super(listener);
         const audioLoader = new THREE.AudioLoader();
-        const insultSounds = ["/Insults/insult1.wav", "/Insults/insult2.wav"];
+        const insultsRootDirectory = soundsRootDirectory + "Insults/";
+        const insultSounds = ["insult1.wav", "insult2.wav", "insult3.wav", "insult4.wav", "insult5.wav"];
         soundsToLoad.forEach(sound => {
             audioLoader.load(soundsRootDirectory + sound, buffer =>{
                 this.#attackSoundBuffers.push(buffer);
@@ -14,7 +15,7 @@ class PlayerAudio extends THREE.PositionalAudio{
             });
         });
         insultSounds.forEach(sound =>{
-            audioLoader.load(soundsRootDirectory + sound, buffer =>{
+            audioLoader.load(insultsRootDirectory + sound, buffer =>{
                 this.#insultSoundBuffers.push(buffer);
             })
         })
