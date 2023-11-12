@@ -88,9 +88,10 @@ class GameObject extends THREE.Mesh{
             return;
         }
         if(index == 2){
+            //1800 is the time in milliseconds it takes to do the light attack animation
             setTimeout(() =>{
-                console.log("attack anim complete");
-            }, 3730);
+                this.SetAnimation(1);
+            }, 1800);
         }
         this.#animationMixer.clipAction(this.gltfFile.animations[this.#currentAnimation]).stop();
         this.#currentAnimation = index;
