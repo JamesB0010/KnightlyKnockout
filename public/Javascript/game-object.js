@@ -10,6 +10,7 @@ let bloodSplatterDom = document.getElementsByClassName("bloodSplatter")[0];
 class GameObject extends THREE.Mesh{
     health = 100;
     #animationMixer;
+    #currentAnimation = 1;
     constructor({
         height = 1,
         width = 1,
@@ -46,6 +47,7 @@ class GameObject extends THREE.Mesh{
 
             //if a gltf scene is passed this wont be null
             this.gltfScene = gltfScene;
+            this.gltfFile = gltfFile;
 
             //if input enabled (ie, this is the local player)
             if (inputEnabled){
@@ -62,7 +64,7 @@ class GameObject extends THREE.Mesh{
                 this.gltfScene.position.z = position.z;
                 this.gltfScene.scale.multiplyScalar(0.6);
                 this.#animationMixer = new THREE.AnimationMixer(gltfScene);
-                this.#animationMixer.clipAction(gltfFile.animations[1]).play();
+                this.#animationMixer.clipAction(gltfFile.animations[this.#currentAnimation]).play();
             }
 
             this.velocity = {
@@ -79,6 +81,39 @@ class GameObject extends THREE.Mesh{
     updateGltfPosition(){
         this.gltfScene.position.x = this.position.x;
         this.gltfScene.position.z = this.position.z;
+    }
+
+    SetAnimation(index){
+        if(this.#currentAnimation == index){
+            return;
+        }
+        this.#animationMixer.clipAction(this.gltfFile.animations[this.#currentAnimation]).stop();
+        this.#currentAnimation = index;
+        this.#animationMixer.clipAction(this.gltfFile.animations[index]).play();
+    }
+
+    SetAnimationFromVelocities(velocities){
+        //player isnt moving edge case;
+        if(velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0){
+            this.SetAnimation(1);
+            return;
+        }
+        if(velocities.sidewaysVelocity == 1){
+            this.SetAnimation(5);
+            return;
+        }
+        if(velocities.sidewaysVelocity == -1){
+            this.SetAnimation(6);
+            return;
+        }
+        if(velocities.forwardVelocity == 1){
+            this.SetAnimation(4);
+            return;
+        }
+        if(velocities.forwardVelocity == -1){
+            this.SetAnimation(3);
+            return;
+        }
     }
 
     UpdateAnimMixer(deltaTime){

@@ -58,6 +58,10 @@ io.on("connection", socket => {
     socket.broadcast.emit("UpdateNetworkedPlayerPos", info);
   })
 
+  socket.on("clientStoppedMoving", id =>{
+    socket.broadcast.emit("NetworkedPlayerStoppedMoving", id);
+  })
+
   socket.on("PlayerLightAttack", id =>{
     socket.broadcast.emit("networkedLightAttack", id);
   })

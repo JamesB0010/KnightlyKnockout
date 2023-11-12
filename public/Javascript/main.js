@@ -48,6 +48,13 @@ socket.on("updateConnectionsArr", (connections)=>{
 socket.on("UpdateNetworkedPlayerPos", info=>{
   //use info.id to find a player and then update its position using info.position
   game.UpdateNetworkedPlayer(info.id, info.position);
+  if(game.players.get(info.id)){
+    game.players.get(info.id).SetAnimationFromVelocities(info.velocities);
+  }
+})
+
+socket.on("NetworkedPlayerStoppedMoving", id =>{
+  game.players.get(id).SetAnimation(1);
 })
 
 socket.on("GetClientPlayerIdPosition", () =>{
@@ -81,8 +88,12 @@ socket.on("networkedLightAttack", id =>{
 
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
-  socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId});
+  socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId, velocities: e.detail});
 })
+
+document.addEventListener("OnClientStop", e =>{
+  socket.emit("clientStoppedMoving", game.clientId);
+});
 
 //make listener for player death
 document.addEventListener("PlayerDead", e =>{

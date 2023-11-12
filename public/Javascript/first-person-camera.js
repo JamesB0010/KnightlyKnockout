@@ -16,7 +16,7 @@ const KEYS = {
 };
 
 //create an event which will be dispached any time we move
-const moveEvent = new Event("OnClientMove");
+const stopEvent = new Event("OnClientStop");
 
 class FirstPersonCamera{
   constructor(camera){
@@ -30,6 +30,7 @@ class FirstPersonCamera{
       this.thetaSpeed_ = 5;
       this.headBobActive_ = false;
       this.headBobTimer_ = 0;
+      this.lastMoving_ = false;
   }
 
   update(timeElapsedS, sceneObjects){
@@ -76,11 +77,21 @@ class FirstPersonCamera{
 
       //if moving dispach the onMove event
       const moving = forwardVelocity != 0 || strafeVelocity != 0;
+
+      const moveEvent = new CustomEvent("OnClientMove", {detail: {
+        forwardVelocity: forwardVelocity,
+        sidewaysVelocity: strafeVelocity
+      }});
+
       if(moving){
         //dispach moving event which can be responded to elsewhere
         //for example whenever the player moves send its new position to the server to be relayed to the other client
         document.dispatchEvent(moveEvent);
       }
+      else if(this.lastMoving_ == true){
+        document.dispatchEvent(stopEvent);
+      }
+      this.lastMoving_ = moving;
       const walkSpeed = 1.75;
 
       const qx = new THREE.Quaternion();
