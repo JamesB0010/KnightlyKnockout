@@ -90,6 +90,13 @@ socket.on("networkedHeavyAttack", id =>{
   game.players.get(id).SetAnimation(0);
 })
 
+socket.on("networkedPlayerInsult", info =>{
+  if(info.insultIndex == -1){
+    game.players.get(info.id).children[0].PlayRandomInsult();
+  }
+  game.players.get(info.id).children[0].PlayRandomInsult(info.insultIndex);
+})
+
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
   socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId, velocities: e.detail});
@@ -111,6 +118,11 @@ document.addEventListener("lightAttack", e=>{
 document.addEventListener("HeavyAttack", e =>{
   socket.emit("PlayerHeavyAttack", game.clientId);
 })
+
+document.addEventListener("Insult", e =>{
+  let insultIndex = game.players.get(game.clientId).children[0].PlayRandomInsult();
+  socket.emit("PlayerInsult", {id:game.clientId, insultIndex: insultIndex});
+} );
 
 function ClientDeath(){
   game.onClientDeath();

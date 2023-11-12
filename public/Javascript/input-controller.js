@@ -1,6 +1,7 @@
 //credits https://www.youtube.com/watch?v=oqKzxPMLWxo
 const lightAttackDown = new Event("lightAttack");
 const heavyAttack = new Event("HeavyAttack");
+const spacePressed = new Event("Insult");
 class InputController{
     constructor(){
         this.initialise_();
@@ -67,6 +68,9 @@ class InputController{
     };
     onKeyDown_(e){
         this.keys_[e.keyCode] = true;
+        if(e.keyCode == 32){
+            document.dispatchEvent(spacePressed);
+        }
     };
     onKeyUp_(e){
         this.keys_[e.keyCode] = false;
