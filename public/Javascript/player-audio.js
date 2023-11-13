@@ -7,7 +7,14 @@ class PlayerAudio extends THREE.PositionalAudio{
         super(listener);
         const audioLoader = new THREE.AudioLoader();
         const insultsRootDirectory = soundsRootDirectory + "Insults/";
-        const insultSounds = ["insult1.wav", "insult2.wav", "insult3.wav", "insult4.wav", "insult5.wav"];
+
+        let numInsults = 14;
+        const insultSounds = [];
+        for(let i = 1; i <= numInsults; i++){
+            insultSounds.push("insult" + i + ".wav");
+        }
+
+
         soundsToLoad.forEach(sound => {
             audioLoader.load(soundsRootDirectory + sound, buffer =>{
                 this.#attackSoundBuffers.push(buffer);
@@ -24,6 +31,7 @@ class PlayerAudio extends THREE.PositionalAudio{
     PlayRandomAttack(){
         let buffer = this.#attackSoundBuffers[Math.floor(Math.random()*this.#attackSoundBuffers.length)];
         this.setBuffer(buffer);
+        this.setVolume(1);
         this.play();
     }
 
@@ -34,6 +42,8 @@ class PlayerAudio extends THREE.PositionalAudio{
         }
         let buffer = this.#insultSoundBuffers[randNum];
         this.setBuffer(buffer);
+        this.setVolume(2);
+        this.stop();
         this.play();
         return randNum;
     }
