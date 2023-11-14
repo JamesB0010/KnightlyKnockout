@@ -1,5 +1,4 @@
 //credits https://www.youtube.com/watch?v=oqKzxPMLWxo
-const lightAttackDown = new Event("lightAttack");
 const startBlock = new Event("startBlock");
 const endBlock = new Event("endBlock");
 const spacePressed = new Event("Insult");
@@ -11,6 +10,7 @@ class InputController{
     initialise_(){
         this.current_ = {
             leftButton: false,
+            leftButtonDownTimer: 0,
             rightButton: false,
             mouseX: 0,
             mouseY:0,
@@ -34,7 +34,6 @@ class InputController{
         switch(e.button){
             case 0:{
                 this.current_.leftButton = true;
-                document.dispatchEvent(lightAttackDown);
                 break;
             }
             case 2:{
@@ -47,7 +46,11 @@ class InputController{
     onMouseUp_(e){
         switch(e.button){
             case 0:{
+                let attackTypeThreshold = 0.3;
+                const attack = new CustomEvent("Attack", {detail: {attackAnimIndex: this.current_.leftButtonDownTimer >= attackTypeThreshold? 4: 7}});
                 this.current_.leftButton = false;
+                this.current_.leftButtonDownTimer = 0;
+                document.dispatchEvent(attack);
                 break;
             }
             case 2:{
@@ -78,12 +81,15 @@ class InputController{
         this.keys_[e.keyCode] = false;
     };
 
-    update(){
+    update(deltaTime){
         if(this.previous_ !== null){
             this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
             this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
 
             this.previous_ = {...this.current_};
+        }
+        if(this.current_.leftButton){
+            this.current_.leftButtonDownTimer += deltaTime;
         }
     }
 

@@ -38,7 +38,7 @@ class FirstPersonCamera{
       this.updateCamera_(timeElapsedS, sceneObjects);
       this.updateTranslation_(timeElapsedS);
       this.updateHeadBob_(timeElapsedS)
-      this.input_.update();
+      this.input_.update(timeElapsedS);
   }
 
   updateCamera_(timeElapsedS, sceneObjects){

@@ -62,8 +62,8 @@ io.on("connection", socket => {
     socket.broadcast.emit("NetworkedPlayerStoppedMoving", id);
   })
 
-  socket.on("PlayerLightAttack", id =>{
-    socket.broadcast.emit("networkedLightAttack", id);
+  socket.on("PlayerAttack", info =>{
+    socket.broadcast.emit("networkedAttack", info);
   })
 
   socket.on("startBlock", id =>{

@@ -84,9 +84,10 @@ socket.on("ResetClientHealth", () =>{
   game.player.ResetHealth();
 });
 
-socket.on("networkedLightAttack", id =>{
-  game.players.get(id).children[0].PlayRandomAttack();
-  game.players.get(id).SetAnimation(7);
+socket.on("networkedAttack", info =>{
+  console.log(info);
+  game.players.get(info.id).children[0].PlayRandomAttack();
+  game.players.get(info.id).SetAnimation(info.attackAnimIndex);
 })
 
 socket.on("networkedStartBlock", id =>{
@@ -118,8 +119,8 @@ document.addEventListener("PlayerDead", e =>{
   socket.emit("PlayerDeath", {id: game.clientId});
 })
 
-document.addEventListener("lightAttack", e=>{
-  socket.emit("PlayerLightAttack", game.clientId);
+document.addEventListener("Attack", e=>{
+  socket.emit("PlayerAttack", {id: game.clientId, attackAnimIndex: e.detail.attackAnimIndex});
 });
 
 document.addEventListener("startBlock", e =>{
