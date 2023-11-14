@@ -99,8 +99,10 @@ socket.on("networkedEndBlock", id =>{
 })
 
 socket.on("networkedPlayerInsult", info =>{
+  console.log(info.insultIndex);
   if(info.insultIndex == -1){
     game.players.get(info.id).children[0].PlayRandomInsult();
+    return;
   }
   game.players.get(info.id).children[0].PlayRandomInsult(info.insultIndex);
 })
@@ -133,6 +135,7 @@ document.addEventListener("endBlock", e =>{
 
 document.addEventListener("Insult", e =>{
   let insultIndex = game.players.get(game.clientId).children[0].PlayRandomInsult();
+  console.log(insultIndex);
   socket.emit("PlayerInsult", {id:game.clientId, insultIndex: insultIndex});
 } );
 
