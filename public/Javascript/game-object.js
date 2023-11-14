@@ -98,13 +98,13 @@ class GameObject extends THREE.Mesh{
             //1800 is the time in milliseconds it takes to do the light attack animation
             setTimeout(() =>{
                 this.SetAnimation(1);
-            }, 1800);
+            }, 1000);
         };
         if(index == 0){
             //2230 is the time in milliseconds it takes to do the light attack animation
             setTimeout(() =>{
                 this.SetAnimation(1);
-            }, 2230);
+            }, 1800);
         };
         //credits https://discourse.threejs.org/t/how-to-not-reset-model-position-when-crossfading-animations/27490, https://github.com/mrdoob/three.js/blob/d39d82999f0ac5cdd1b4eb9f4aba3f9626f32ab6/examples/webgl_animation_skinning_morph.html#L214-L232
         let prevAction = this.#animActions[this.#currentAnimation];
