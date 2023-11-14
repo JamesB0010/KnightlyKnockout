@@ -85,9 +85,12 @@ socket.on("networkedLightAttack", id =>{
   game.players.get(id).SetAnimation(7);
 })
 
-socket.on("networkedHeavyAttack", id =>{
-  game.players.get(id).children[0].PlayRandomAttack();
-  game.players.get(id).SetAnimation(4);
+socket.on("networkedStartBlock", id =>{
+  game.players.get(id).SetAnimation(1);
+})
+
+socket.on("networkedEndBlock", id =>{
+  game.players.get(id).SetAnimation(6);
 })
 
 socket.on("networkedPlayerInsult", info =>{
@@ -115,8 +118,12 @@ document.addEventListener("lightAttack", e=>{
   socket.emit("PlayerLightAttack", game.clientId);
 });
 
-document.addEventListener("HeavyAttack", e =>{
-  socket.emit("PlayerHeavyAttack", game.clientId);
+document.addEventListener("startBlock", e =>{
+  socket.emit("startBlock", game.clientId);
+})
+
+document.addEventListener("endBlock", e =>{
+  socket.emit("endBlock", game.clientId);
 })
 
 document.addEventListener("Insult", e =>{

@@ -66,8 +66,12 @@ io.on("connection", socket => {
     socket.broadcast.emit("networkedLightAttack", id);
   })
 
-  socket.on("PlayerHeavyAttack", id =>{
-    socket.broadcast.emit("networkedHeavyAttack", id);
+  socket.on("startBlock", id =>{
+    socket.broadcast.emit("networkedStartBlock", id);
+  })
+
+  socket.on("endBlock", id =>{
+    socket.broadcast.emit("networkedEndBlock", id);
   })
 
   socket.on("PlayerInsult", (info) =>{

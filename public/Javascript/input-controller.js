@@ -1,6 +1,7 @@
 //credits https://www.youtube.com/watch?v=oqKzxPMLWxo
 const lightAttackDown = new Event("lightAttack");
-const heavyAttack = new Event("HeavyAttack");
+const startBlock = new Event("startBlock");
+const endBlock = new Event("endBlock");
 const spacePressed = new Event("Insult");
 class InputController{
     constructor(){
@@ -38,7 +39,7 @@ class InputController{
             }
             case 2:{
                 this.current_.leftButton = true;
-                document.dispatchEvent(heavyAttack);
+                document.dispatchEvent(startBlock);
                 break;
             }
         }
@@ -51,6 +52,7 @@ class InputController{
             }
             case 2:{
                 this.current_.leftButton = false;
+                document.dispatchEvent(endBlock);
                 break;
             }
         }
