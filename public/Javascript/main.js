@@ -73,7 +73,11 @@ socket.on("removeId", id =>{
 })
 
 socket.on("NetworkedPlayerDeath", info =>{
-  game.roundManager.playerDead(info.id);
+  game.players.get(info.id).SetAnimation(3);
+  setTimeout(() =>{
+    game.roundManager.playerDead(info.id);
+    game.players.get(info.id).ResetToIdleAnim();
+  }, 5000)
 })
 
 socket.on("ResetClientHealth", () =>{

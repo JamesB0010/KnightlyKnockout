@@ -239,8 +239,11 @@ class Game {
   }
 
   onClientDeath(){
-    this.roundManager.playerDead(this.clientId);
     document.dispatchEvent(playerDead);
+    setTimeout(()=>{
+      this.roundManager.playerDead(this.clientId);
+      this.player.ResetToIdleAnim();
+    }, 5000)
   };
 }
 

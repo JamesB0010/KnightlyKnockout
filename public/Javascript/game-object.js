@@ -91,6 +91,7 @@ class GameObject extends THREE.Mesh{
     }
 
     SetAnimation(index){
+        if(this.#currentAnimation == 3) return;
         if(this.#currentAnimation == index){
             return;
         }
@@ -117,6 +118,12 @@ class GameObject extends THREE.Mesh{
         }
 
         activeAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(0.5).play();
+    }
+
+    ResetToIdleAnim(){
+        this.#animActions[3].stop();
+        this.#currentAnimation = 0;
+        this.SetAnimation(6);
     }
 
     SetAnimationFromVelocities(velocities){
