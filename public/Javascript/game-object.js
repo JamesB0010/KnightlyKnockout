@@ -11,6 +11,7 @@ class GameObject extends THREE.Mesh{
     health = 100;
     #animationMixer;
     #currentAnimation = 1;
+    #animActions = [];
     constructor({
         height = 1,
         width = 1,
@@ -55,6 +56,9 @@ class GameObject extends THREE.Mesh{
                 document.addEventListener("lightAttack", () =>{
                     this.children[0].PlayRandomAttack();
                 });
+                document.addEventListener("HeavyAttack", () =>{
+                    this.children[0].PlayRandomAttack();
+                })
             }
 
             //set the gltf scene position if its not null
@@ -63,8 +67,11 @@ class GameObject extends THREE.Mesh{
                 this.gltfScene.position.y = -0.78;
                 this.gltfScene.position.z = position.z;
                 this.gltfScene.scale.multiplyScalar(0.6);
-                this.#animationMixer = new THREE.AnimationMixer(gltfScene);
-                this.#animationMixer.clipAction(gltfFile.animations[this.#currentAnimation]).play();
+                this.#animationMixer = new THREE.AnimationMixer(gltfScene)
+                for(let i = 0; i < this.gltfFile.animations.length; i++){
+                    this.#animActions.push(this.#animationMixer.clipAction(this.gltfFile.animations[i]));
+                }
+                this.#animActions[this.#currentAnimation].play();
             }
 
             this.velocity = {
@@ -99,10 +106,16 @@ class GameObject extends THREE.Mesh{
                 this.SetAnimation(1);
             }, 2230);
         };
-        this.#animationMixer.clipAction(this.gltfFile.animations[this.#currentAnimation]).stop();
+        //credits https://discourse.threejs.org/t/how-to-not-reset-model-position-when-crossfading-animations/27490, https://github.com/mrdoob/three.js/blob/d39d82999f0ac5cdd1b4eb9f4aba3f9626f32ab6/examples/webgl_animation_skinning_morph.html#L214-L232
+        let prevAction = this.#animActions[this.#currentAnimation];
+        let activeAction = this.#animActions[index];
         this.#currentAnimation = index;
-        this.#animationMixer.clipAction(this.gltfFile.animations[index]).fadeIn(0.5);
-        this.#animationMixer.clipAction(this.gltfFile.animations[index]).play();
+
+        if(prevAction !== activeAction){
+            prevAction.fadeOut(0.5);
+        }
+
+        activeAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(0.5).play();
     }
 
     SetAnimationFromVelocities(velocities){
@@ -112,19 +125,19 @@ class GameObject extends THREE.Mesh{
             return;
         }
         if(velocities.sidewaysVelocity == 1){
-            this.SetAnimation(5);
-            return;
-        }
-        if(velocities.sidewaysVelocity == -1){
             this.SetAnimation(6);
             return;
         }
+        if(velocities.sidewaysVelocity == -1){
+            this.SetAnimation(5);
+            return;
+        }
         if(velocities.forwardVelocity == 1){
-            this.SetAnimation(4);
+            this.SetAnimation(3);
             return;
         }
         if(velocities.forwardVelocity == -1){
-            this.SetAnimation(3);
+            this.SetAnimation(4);
             return;
         }
     }
