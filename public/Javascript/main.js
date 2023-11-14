@@ -54,7 +54,7 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
 })
 
 socket.on("NetworkedPlayerStoppedMoving", id =>{
-  game.players.get(id).SetAnimation(1);
+  game.players.get(id).SetAnimation(6);
 })
 
 socket.on("GetClientPlayerIdPosition", () =>{
@@ -82,12 +82,12 @@ socket.on("ResetClientHealth", () =>{
 
 socket.on("networkedLightAttack", id =>{
   game.players.get(id).children[0].PlayRandomAttack();
-  game.players.get(id).SetAnimation(2);
+  game.players.get(id).SetAnimation(7);
 })
 
 socket.on("networkedHeavyAttack", id =>{
   game.players.get(id).children[0].PlayRandomAttack();
-  game.players.get(id).SetAnimation(0);
+  game.players.get(id).SetAnimation(4);
 })
 
 socket.on("networkedPlayerInsult", info =>{

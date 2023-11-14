@@ -94,16 +94,17 @@ class GameObject extends THREE.Mesh{
         if(this.#currentAnimation == index){
             return;
         }
-        if(index == 2){
+        if(index == 7){
             //1800 is the time in milliseconds it takes to do the light attack animation
             setTimeout(() =>{
-                this.SetAnimation(1);
+                this.SetAnimation(6);
+                console.log("end anim");
             }, 1000);
         };
-        if(index == 0){
+        if(index == 4){
             //2230 is the time in milliseconds it takes to do the light attack animation
             setTimeout(() =>{
-                this.SetAnimation(1);
+                this.SetAnimation(6);
             }, 1800);
         };
         //credits https://discourse.threejs.org/t/how-to-not-reset-model-position-when-crossfading-animations/27490, https://github.com/mrdoob/three.js/blob/d39d82999f0ac5cdd1b4eb9f4aba3f9626f32ab6/examples/webgl_animation_skinning_morph.html#L214-L232
@@ -121,23 +122,23 @@ class GameObject extends THREE.Mesh{
     SetAnimationFromVelocities(velocities){
         //player isnt moving edge case;
         if(velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0){
-            this.SetAnimation(1);
-            return;
-        }
-        if(velocities.sidewaysVelocity == 1){
             this.SetAnimation(6);
             return;
         }
+        if(velocities.sidewaysVelocity == 1){
+            this.SetAnimation(11);
+            return;
+        }
         if(velocities.sidewaysVelocity == -1){
-            this.SetAnimation(5);
+            this.SetAnimation(10);
             return;
         }
         if(velocities.forwardVelocity == 1){
-            this.SetAnimation(3);
+            this.SetAnimation(8);
             return;
         }
         if(velocities.forwardVelocity == -1){
-            this.SetAnimation(4);
+            this.SetAnimation(9);
             return;
         }
     }
