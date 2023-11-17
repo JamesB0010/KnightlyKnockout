@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+const clock = new THREE.Clock();
 
 const loader = new GLTFLoader();
 
@@ -23,10 +24,28 @@ const ambLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add( directionalLight, helper, ambLight );
 
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+const modelPromise = loader.loadAsync("./spinningCube.glb");
+
+let mixer;
+let modelReady = false;
+const animActions = [];
+
+
+modelPromise.then((gltf)=>{
+    mixer = new THREE.AnimationMixer(gltf.scene);
+    const clip1 = mixer.clipAction(gltf.animations[0]);
+    animActions.push(clip1);
+    const clip2 = mixer.clipAction(gltf.animations[1]);
+    animActions.push(clip2);
+
+    THREE.AnimationUtils.makeClipAdditive(clip2.getClip());
+    
+    animActions[0].play();
+    animActions[1].play();
+    
+    scene.add(gltf.scene);
+    modelReady = true;
+})
 
 camera.position.z = 5;
 
@@ -34,5 +53,6 @@ camera.position.z = 5;
 function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
+    if(modelReady) mixer.update(clock.getDelta());
 }
 animate();
