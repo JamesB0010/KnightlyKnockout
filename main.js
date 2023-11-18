@@ -31,10 +31,8 @@ const modelPromise = loader.loadAsync("./knightMan2.glb");
 
 let mixer;
 let modelReady = false;
-const animActions = [];
 
 function activateAction(action, weight){
-    const clip = action.getClip();
     action.enabled = true;
     action.setEffectiveTimeScale(1);
     action.setEffectiveWeight(weight);
@@ -49,14 +47,12 @@ modelPromise.then((gltf)=>{
     scene.add(skeleton);
 
 
-    const action1 = mixer.clipAction(gltf.animations[0]);
-    animActions.push(action1);
+    const action1 = mixer.clipAction(gltf.animations[1]);
     activateAction(action1, 1);
 
 
-    THREE.AnimationUtils.makeClipAdditive(gltf.animations[1]);
-    const action2 = mixer.clipAction(gltf.animations[1]);
-    animActions.push(action2);
+    THREE.AnimationUtils.makeClipAdditive(gltf.animations[0], 1, gltf.animations[1]);
+    const action2 = mixer.clipAction(gltf.animations[0]);
     activateAction(action2, 1);
     
     scene.add(gltf.scene);
