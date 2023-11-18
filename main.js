@@ -24,29 +24,40 @@ const ambLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add( directionalLight, helper, ambLight );
 
 
-const modelPromise = loader.loadAsync("./knightMan.glb");
+//const modelPromise = loader.loadAsync("./knightMan.glb");
+const modelPromise = loader.loadAsync("./knightMan2.glb");
+//const modelPromise = loader.loadAsync("./Xbot.glb")
+//const modelPromise = loader.loadAsync("./spinningCube.glb");
 
 let mixer;
 let modelReady = false;
 const animActions = [];
 
+function activateAction(action, weight){
+    const clip = action.getClip();
+    action.enabled = true;
+    action.setEffectiveTimeScale(1);
+    action.setEffectiveWeight(weight);
+    action.play();
+}
+
 
 modelPromise.then((gltf)=>{
     mixer = new THREE.AnimationMixer(gltf.scene);
+    let skeleton = new THREE.SkeletonHelper(gltf.scene);
+    skeleton.visible = false;
+    scene.add(skeleton);
 
 
-    const clip1 = mixer.clipAction(gltf.animations[36]);
-    //36
-    animActions.push(clip1);
+    const action1 = mixer.clipAction(gltf.animations[0]);
+    animActions.push(action1);
+    activateAction(action1, 1);
 
 
-    //14
-    const clip2 = mixer.clipAction(gltf.animations[14]);
-    animActions.push(clip2);
-    THREE.AnimationUtils.makeClipAdditive(clip2.getClip());
-    
-    animActions[0].play();
-    //animActions[1].play();
+    THREE.AnimationUtils.makeClipAdditive(gltf.animations[1]);
+    const action2 = mixer.clipAction(gltf.animations[1]);
+    animActions.push(action2);
+    activateAction(action2, 1);
     
     scene.add(gltf.scene);
     modelReady = true;
