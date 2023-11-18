@@ -24,7 +24,7 @@ const ambLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add( directionalLight, helper, ambLight );
 
 
-const modelPromise = loader.loadAsync("./spinningCube.glb");
+const modelPromise = loader.loadAsync("./knightMan.glb");
 
 let mixer;
 let modelReady = false;
@@ -33,15 +33,20 @@ const animActions = [];
 
 modelPromise.then((gltf)=>{
     mixer = new THREE.AnimationMixer(gltf.scene);
-    const clip1 = mixer.clipAction(gltf.animations[0]);
-    animActions.push(clip1);
-    const clip2 = mixer.clipAction(gltf.animations[1]);
-    animActions.push(clip2);
 
+
+    const clip1 = mixer.clipAction(gltf.animations[36]);
+    //36
+    animActions.push(clip1);
+
+
+    //14
+    const clip2 = mixer.clipAction(gltf.animations[14]);
+    animActions.push(clip2);
     THREE.AnimationUtils.makeClipAdditive(clip2.getClip());
     
     animActions[0].play();
-    animActions[1].play();
+    //animActions[1].play();
     
     scene.add(gltf.scene);
     modelReady = true;
