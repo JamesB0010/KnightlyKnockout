@@ -32,12 +32,21 @@ const modelPromise = loader.loadAsync("./knight-man-additive-complete.glb");
 
 let mixer;
 let modelReady = false;
+let Modelgltf;
+let currentBaseAction;
+let currentAdditiveAction;
 
 function activateAction(action, weight){
     action.enabled = true;
     action.setEffectiveTimeScale(1);
     action.setEffectiveWeight(weight);
     action.play();
+}
+
+function deactivateAction(action){
+    action.enabled = false;
+    action.setEffectiveWeight(0);
+    action.stop();
 }
 
 let animations = {
@@ -63,8 +72,28 @@ let animations = {
     }
 }
 
+document.addEventListener("ChangeBaseAnimation", e =>{
+    deactivateAction(currentBaseAction);
+    mixer.stopAllAction();
+    Modelgltf.scene.rotation.y = 0;
+    const clipIndex = e.detail.index;
+    if(clipIndex == 5){
+        const action = mixer.clipAction(Modelgltf.animations[clipIndex]);
+        action.clampWhenFinished = true;
+        action.loop = THREE.LoopOnce;
+        action.play();
+        return;
+    }
+    const action = mixer.clipAction(Modelgltf.animations[clipIndex]);
+    activateAction(action, 1);
+})
+
+document.addEventListener("ChangeAdditiveAnimation", e=>{
+})
+
 
 modelPromise.then((gltf)=>{
+    Modelgltf = gltf;
     gltf.scene.rotation.y = -45;
     mixer = new THREE.AnimationMixer(gltf.scene);
     let skeleton = new THREE.SkeletonHelper(gltf.scene);
@@ -77,11 +106,13 @@ modelPromise.then((gltf)=>{
 
     const action1 = mixer.clipAction(gltf.animations[clip1Index]);
     activateAction(action1, 1);
+    currentBaseAction = action1;
 
 
     THREE.AnimationUtils.makeClipAdditive(gltf.animations[clip2Index], 1, gltf.animations[clip1Index]);
     const action2 = mixer.clipAction(gltf.animations[clip2Index]);
     activateAction(action2, 1);
+    currentAdditiveAction = action2;
     
     scene.add(gltf.scene);
     modelReady = true;
