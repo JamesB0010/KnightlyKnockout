@@ -43,11 +43,21 @@ function activateAction(action, weight){
     action.play();
 }
 
-function deactivateAction(action){
-    action.enabled = false;
-    action.setEffectiveWeight(0);
-    action.stop();
-}
+// function deactivateAction(action){
+//     console.log(action);
+//     console.log(mixer._nActiveActions);
+//     for(let i = mixer._nActiveActions - 1; i >= 0; i--){
+//         if(mixer._actions[i] == currentAdditiveAction){
+//             mixer._actions[i].stop();
+//         }
+//     }
+//     //current issue is the current playing action isnt actually getting stopped
+//     action.stop();
+//     action.enabled = false;
+//     action.setEffectiveWeight(0);
+//     action.setEffectiveTimeScale(0);
+//     console.log(mixer);
+// }
 
 let animations = {
     base: {
@@ -74,7 +84,7 @@ let animations = {
 
 document.addEventListener("ChangeBaseAnimation", e =>{
     deactivateAction(currentBaseAction);
-    mixer.stopAllAction();
+    //mixer.stopAllAction();
     Modelgltf.scene.rotation.y = 0;
     const clipIndex = e.detail.index;
     if(clipIndex == 5){
