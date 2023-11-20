@@ -1,3 +1,6 @@
+//reference for code used to create this https://github.com/mrdoob/three.js/blob/dev/examples/webgl_animation_skinning_additive_blending.html#L275
+
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -40,7 +43,8 @@ const baseActions = {
     walkForwardBase :{weight: 1},
     walkBackBase:{weight: 0},
     walkLeftBase:{weight: 0},
-    walkRightBase:{weight: 0}
+    walkRightBase:{weight: 0},
+    death:{weight: 0}
 }
 
 const additiveActions = {
@@ -58,6 +62,7 @@ const additiveActions = {
 }
 
 let currentAdditiveAction = "walkForwardAdditive";
+let currentBaseAction = "walkForwardBase";
 
 let numAnimations;
 
@@ -71,10 +76,26 @@ function activateAction(action){
     const clip = action.getClip();
     const settings = baseActions[clip.name] || additiveActions[clip.name];
     setWeight(action, settings.weight);
+    action.stop();
     action.play();
 }
 
 document.addEventListener("ChangeBaseAnimation", e =>{
+    if(e.detail.name == "death"){
+        model.rotation.y = 0;
+
+        baseActions[currentBaseAction].weight = 0;
+        additiveActions[currentAdditiveAction].weight = 0;
+        baseActions['death'].weight = 1;
+        baseActions['death'].action.clampWhenFinished = true;
+
+        
+        activateAction(baseActions["death"].action);
+        activateAction(baseActions[currentBaseAction].action);
+        activateAction(additiveActions[currentAdditiveAction].action);
+        currentAdditiveAction = null;
+        currentBaseAction = "death";
+    }
 })
 
 document.addEventListener("ChangeAdditiveAnimation", e=>{
