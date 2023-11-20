@@ -25,13 +25,13 @@
         }
     </style>
     <script>
-        function ChangeBaseAnimation(index){
-            const event = new CustomEvent("ChangeBaseAnimation", {detail: {index: index}});
+        function ChangeBaseAnimation(clipName){
+            const event = new CustomEvent("ChangeBaseAnimation", {detail: {name: clipName}});
             document.dispatchEvent(event);
         }
 
-        function ChangeAdditiveAnimation(index){
-            const event = new CustomEvent("ChangeAdditiveAnimation", {detail:{index: index}});
+        function ChangeAdditiveAnimation(clipName){
+            const event = new CustomEvent("ChangeAdditiveAnimation", {detail:{name: clipName}});
             document.dispatchEvent(event);
         }
     </script>
@@ -51,27 +51,27 @@
         <h1>Settings</h1>
         <div id = "basePoses">
             <h2>Base animations</h2>
-            <button onclick="ChangeBaseAnimation(0)">Idle</button> <br>
-            <button onclick="ChangeBaseAnimation(1)">Walk Forward</button> <br>
-            <button onclick="ChangeBaseAnimation(2)">Walk Backwards</button> <br>
-            <button onclick="ChangeBaseAnimation(3)">Walk Left</button> <br>
-            <button onclick="ChangeBaseAnimation(4)">Walk Right</button> <br>
-            <button onclick="ChangeBaseAnimation(5)">Die</button>
+            <button onclick="ChangeBaseAnimation('idleBase')">Idle</button> <br>
+            <button onclick="ChangeBaseAnimation('walkForwardBase')">Walk Forward</button> <br>
+            <button onclick="ChangeBaseAnimation('walkBackBase')">Walk Backwards</button> <br>
+            <button onclick="ChangeBaseAnimation('walkLeftBase')">Walk Left</button> <br>
+            <button onclick="ChangeBaseAnimation('walkRightBase')">Walk Right</button> <br>
+            <button onclick="ChangeBaseAnimation('death')">Die</button>
         </div>
         <br>
         <div id = "additivePoses">
             <h2>Additive Animations</h2>
-            <button onclick = "ChangeAdditiveAnimation(13)">Idle</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(12)">Walk Forward</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(14)">Walk Backwards</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(15)">Walk Left</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(16)">Walk Right</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(6)">Block idle</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(7)">Block React</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(10)">Light Attack</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(11)">Heavy attack</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(8)">hurt reaction 1</button> <br>
-            <button onclick = "ChangeAdditiveAnimation(9)">hurt reaction 2</button> 
+            <button onclick = "ChangeAdditiveAnimation('idleAdditive')">Idle</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('walkForwardAdditive')">Walk Forward</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('walkBackAdditive')">Walk Backwards</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('walkLeftAdditive')">Walk Left</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('walkRightAdditive')">Walk Right</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('blockIdle')">Block idle</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('blockReact')">Block React</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('lightAttack')">Light Attack</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('heavyAttack')">Heavy attack</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('hitReactionGut')">hurt reaction 1</button> <br>
+            <button onclick = "ChangeAdditiveAnimation('hitReactionHead')">hurt reaction 2</button> 
         </div>
     </div>
 </body>

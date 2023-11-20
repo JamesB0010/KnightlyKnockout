@@ -32,75 +32,92 @@ const modelPromise = loader.loadAsync("./knight-man-additive-complete.glb");
 
 let mixer;
 let modelReady = false;
-let Modelgltf;
-let currentBaseAction;
-let currentAdditiveAction;
+let model;
 
-function activateAction(action, weight){
+const allActions = [];
+const baseActions = {
+    idleBase:{weight: 0},
+    walkForwardBase :{weight: 1},
+    walkBackBase:{weight: 0},
+    walkLeftBase:{weight: 0},
+    walkRightBase:{weight: 0}
+}
+
+const additiveActions = {
+    blockIdle: {weight: 0},
+    blockReact: {weight: 0},
+    hitReactionGut: {weight: 0},
+    hitReactionHead: {weight: 0},
+    lightAttack: {weight: 0},
+    heavyAttack: {weight: 0},
+    walkForwardAdditive: {weight: 1},
+    idleAdditive: {weight: 0},
+    walkBackAdditive: {weight: 0},
+    walkLeftAdditive: {weight: 0},
+    walkRightAdditive: {weight: 0}
+}
+
+let currentAdditiveAction = "walkForwardAdditive";
+
+let numAnimations;
+
+function setWeight(action, weight){
     action.enabled = true;
     action.setEffectiveTimeScale(1);
     action.setEffectiveWeight(weight);
+}
+
+function activateAction(action){
+    const clip = action.getClip();
+    const settings = baseActions[clip.name] || additiveActions[clip.name];
+    setWeight(action, settings.weight);
     action.play();
 }
 
-let animations = {
-    base: {
-        idle: 0,
-        walkForward: 1,
-        walkBack: 2,
-        walkLeft: 3,
-        walkRight: 4,
-    },
-    additive: {
-        block: 6,
-        blockReact: 7,
-        hitReactionGut: 8,
-        hitReactionHead: 9,
-        lightAttack: 10,
-        heavyAttack: 11,
-        walkForward: 12,
-        idle: 13,
-        walkBack: 14,
-        walkLeft: 15,
-        walkRight: 16
-    }
-}
-
 document.addEventListener("ChangeBaseAnimation", e =>{
-    Modelgltf.scene.rotation.y = 0;
-    mixer.stopAllAction();
-    let action = mixer.clipAction(Modelgltf.animations[e.detail.index]);
-    activateAction(action, 1);
 })
 
 document.addEventListener("ChangeAdditiveAnimation", e=>{
+    additiveActions[currentAdditiveAction].weight = 0;
+    additiveActions[e.detail.name].weight = 1;
+    activateAction(additiveActions[e.detail.name].action);
+    activateAction(additiveActions[currentAdditiveAction].action);
+    currentAdditiveAction = e.detail.name;
 })
 
 
 modelPromise.then((gltf)=>{
-    Modelgltf = gltf;
-    gltf.scene.rotation.y = -45;
-    let anims = [...gltf.animations];
-    mixer = new THREE.AnimationMixer(gltf.scene);
-    let skeleton = new THREE.SkeletonHelper(gltf.scene);
-    skeleton.visible = false;
-    scene.add(skeleton);
-
-    const clip1Index = animations.base.walkForward;
-    const clip2Index = animations.additive.block;
-
-
-    const action1 = mixer.clipAction(anims[clip1Index]);
-    activateAction(action1, 1);
-    currentBaseAction = action1;
-
-    THREE.AnimationUtils.makeClipAdditive(anims[clip2Index], 1, anims[clip1Index]);
-    const action2 = mixer.clipAction(anims[clip2Index]);
-    activateAction(action2, 1);
-    currentAdditiveAction = action2;
-    
-    scene.add(gltf.scene);
+    model = gltf.scene;
+    //rotate a quater
+    model.rotation.y = -Math.PI * 0.25;
+    scene.add(model);
     modelReady = true;
+
+    const animations = gltf.animations;
+    mixer = new THREE.AnimationMixer(model);
+    
+    numAnimations = animations.length;
+
+    for(let i = 0; i !== numAnimations; i++){
+        let clip = animations[i];
+        const name = clip.name;
+
+        if(baseActions[name]){
+            const action = mixer.clipAction(clip);
+            activateAction(action);
+            baseActions[name].action = action;
+            allActions.push(action);
+        }
+        else if(additiveActions[name]){
+            //make the clip additive
+            THREE.AnimationUtils.makeClipAdditive(clip, 1, baseActions["walkForwardBase"].action.getClip());
+
+            const action = mixer.clipAction(clip);
+            activateAction(action);
+            additiveActions[name].action = action;
+            allActions.push(action);
+        }
+    }
 })
 
 camera.position.z = 5;
