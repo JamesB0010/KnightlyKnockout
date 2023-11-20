@@ -43,22 +43,6 @@ function activateAction(action, weight){
     action.play();
 }
 
-// function deactivateAction(action){
-//     console.log(action);
-//     console.log(mixer._nActiveActions);
-//     for(let i = mixer._nActiveActions - 1; i >= 0; i--){
-//         if(mixer._actions[i] == currentAdditiveAction){
-//             mixer._actions[i].stop();
-//         }
-//     }
-//     //current issue is the current playing action isnt actually getting stopped
-//     action.stop();
-//     action.enabled = false;
-//     action.setEffectiveWeight(0);
-//     action.setEffectiveTimeScale(0);
-//     console.log(mixer);
-// }
-
 let animations = {
     base: {
         idle: 0,
@@ -83,18 +67,9 @@ let animations = {
 }
 
 document.addEventListener("ChangeBaseAnimation", e =>{
-    deactivateAction(currentBaseAction);
-    //mixer.stopAllAction();
     Modelgltf.scene.rotation.y = 0;
-    const clipIndex = e.detail.index;
-    if(clipIndex == 5){
-        const action = mixer.clipAction(Modelgltf.animations[clipIndex]);
-        action.clampWhenFinished = true;
-        action.loop = THREE.LoopOnce;
-        action.play();
-        return;
-    }
-    const action = mixer.clipAction(Modelgltf.animations[clipIndex]);
+    mixer.stopAllAction();
+    let action = mixer.clipAction(Modelgltf.animations[e.detail.index]);
     activateAction(action, 1);
 })
 
@@ -105,22 +80,22 @@ document.addEventListener("ChangeAdditiveAnimation", e=>{
 modelPromise.then((gltf)=>{
     Modelgltf = gltf;
     gltf.scene.rotation.y = -45;
+    let anims = [...gltf.animations];
     mixer = new THREE.AnimationMixer(gltf.scene);
     let skeleton = new THREE.SkeletonHelper(gltf.scene);
     skeleton.visible = false;
     scene.add(skeleton);
 
-    const clip1Index = animations.base.walkRight;
+    const clip1Index = animations.base.walkForward;
     const clip2Index = animations.additive.block;
 
 
-    const action1 = mixer.clipAction(gltf.animations[clip1Index]);
+    const action1 = mixer.clipAction(anims[clip1Index]);
     activateAction(action1, 1);
     currentBaseAction = action1;
 
-
-    THREE.AnimationUtils.makeClipAdditive(gltf.animations[clip2Index], 1, gltf.animations[clip1Index]);
-    const action2 = mixer.clipAction(gltf.animations[clip2Index]);
+    THREE.AnimationUtils.makeClipAdditive(anims[clip2Index], 1, anims[clip1Index]);
+    const action2 = mixer.clipAction(anims[clip2Index]);
     activateAction(action2, 1);
     currentAdditiveAction = action2;
     
