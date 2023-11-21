@@ -80,9 +80,63 @@ function activateAction(action){
     action.play();
 }
 
-document.addEventListener("ChangeBaseAnimation", e =>{
-    if(e.detail.name == "death"){
-        model.rotation.y = 0;
+function prepareCrossFade(startAction, endAction, duration){
+    //if the current action is 'idleBase', execute the crossfade immediately;
+    //else wait until the current action has finished its current loop
+
+    if(currentBaseAction === 'idleBase' || ! startAction || !endAction){
+        executeCrossFade(startAction, endAction, duration);
+    }
+    else{
+        synchronizeCrossFade(startAction, endAction, duration);
+    }
+
+    if(endAction){
+        const clip = endAction.getClip();
+        currentBaseAction = clip.name;
+    }
+    else{
+        currentBaseAction = 'None';
+    }
+}
+
+function synchronizeCrossFade(startAction, endAction, duration){
+    mixer.addEventListener('loop', onLoopFinished);
+
+    function onLoopFinished(event){
+        if (event.action == startAction){
+            mixer.removeEventListener('loop', onLoopFinished);
+
+            executeCrossFade(startAction, endAction, duration);
+        }
+    }
+}
+
+//this function is needed, since animationAction.crossFadeTo() disables its start action and sets
+//the start actions timescale to ((start animations duration) / (end animations duration))
+function executeCrossFade(startAction, endAction, duration){
+    //not only the start action, but also the end action must have a weight of 1 before fading
+    //for start action this is the case
+    if (endAction){
+        setWeight(endAction, 1);
+        endAction.time = 0;
+
+        if(startAction){
+            //crossfade with warping
+            startAction.crossFadeTo(endAction, duration, true);
+        }
+        else{
+            endAction.fadeIn(duration);
+        }
+    }
+    else{
+        //fade out
+        startAction.fadeOut(duration);
+    }
+}
+
+function PlayDeathAnimation(){
+    model.rotation.y = 0;
 
         baseActions[currentBaseAction].weight = 0;
         additiveActions[currentAdditiveAction].weight = 0;
@@ -95,6 +149,16 @@ document.addEventListener("ChangeBaseAnimation", e =>{
         activateAction(additiveActions[currentAdditiveAction].action);
         currentAdditiveAction = null;
         currentBaseAction = "death";
+}
+
+document.addEventListener("ChangeBaseAnimation", e =>{
+    if(e.detail.name == "death"){
+        PlayDeathAnimation();
+        return;
+    }
+
+    if (e.detail.name != currentBaseAction){
+        prepareCrossFade(baseActions[currentBaseAction].action, baseActions[e.detail.name].action, 0.35);
     }
 })
 
