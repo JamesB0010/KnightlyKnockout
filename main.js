@@ -124,6 +124,8 @@ function executeCrossFade(startAction, endAction, duration){
         if(startAction){
             //crossfade with warping
             startAction.crossFadeTo(endAction, duration, true);
+            baseActions[startAction.getClip().name].weight = 0;
+            baseActions[endAction.getClip().name].weight = 1;
         }
         else{
             endAction.fadeIn(duration);
