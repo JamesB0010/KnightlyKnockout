@@ -26,12 +26,14 @@ const helper = new THREE.DirectionalLightHelper(directionalLight, 5);
 const ambLight = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add( directionalLight, helper, ambLight );
 
+const walkRightPromise = loader.loadAsync("./knightManWalkRight.glb");
 
 //const modelPromise = loader.loadAsync("./knightMan.glb");
 //const modelPromise = loader.loadAsync("./knightMan2.glb");
 const modelPromise = loader.loadAsync("./knight-man-additive-complete.glb");
 //const modelPromise = loader.loadAsync("./Xbot.glb")
 //const modelPromise = loader.loadAsync("./spinningCube.glb");
+
 
 let mixer;
 let modelReady = false;
@@ -181,6 +183,14 @@ modelPromise.then((gltf)=>{
     modelReady = true;
 
     const animations = gltf.animations;
+
+    walkRightPromise.then((gltf=>{
+        animations.push(gltf.animations[0]);
+    }))
+
+
+    console.log(animations);
+    
     mixer = new THREE.AnimationMixer(model);
     
     numAnimations = animations.length;
