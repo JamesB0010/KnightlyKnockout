@@ -32,6 +32,8 @@ const modelPromise = loader.loadAsync("./knight-man-additive-complete.glb");
 //const modelPromise = loader.loadAsync("./Xbot.glb")
 //const modelPromise = loader.loadAsync("./spinningCube.glb");
 
+const walkRightPromise = loader.loadAsync("./KnightManWalkRight.glb");
+
 
 let mixer;
 let modelReady = false;
@@ -208,7 +210,18 @@ modelPromise.then((gltf)=>{
             allActions.push(action);
         }
     }
+
+    walkRightPromise.then((gltf) =>{
+        const clip = gltf.animations[0];
+        const name = "walkRightAdditive";
+        THREE.AnimationUtils.makeClipAdditive(clip, 0, baseActions["walkForwardBase"].action.getClip());
+        const action = mixer.clipAction(clip);
+                activateAction(action);
+                additiveActions[name].action = action;
+                allActions.push(action);
+    });
 })
+
 
 camera.position.z = 5;
 
