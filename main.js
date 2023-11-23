@@ -211,6 +211,7 @@ modelPromise.then((gltf)=>{
         }
     }
 
+    //load the right walk animation as for some reason was not able to include it in the main knight man gltf file
     walkRightPromise.then((gltf) =>{
         const clip = gltf.animations[0];
         const name = "walkRightAdditive";
