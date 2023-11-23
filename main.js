@@ -197,7 +197,7 @@ modelPromise.then((gltf)=>{
         }
         else if(additiveActions[name]){
             //make the clip additive
-            THREE.AnimationUtils.makeClipAdditive(clip, 1, baseActions["walkForwardBase"].action.getClip());
+            THREE.AnimationUtils.makeClipAdditive(clip, 0, baseActions["walkForwardBase"].action.getClip());
 
             const action = mixer.clipAction(clip);
             activateAction(action);
