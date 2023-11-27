@@ -37,7 +37,7 @@ const walkRightPromise = loader.loadAsync("./KnightManWalkRight.glb");
 
 let mixer;
 let modelReady = false;
-let model;
+let model, leftFoot;
 
 const allActions = [];
 const baseActions = {
@@ -177,6 +177,9 @@ document.addEventListener("ChangeAdditiveAnimation", e=>{
 
 modelPromise.then((gltf)=>{
     model = gltf.scene;
+
+    leftFoot = model.getObjectByName( 'mixamorigLeftFoot');
+    console.log(leftFoot);
     //rotate a quater
     model.rotation.y = -Math.PI * 0.25;
     scene.add(model);
@@ -230,6 +233,12 @@ camera.position.z = 5;
 function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
-    if(modelReady) mixer.update(clock.getDelta());
+    if(modelReady){
+        mixer.update(clock.getDelta());  
+        leftFoot.rotation.order = "YZX";
+        leftFoot.rotation.x -= 0.27 * Math.PI;
+        leftFoot.children[0].rotation.order = "YZX";
+        leftFoot.children[0].rotation.x += 0.1 * Math.PI;
+    } 
 }
 animate();
