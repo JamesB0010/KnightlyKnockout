@@ -16,6 +16,23 @@ const io = require("socket.io")(server, {
   }
 }); // create instance of socketio
 
+
+//import sql library
+const mySql = require('mysql');
+
+const database = mySql.createConnection({
+  host: "localhost",
+  user:"root",
+  password: "",
+  database: "knightlyknockout"
+})
+
+let sql = 'SELECT * FROM users';
+database.query(sql, (err, result) =>{
+  if (err) throw err;
+  console.log(result);
+})
+
 //setting the directiories which we will serve to the client (static files)
 app.use(express.static("public/HTML"));
 app.use(express.static("public/CSS")); 
@@ -27,6 +44,20 @@ app.use(express.static("public/GameAssets/Models"));
 app.use(express.static("public/GameAssets/Models/Environment"));
 app.use(express.static("public/GameAssets/Models/Player"));
 app.use(express.static("views"));
+
+//database stuff
+app.get("/getUser/:username/:password", (req, res) =>{
+  let sql = `SELECT * FROM users WHERE username = '${req.params.username}' AND password = '${req.params.password}'`;
+  database.query(sql, (err, result) =>{
+    if (err) throw err;
+    if(result.length != 0){
+      res.send(result);
+    }
+    else{
+      res.send("no user Found");
+    }
+  })
+});
 
 //configure 404 page
 app.use(function(req, res, next){
@@ -92,6 +123,11 @@ io.on("connection", socket => {
     io.emit("removeId", socket.id);
   })
 });
+
+
+
+
+
 
 server.listen(3000); // run server
 console.log("server running on http://localhost:3000");
