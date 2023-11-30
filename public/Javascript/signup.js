@@ -36,7 +36,9 @@ form.addEventListener("submit", e =>{
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
-    fetch(`http://localhost:3000/newUser/${username}/${password}`, {
+    let profilePicUrl = reader.result? reader.result: "default";
+
+    fetch(`http://localhost:3000/newUser/${username}/${password}/default`, {
         method: "POST"
     }).then(res =>{
         res.json().then(json =>{

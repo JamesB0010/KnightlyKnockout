@@ -53,7 +53,7 @@ app.get("/getUser/:username/:password", (req, res) =>{
   })
 });
 
-app.post("/newUser/:username/:password", (req, res) =>{
+app.post("/newUser/:username/:password/:profilePic", (req, res) =>{
   let userExists = false;
 
   let check = `SELECT * FROM users WHERE username = '${req.params.username}'`;
@@ -66,7 +66,7 @@ app.post("/newUser/:username/:password", (req, res) =>{
 
   if (userExists) return;
 
-  let post = {username: req.params.username, password: req.params.password};
+  let post = {username: req.params.username, password: req.params.password, profilePicture: req.params.profilePic};
   let sql = "INSERT INTO users SET ?"
   database.query(sql, post, (err, result) =>{
     if(err){
