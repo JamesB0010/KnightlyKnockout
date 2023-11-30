@@ -27,12 +27,6 @@ const database = mySql.createConnection({
   database: "knightlyknockout"
 })
 
-let sql = 'SELECT * FROM users';
-database.query(sql, (err, result) =>{
-  if (err) throw err;
-  console.log(result);
-})
-
 //setting the directiories which we will serve to the client (static files)
 app.use(express.static("public/HTML"));
 app.use(express.static("public/CSS")); 
@@ -65,10 +59,9 @@ app.post("/newUser/:username/:password", (req, res) =>{
   database.query(sql, post, (err, result) =>{
     if(err){
       res.send({error: "error"});
-      throw err;
     }
+    res.send(result);
   })
-  res.send(result);
 })
 
 //configure 404 page
