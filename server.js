@@ -54,10 +54,22 @@ app.get("/getUser/:username/:password", (req, res) =>{
       res.send(result);
     }
     else{
-      res.send("no user Found");
+      res.send({error: "no user found"});
     }
   })
 });
+
+app.post("/newUser/:username/:password", (req, res) =>{
+  let post = {username: req.params.username, password: req.params.password};
+  let sql = "INSERT INTO users SET ?"
+  database.query(sql, post, (err, result) =>{
+    if(err){
+      res.send({error: "error"});
+      throw err;
+    }
+  })
+  res.send(result);
+})
 
 //configure 404 page
 app.use(function(req, res, next){

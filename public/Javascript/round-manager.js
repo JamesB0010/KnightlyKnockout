@@ -49,6 +49,7 @@ class RoundManager{
             if(key != Id){
                 let newScore = this.#playerScores.get(key) + 1;
                 this.#playerScores.set(key, newScore);
+                /*lol*/
                 if(this.#roundNumber < 5){
                     this.#roundNumber++;
                 }

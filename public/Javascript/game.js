@@ -38,6 +38,7 @@ function CheckEverythingsLoaded(){
 class Game {
   constructor() {
     this.scene;
+    /*lol*/
     this.camera;
     this.renderer;
     this.gameObjects = [];

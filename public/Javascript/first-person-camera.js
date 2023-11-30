@@ -11,6 +11,7 @@ function clamp(x, a, b) {
 const KEYS = {
   'a': 65,
   's': 83,
+  /*lol*/
   'w': 87,
   'd': 68,
 };

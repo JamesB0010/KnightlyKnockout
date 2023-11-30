@@ -9,18 +9,24 @@
 </head>
 <body>
   <div id = "backgroundDiv">
+    <div id = "profilePicture">
+
+    </div>
     <h1>Sign Up</h1>
     <br>
     <!--Log in form from https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit-->
-    <form>
-      <label for="fname">Username:</label><br>
-      <input type="text" id="fname" name="fname" value=""><br>
-      <label for="lname">Password:</label><br>
-      <input type="password" id="lname" name="lname" value=""><br><br>
+    <form action = "">
+      <label for="username">Username:</label><br>
+      <input type="text" id="username" name="username" value=""><br>
+      <label for="password">Password:</label><br>
+      <input type="password" id="password" name="password" value=""><br><br>
+      <label for="profilePictureUpload">Profile Picture</label> <br><br>
+      <input type="file" id="profilePictureUpload" name = "profilePictureUpload" accept="image/png"/><br><br><br>
       <input type="submit" value="Sign Up">
     </form>
     <br>
     <a href="./index.html">Back to landing page</a>
   </div>
+  <script type="module" src="../Javascript/signup.js"></script>
 </body>
 </html>

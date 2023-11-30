@@ -5,6 +5,7 @@ body{
 
 #backgroundDiv{
   display: flex;
+  /*lol*/
   flex-direction: column;
   align-items: center;
   margin:0;
@@ -46,4 +47,14 @@ a:active{
 
 p{
   color: #ffffff;
+}
+
+#profilePicture{
+  border-radius: 50%; 
+  width: 9.375vw;
+  height: 18.73vh;
+  background-image: url("../GameAssets/Images/DefaultKnightFacingLeft.png");
+  background-size:     cover;                    
+  background-repeat:   no-repeat;
+  background-position: center center;
 }
