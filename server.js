@@ -1,6 +1,7 @@
 //credit for creating express server https://replit.com/talk/learn/SocketIO-Tutorial-What-its-for-and-how-to-use/143781
 //credit to https://www.youtube.com/watch?v=OKGMhFgR7RY for responding to 404 status
 //credit to https://www.youtube.com/watch?v=JbwlM1Gu5aE for being able to send a html file as a response
+//how to use multer https://www.youtube.com/watch?v=EVOFt8Its6I
 
 //this is the server that serves all the game files and runs the networking of the game
 
@@ -19,6 +20,27 @@ const io = require("socket.io")(server, {
 
 //import sql library
 const mySql = require('mysql');
+
+//using multer
+const multer = require('multer');
+
+
+//this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
+//so if you re enable these comments make sure there is an images folder in the project
+// const fileStorageEngine = multer.diskStorage({
+//   destination: (req, file, cb) =>{
+//     cb(null, './images');
+//   },
+//   filename: (req, file, cb) =>{
+//     cb(null, Date.now() + '--' + file.originalname);
+//   }
+// })
+
+// const upload = multer({
+//   storage: fileStorageEngine
+// });
+
+const upload = multer();
 
 const database = mySql.createConnection({
   host: "localhost",
@@ -53,10 +75,18 @@ app.get("/getUser/:username/:password", (req, res) =>{
   })
 });
 
-app.post("/newUser/:username/:password", (req, res) =>{
+app.post("/newUser", upload.array('image', 3), (req, res) =>{
+  let username = req.body.image[0];
+  let password = req.body.image[1];
+  let profilePic = req.files[0];
+
+  console.log(username);
+  console.log(password);
+  console.log(profilePic);
+
   let userExists = false;
 
-  let check = `SELECT * FROM users WHERE username = '${req.params.username}'`;
+  let check = `SELECT * FROM users WHERE username = '${username}'`;
 
   database.query(check, (err, result)=>{
     if (result.length >= 0){
@@ -66,13 +96,13 @@ app.post("/newUser/:username/:password", (req, res) =>{
 
   if (userExists) return;
 
-  let post = {username: req.params.username, password: req.params.password};
+  let post = {username: username, password: password, profilePicture: profilePic};
   let sql = "INSERT INTO users SET ?"
   database.query(sql, post, (err, result) =>{
     if(err){
-      res.send({error: "error"});
+      res.send({ error: true, body: "upload uncussessful"});
     }
-    res.send(result);
+    res.send({error: true, body: "upload sucessful"});
   })
 })
 
