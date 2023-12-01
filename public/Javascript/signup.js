@@ -3,11 +3,13 @@
 let profilePictureUpload = document.getElementById("profilePictureUpload");
 profilePictureUpload.addEventListener("change", processFile, false);
 let profilePicDiv = document.getElementById("profilePicture");
+let profileImageBlob;
 
 const reader = new FileReader();
 
 reader.addEventListener("load", function (){
     profilePicDiv.style.backgroundImage = `url(${reader.result})`;
+    console.log(reader);
 }, false);
 
 function processFile(){
@@ -19,10 +21,10 @@ function processFile(){
         return;
     }
 
-    const image = this.files[0];
+    profileImageBlob = this.files[0];
 
-    if(image){
-        reader.readAsDataURL(image);
+    if(profileImageBlob){
+        reader.readAsDataURL(profileImageBlob);
     }
 }
 
@@ -36,10 +38,10 @@ form.addEventListener("submit", e =>{
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
-    let profilePicUrl = reader.result? reader.result: "default";
+    let profilePicUrl = profileImageBlob? profileImageBlob: "default";
 
-    fetch(`http://localhost:3000/newUser/${username}/${password}/default`, {
-        method: "POST"
+    fetch(`http://localhost:3000/newUser/${username}/${password}/${imageUrl}`, {
+        method: "POST",
     }).then(res =>{
         res.json().then(json =>{
             if (json.error){
