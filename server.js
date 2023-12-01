@@ -54,7 +54,6 @@ app.get("/getUser/:username/:password", (req, res) =>{
 });
 
 app.post("/newUser/:username/:password/:profilePic", (req, res) =>{
-  console.log(res.params);
   let userExists = false;
 
   let check = `SELECT * FROM users WHERE username = '${req.params.username}'`;
