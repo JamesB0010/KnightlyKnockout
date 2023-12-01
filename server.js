@@ -85,6 +85,8 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
 
   let check = `SELECT * FROM users WHERE username = '${username}'`;
 
+  console.log(profilePic.originalname);
+
   database.query(check, (err, result)=>{
     if (result.length > 0){
       res.send({body: "user already exists"});
@@ -92,6 +94,13 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
         if (err) throw err;
       })
       return;
+    }
+
+    if(profilePic.originalname == "default"){
+      fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
+        if (err) throw err;
+      })
+      profilePicFileName = "default";
     }
 
     let post = {username: username, password: password, profilePicture: profilePicFileName};
