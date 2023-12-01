@@ -24,6 +24,8 @@ const mySql = require('mysql');
 //using multer
 const multer = require('multer');
 
+const fs = require('fs');
+
 
 //this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
 //so if you re enable these comments make sure there is an images folder in the project
@@ -84,18 +86,21 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
   let check = `SELECT * FROM users WHERE username = '${username}'`;
 
   database.query(check, (err, result)=>{
-    if (result.length >= 0){
-      userExists = true;
+    if (result.length > 0){
+      res.send({body: "user already exists"});
+      fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
+        if (err) throw err;
+      })
+      return;
     }
+
+    let post = {username: username, password: password, profilePicture: profilePicFileName};
+    let sql = "INSERT INTO users SET ?"
+    database.query(sql, post, (err, result) =>{
+    })
+    res.send({body: "user created sucessfully"});
   })
 
-  if (userExists) return;
-
-  let post = {username: username, password: password, profilePicture: profilePicFileName};
-  let sql = "INSERT INTO users SET ?"
-  database.query(sql, post, (err, result) =>{
-  })
-  res.send("upload sucessful");
 })
 
 //configure 404 page

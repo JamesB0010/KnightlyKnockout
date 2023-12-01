@@ -55,7 +55,9 @@ form.addEventListener("submit", e =>{
         body: data
     })
     .then(result =>{
-        console.log("user signed up");
+        result.json().then(json =>{
+            alert(json.body);
+        })
     })
     .catch(err =>{
         console.log(err.message);
