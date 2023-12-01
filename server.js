@@ -27,20 +27,18 @@ const multer = require('multer');
 
 //this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
 //so if you re enable these comments make sure there is an images folder in the project
-// const fileStorageEngine = multer.diskStorage({
-//   destination: (req, file, cb) =>{
-//     cb(null, './images');
-//   },
-//   filename: (req, file, cb) =>{
-//     cb(null, Date.now() + '--' + file.originalname);
-//   }
-// })
+const fileStorageEngine = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null, './images');
+  },
+  filename: (req, file, cb) =>{
+    cb(null, Date.now() + '--' + file.originalname);
+  }
+})
 
-// const upload = multer({
-//   storage: fileStorageEngine
-// });
-
-const upload = multer();
+const upload = multer({
+  storage: fileStorageEngine
+});
 
 const database = mySql.createConnection({
   host: "localhost",
@@ -79,10 +77,7 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
   let username = req.body.image[0];
   let password = req.body.image[1];
   let profilePic = req.files[0];
-
-  console.log(username);
-  console.log(password);
-  console.log(profilePic);
+  let profilePicFileName = profilePic.filename;
 
   let userExists = false;
 
@@ -96,14 +91,11 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
 
   if (userExists) return;
 
-  let post = {username: username, password: password, profilePicture: profilePic};
+  let post = {username: username, password: password, profilePicture: profilePicFileName};
   let sql = "INSERT INTO users SET ?"
   database.query(sql, post, (err, result) =>{
-    if(err){
-      res.send({ error: true, body: "upload uncussessful"});
-    }
-    res.send({error: true, body: "upload sucessful"});
   })
+  res.send("upload sucessful");
 })
 
 //configure 404 page
