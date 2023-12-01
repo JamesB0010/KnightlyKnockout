@@ -12,7 +12,7 @@ reader.addEventListener("load", function (){
     profilePicDiv.style.backgroundImage = `url(${reader.result})`;
 }, false);
 
-let userImage = new File([], "default");
+let userImage = new File([], "default.png");
 
 
 function processFile(){

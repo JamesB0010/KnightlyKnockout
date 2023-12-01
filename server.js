@@ -67,7 +67,13 @@ app.get("/getUser/:username/:password", (req, res) =>{
   database.query(sql, (err, result) =>{
     if (err) throw err;
     if(result.length != 0){
-      res.send(result);
+      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data){
+        if(err){
+          throw err;
+        }
+        res.send({body: "Logged in!", profilePicture: data.toString('base64')});
+
+      })
     }
     else{
       res.send({error: "no user found"});
@@ -85,8 +91,6 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
 
   let check = `SELECT * FROM users WHERE username = '${username}'`;
 
-  console.log(profilePic.originalname);
-
   database.query(check, (err, result)=>{
     if (result.length > 0){
       res.send({body: "user already exists"});
@@ -96,11 +100,11 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
       return;
     }
 
-    if(profilePic.originalname == "default"){
+    if(profilePic.originalname == "default.png"){
       fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
         if (err) throw err;
       })
-      profilePicFileName = "default";
+      profilePicFileName = "default.png";
     }
 
     let post = {username: username, password: password, profilePicture: profilePicFileName};
