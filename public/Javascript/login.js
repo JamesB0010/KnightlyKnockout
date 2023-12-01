@@ -19,9 +19,30 @@ form.addEventListener("submit", e =>{
                 return;
             }
             profilePicDiv.style.backgroundImage = `url(data:image/png;base64,${json.profilePicture})`;
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+            localStorage.setItem("profilePicture", `url(data:image/png;base64,${json.profilePicture}`);
             setTimeout(() => {
                 alert(json.body);
             }, 200);
         })
     })
 })
+
+if(localStorage.username){
+    setTimeout(() =>{
+        alert(`Hi ${localStorage.username} your user credentials have been remembered from the last time you signed in`);
+        fetch(`http://localhost:3000/getUser/${localStorage.username}/${localStorage.password}`).then(res =>{
+        res.json().then(json =>{
+            if(json.error){
+                alert("user not found");
+                return;
+            }
+            profilePicDiv.style.backgroundImage = `url(data:image/png;base64,${json.profilePicture})`;
+            setTimeout(() => {
+                alert(json.body);
+            }, 200);
+        })
+    })
+    }, 200);
+}
