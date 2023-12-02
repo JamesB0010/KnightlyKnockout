@@ -142,6 +142,7 @@ app.use(function(req, res, next){
 //connections holds the socket id's of all clients connected to the server
 //this is the objectivley correct, which will be sent to clients to update their local lists
 let connections = [];
+let playerUsernames = new Map();
 
 
 io.on("connection", socket => {
@@ -149,16 +150,18 @@ io.on("connection", socket => {
   console.log("someone joined with id " + socket.id);
   socket.emit('setId', socket.id);
 
-  socket.on("profileInfo", info =>{
-    console.log(info);
+  socket.on("profileInfo", username =>{
+    playerUsernames.set(socket.id, username);
+    io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+    console.log(playerUsernames);
+
+    //update all clients using new list of connections
+  io.emit("updateConnectionsArr", connections);
   })
 
 
   //add this new clients id to the connections array
   connections.push(socket.id);
-
-//update all clients using new list of connections
-  io.emit("updateConnectionsArr", connections);
 
   //make every client send an update player movement to set all of the clients networked players (other player) to the correct position
   io.emit("GetClientPlayerIdPosition");
@@ -200,6 +203,7 @@ io.on("connection", socket => {
     //remove current socket from server
     connections = connections.filter(connection =>{connection != socket.id});
     io.emit("removeId", socket.id);
+    playerUsernames.delete(socket.id);
   })
 });
 

@@ -1,7 +1,7 @@
 //how to respond to form submit with js https://www.freecodecamp.org/news/how-to-submit-a-form-with-javascript/#:~:text=To%20submit%20a%20form%20using,if%20any%20data%20is%20submitted).
 //how to use multer https://www.youtube.com/watch?v=EVOFt8Its6I
 
-console.log(localStorage);
+console.log(sessionStorage);
 
 let profilePictureUpload = document.getElementById("profilePictureUpload");
 profilePictureUpload.addEventListener("change", processFile, false);
@@ -59,9 +59,9 @@ form.addEventListener("submit", e =>{
     .then(result =>{
         result.json().then(json =>{
             alert(json.body);
-            localStorage.setItem("username", username);
-            localStorage.setItem("password", password);
-            localStorage.setItem("profilePicture", reader.result? reader.result: "default");
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("password", password);
+            sessionStorage.setItem("profilePicture", reader.result? reader.result: "default");
         })
     })
     .catch(err =>{
@@ -70,10 +70,10 @@ form.addEventListener("submit", e =>{
 });
 
 
-if(localStorage.username){
+if(sessionStorage.username){
     setTimeout(() =>{
-        alert(`Hi ${localStorage.username} your user credentials have been remembered from the last time you signed in`);
-        fetch(`http://localhost:3000/getUser/${localStorage.username}/${localStorage.password}`).then(res =>{
+        alert(`Hi ${sessionStorage.username} your user credentials have been remembered from the last time you signed in`);
+        fetch(`http://localhost:3000/getUser/${sessionStorage.username}/${sessionStorage.password}`).then(res =>{
         res.json().then(json =>{
             if(json.error){
                 alert("user not found");
