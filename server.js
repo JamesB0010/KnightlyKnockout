@@ -81,6 +81,24 @@ app.get("/getUser/:username/:password", (req, res) =>{
   })
 });
 
+app.get("/getProfilePicture/:username", (req, res) =>{
+  let sql = `SELECT * FROM users WHERE username = '${req.params.username}'`;
+  database.query(sql, (err, result) =>{
+    if (err) throw err;
+    if(result.length != 0){
+      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data){
+        if(err){
+          throw err;
+        }
+        res.send({profilePicture: data.toString('base64')});
+      })
+    }
+    else{
+      res.send({error: "no user found"});
+    }
+  })
+})
+
 app.post("/newUser", upload.array('image', 3), (req, res) =>{
   let username = req.body.image[0];
   let password = req.body.image[1];
@@ -130,6 +148,10 @@ io.on("connection", socket => {
   //when someone joins send their socket id to the client to be saved
   console.log("someone joined with id " + socket.id);
   socket.emit('setId', socket.id);
+
+  socket.on("profileInfo", info =>{
+    console.log(info);
+  })
 
 
   //add this new clients id to the connections array

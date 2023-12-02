@@ -16,6 +16,11 @@ socket.on("setId", id => {
   game.clientId = id;
   game.connectionArray.push(id);
   game.NewPlayer(id, {color:0xffffff, inputEnabled: true});
+  if(localStorage.username){
+    socket.emit("profileInfo", {
+      username: localStorage.username
+    })
+  }
 })
 
 //whenever a player joins the server send the cupdateConnectionsArr message to all clients 
@@ -155,3 +160,11 @@ function Animate() {
 }
 
 Animate();
+
+console.log(localStorage.profilePicture);
+
+
+
+if(localStorage.username){
+  document.getElementById("clientProfilePicture").src = localStorage.profilePicture.substring(4,localStorage.profilePicture.length)
+}
