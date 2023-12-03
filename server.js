@@ -1,6 +1,7 @@
 //credit for creating express server https://replit.com/talk/learn/SocketIO-Tutorial-What-its-for-and-how-to-use/143781
 //credit to https://www.youtube.com/watch?v=OKGMhFgR7RY for responding to 404 status
 //credit to https://www.youtube.com/watch?v=JbwlM1Gu5aE for being able to send a html file as a response
+//how to use multer https://www.youtube.com/watch?v=EVOFt8Its6I
 
 //this is the server that serves all the game files and runs the networking of the game
 
@@ -19,6 +20,27 @@ const io = require("socket.io")(server, {
 
 //import sql library
 const mySql = require('mysql');
+
+//using multer
+const multer = require('multer');
+
+const fs = require('fs');
+
+
+//this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
+//so if you re enable these comments make sure there is an images folder in the project
+const fileStorageEngine = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null, './images');
+  },
+  filename: (req, file, cb) =>{
+    cb(null, Date.now() + '--' + file.originalname);
+  }
+})
+
+const upload = multer({
+  storage: fileStorageEngine
+});
 
 const database = mySql.createConnection({
   host: "localhost",
@@ -45,7 +67,13 @@ app.get("/getUser/:username/:password", (req, res) =>{
   database.query(sql, (err, result) =>{
     if (err) throw err;
     if(result.length != 0){
-      res.send(result);
+      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data){
+        if(err){
+          throw err;
+        }
+        res.send({body: "Logged in!", profilePicture: data.toString('base64')});
+
+      })
     }
     else{
       res.send({error: "no user found"});
@@ -53,27 +81,57 @@ app.get("/getUser/:username/:password", (req, res) =>{
   })
 });
 
-app.post("/newUser/:username/:password", (req, res) =>{
+app.get("/getProfilePicture/:username", (req, res) =>{
+  let sql = `SELECT * FROM users WHERE username = '${req.params.username}'`;
+  database.query(sql, (err, result) =>{
+    if (err) throw err;
+    if(result.length != 0){
+      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data){
+        if(err){
+          throw err;
+        }
+        res.send({profilePicture: data.toString('base64')});
+      })
+    }
+    else{
+      res.send({error: "no user found"});
+    }
+  })
+})
+
+app.post("/newUser", upload.array('image', 3), (req, res) =>{
+  let username = req.body.image[0];
+  let password = req.body.image[1];
+  let profilePic = req.files[0];
+  let profilePicFileName = profilePic.filename;
+
   let userExists = false;
 
-  let check = `SELECT * FROM users WHERE username = '${req.params.username}'`;
+  let check = `SELECT * FROM users WHERE username = '${username}'`;
 
   database.query(check, (err, result)=>{
-    if (result.length >= 0){
-      userExists = true;
+    if (result.length > 0){
+      res.send({body: "user already exists"});
+      fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
+        if (err) throw err;
+      })
+      return;
     }
+
+    if(profilePic.originalname == "default.png"){
+      fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
+        if (err) throw err;
+      })
+      profilePicFileName = "default.png";
+    }
+
+    let post = {username: username, password: password, profilePicture: profilePicFileName};
+    let sql = "INSERT INTO users SET ?"
+    database.query(sql, post, (err, result) =>{
+    })
+    res.send({body: "user created sucessfully"});
   })
 
-  if (userExists) return;
-
-  let post = {username: req.params.username, password: req.params.password};
-  let sql = "INSERT INTO users SET ?"
-  database.query(sql, post, (err, result) =>{
-    if(err){
-      res.send({error: "error"});
-    }
-    res.send(result);
-  })
 })
 
 //configure 404 page
@@ -84,6 +142,7 @@ app.use(function(req, res, next){
 //connections holds the socket id's of all clients connected to the server
 //this is the objectivley correct, which will be sent to clients to update their local lists
 let connections = [];
+let playerUsernames = new Map();
 
 
 io.on("connection", socket => {
@@ -91,12 +150,18 @@ io.on("connection", socket => {
   console.log("someone joined with id " + socket.id);
   socket.emit('setId', socket.id);
 
+  socket.on("profileInfo", username =>{
+    playerUsernames.set(socket.id, username);
+    io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+    console.log(playerUsernames);
+
+    //update all clients using new list of connections
+  io.emit("updateConnectionsArr", connections);
+  })
+
 
   //add this new clients id to the connections array
   connections.push(socket.id);
-
-//update all clients using new list of connections
-  io.emit("updateConnectionsArr", connections);
 
   //make every client send an update player movement to set all of the clients networked players (other player) to the correct position
   io.emit("GetClientPlayerIdPosition");
@@ -138,6 +203,7 @@ io.on("connection", socket => {
     //remove current socket from server
     connections = connections.filter(connection =>{connection != socket.id});
     io.emit("removeId", socket.id);
+    playerUsernames.delete(socket.id);
   })
 });
 

@@ -8,6 +8,7 @@ const socket = io(); // create new socket instance
 //create a new game and initialise it
 let game = new Game();
 game.Init();
+let usernamesMap = new Map();
 
 
 //setup socket listeners
@@ -16,6 +17,9 @@ socket.on("setId", id => {
   game.clientId = id;
   game.connectionArray.push(id);
   game.NewPlayer(id, {color:0xffffff, inputEnabled: true});
+  if(sessionStorage.username){
+    socket.emit("profileInfo", sessionStorage.username)
+  }
 })
 
 //whenever a player joins the server send the cupdateConnectionsArr message to all clients 
@@ -31,6 +35,13 @@ socket.on("updateConnectionsArr", (connections)=>{
     //therefore getting the new client who has joined
      let newClient = connections.filter(element =>{ return !game.connectionArray.includes(element);});
 
+
+     fetch(`http://localhost:3000/getProfilePicture/${usernamesMap.get(newClient[0])}`).then(response =>{
+    response.json().then(json =>{
+      document.getElementById("enemyProfilePicture").src = "data:image/png;base64," + json.profilePicture;
+    })
+  })
+
      //do something with this info
     console.log(game.clientId);
     console.log("new client " + newClient);
@@ -43,6 +54,15 @@ socket.on("updateConnectionsArr", (connections)=>{
     //update local copy of connections
     game.connectionArray = connections;
   }
+});
+
+socket.on("updatePlayerUsernames", usernames =>{
+  usernamesMap = new Map();
+  usernames = JSON.parse(usernames);
+
+  usernames.forEach(list => {
+    usernamesMap.set(list[0], list[1]);
+  });
 });
 
 socket.on("UpdateNetworkedPlayerPos", info=>{
@@ -155,3 +175,10 @@ function Animate() {
 }
 
 Animate();
+
+
+
+
+if(sessionStorage.username){
+  document.getElementById("clientProfilePicture").src = sessionStorage.profilePicture.substring(4,sessionStorage.profilePicture.length)
+}
