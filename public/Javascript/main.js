@@ -9,6 +9,7 @@ const socket = io(); // create new socket instance
 let game = new Game();
 game.Init();
 let usernamesMap = new Map();
+let latestClient;
 
 
 //setup socket listeners
@@ -34,13 +35,7 @@ socket.on("updateConnectionsArr", (connections)=>{
     //this line gets the id which is present in the new connections array but not in the local connection array. 
     //therefore getting the new client who has joined
      let newClient = connections.filter(element =>{ return !game.connectionArray.includes(element);});
-
-
-     fetch(`http://localhost:3000/getProfilePicture/${usernamesMap.get(newClient[0])}`).then(response =>{
-    response.json().then(json =>{
-      document.getElementById("enemyProfilePicture").src = "data:image/png;base64," + json.profilePicture;
-    })
-  })
+     latestClient = newClient;
 
      //do something with this info
     console.log(game.clientId);
@@ -57,13 +52,27 @@ socket.on("updateConnectionsArr", (connections)=>{
 });
 
 socket.on("updatePlayerUsernames", usernames =>{
+  console.log(usernames);
   usernamesMap = new Map();
   usernames = JSON.parse(usernames);
 
   usernames.forEach(list => {
     usernamesMap.set(list[0], list[1]);
   });
-});
+  try{
+
+    fetch(`http://localhost:3000/getProfilePicture/${usernamesMap.get(latestClient[0])}`).then(response =>{
+      response.json().then(json =>{
+        console.log(json);
+        if(json.error != "no user found"){
+          document.getElementById("enemyProfilePicture").src = "data:image/png;base64," + json.profilePicture;
+        }
+      })
+    })
+  }
+  catch{
+  }
+  });
 
 socket.on("UpdateNetworkedPlayerPos", info=>{
   //use info.id to find a player and then update its position using info.position
@@ -78,11 +87,20 @@ socket.on("NetworkedPlayerRotate", info =>{
   //reference https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation
   let theta_y = Math.atan2(info.rotation[1], info.rotation[3]);
   let yRotation = [0, Math.sin(theta_y), 0, Math.cos(theta_y)];
-  game.players.get(info.id).gltfScene.quaternion.set(yRotation[0], yRotation[1], yRotation[2], yRotation[3]);
+  try{
+    game.players.get(info.id).gltfScene.quaternion.set(yRotation[0], yRotation[1], yRotation[2], yRotation[3]);
+  }
+  catch{
+
+  }
 })
 
 socket.on("NetworkedPlayerStoppedMoving", id =>{
-  game.players.get(id).SetAnimation(6);
+  try{
+    game.players.get(id).SetAnimation(6);
+  }
+  catch{
+  }
 })
 
 socket.on("GetClientPlayerIdPosition", () =>{
@@ -114,8 +132,11 @@ socket.on("ResetClientHealth", () =>{
 
 socket.on("networkedAttack", info =>{
   console.log(info);
-  game.players.get(info.id).children[0].PlayRandomAttack();
-  game.players.get(info.id).SetAnimation(info.attackAnimIndex);
+  try{
+    game.players.get(info.id).children[0].PlayRandomAttack();
+    game.players.get(info.id).SetAnimation(info.attackAnimIndex);
+  }
+  catch{};
 })
 
 socket.on("networkedStartBlock", id =>{
@@ -132,12 +153,19 @@ socket.on("networkedPlayerInsult", info =>{
     game.players.get(info.id).children[0].PlayRandomInsult();
     return;
   }
-  game.players.get(info.id).children[0].PlayRandomInsult(info.insultIndex);
+  try{
+    game.players.get(info.id).children[0].PlayRandomInsult(info.insultIndex);
+  }
+  catch{
+  }
 })
 
 //whenever the local player moves send it to the server
 document.addEventListener("OnClientMove", e =>{
-  socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId, velocities: e.detail});
+  try{
+    socket.emit("UpdatePlayerMovement", {position:game.player.position, id: game.clientId, velocities: e.detail});
+  }
+  catch{};
 })
 
 document.addEventListener("OnClientStop", e =>{

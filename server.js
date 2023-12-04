@@ -150,26 +150,29 @@ let playerUsernames = new Map();
 
 
 io.on("connection", socket => {
+
   //when someone joins send their socket id to the client to be saved
   console.log("someone joined with id " + socket.id);
   socket.emit('setId', socket.id);
+  io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+
+  //add this new clients id to the connections array
+  connections.push(socket.id);
+  //update all clients using new list of connections
+io.emit("updateConnectionsArr", connections);
 
   socket.on("profileInfo", username =>{
     playerUsernames.set(socket.id, username);
     io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
     console.log(playerUsernames);
-
-    //update all clients using new list of connections
-  io.emit("updateConnectionsArr", connections);
   })
+
 
   socket.on("PlayerRotate", info =>{
     socket.broadcast.emit("NetworkedPlayerRotate", info);
   })
 
 
-  //add this new clients id to the connections array
-  connections.push(socket.id);
 
   //make every client send an update player movement to set all of the clients networked players (other player) to the correct position
   io.emit("GetClientPlayerIdPosition");

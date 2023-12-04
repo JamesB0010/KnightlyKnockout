@@ -124,13 +124,14 @@ class GameObject extends THREE.Mesh{
     }
 
     SetAnimationFromVelocities(velocities){
-        //player isnt moving edge case;
-        if(velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0){
-            this.SetAnimation(6);
-            return;
-        }
-        if(velocities.sidewaysVelocity == 1){
-            this.SetAnimation(11);
+        try{
+            //player isnt moving edge case;
+            if(velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0){
+                this.SetAnimation(6);
+                return;
+            }
+            if(velocities.sidewaysVelocity == 1){
+                this.SetAnimation(11);
             return;
         }
         if(velocities.sidewaysVelocity == -1){
@@ -146,7 +147,9 @@ class GameObject extends THREE.Mesh{
             return;
         }
     }
-
+    catch{};
+    }
+    
     UpdateAnimMixer(deltaTime){
         this.#animationMixer.update(deltaTime);
     }
