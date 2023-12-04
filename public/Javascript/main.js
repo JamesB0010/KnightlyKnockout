@@ -74,7 +74,9 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
 })
 
 socket.on("NetworkedPlayerRotate", info =>{
-  game.players.get(info.id).gltfScene.rotation.set(info.rotation._x, info.rotation._y, info.rotation._z, info.rotation._w);
+  let theta_y = Math.atan2(info.rotation[1], info.rotation[3]);
+  let yRotation = [0, Math.sin(theta_y), 0, Math.cos(theta_y)];
+  game.players.get(info.id).gltfScene.quaternion.set(yRotation[0], yRotation[1], yRotation[2], yRotation[3]);
 })
 
 socket.on("NetworkedPlayerStoppedMoving", id =>{

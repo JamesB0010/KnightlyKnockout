@@ -45,7 +45,7 @@ class FirstPersonCamera{
       this.input_.update(timeElapsedS);
       if (this.rotating){
         this.rotating = false;
-        rotateEvent.detail.rotation = this.camera_.rotation;
+        rotateEvent.detail.rotation = this.rotation_;
         document.dispatchEvent(rotateEvent);
       }
   }
