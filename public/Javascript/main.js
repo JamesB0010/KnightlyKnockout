@@ -74,6 +74,8 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
 })
 
 socket.on("NetworkedPlayerRotate", info =>{
+  //how to isolate y axis
+  //reference https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation
   let theta_y = Math.atan2(info.rotation[1], info.rotation[3]);
   let yRotation = [0, Math.sin(theta_y), 0, Math.cos(theta_y)];
   game.players.get(info.id).gltfScene.quaternion.set(yRotation[0], yRotation[1], yRotation[2], yRotation[3]);
