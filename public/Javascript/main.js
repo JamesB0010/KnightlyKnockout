@@ -73,6 +73,12 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
   }
 })
 
+socket.on("NetworkedPlayerRotate", info =>{
+  console.log(info.rotation);
+  const radians = info.rotation > 0? info.rotation: (2 * Math.PI) + info.rotation;
+  game.players.get(info.id).gltfScene.rotation.y = radians;
+})
+
 socket.on("NetworkedPlayerStoppedMoving", id =>{
   game.players.get(id).SetAnimation(6);
 })
@@ -158,6 +164,10 @@ document.addEventListener("Insult", e =>{
   console.log(insultIndex);
   socket.emit("PlayerInsult", {id:game.clientId, insultIndex: insultIndex});
 } );
+
+document.addEventListener("OnClientRotate", e =>{
+  socket.emit("PlayerRotate", {rotation: e.detail.rotation, id: game.clientId});
+})
 
 function ClientDeath(){
   game.onClientDeath();

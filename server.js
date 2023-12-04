@@ -43,10 +43,14 @@ const upload = multer({
 });
 
 const database = mySql.createConnection({
-  host: "localhost",
-  user:"root",
-  password: "",
-  database: "knightlyknockout"
+  host: "sql8.freemysqlhosting.net",
+  user: "sql8666464",
+  password: "es8gRGJxQN",
+  database: "sql8666464"
+  // host: "localhost",
+  // user:"root",
+  // password: "",
+  // database: "knightlyknockout"
 })
 
 //setting the directiories which we will serve to the client (static files)
@@ -157,6 +161,10 @@ io.on("connection", socket => {
 
     //update all clients using new list of connections
   io.emit("updateConnectionsArr", connections);
+  })
+
+  socket.on("PlayerRotate", info =>{
+    socket.broadcast.emit("NetworkedPlayerRotate", info);
   })
 
 
