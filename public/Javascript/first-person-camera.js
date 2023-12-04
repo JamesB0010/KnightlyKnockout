@@ -19,6 +19,8 @@ const KEYS = {
 //create an event which will be dispached any time we move
 const stopEvent = new Event("OnClientStop");
 
+const rotateEvent = new CustomEvent("OnClientRotate", {detail:{rotation: new THREE.Quaternion}});
+
 class FirstPersonCamera{
   constructor(camera){
       this.camera_ = camera;
@@ -32,6 +34,7 @@ class FirstPersonCamera{
       this.headBobActive_ = false;
       this.headBobTimer_ = 0;
       this.lastMoving_ = false;
+      this.rotating = false;
   }
 
   update(timeElapsedS, sceneObjects){
@@ -40,6 +43,11 @@ class FirstPersonCamera{
       this.updateTranslation_(timeElapsedS);
       this.updateHeadBob_(timeElapsedS)
       this.input_.update(timeElapsedS);
+      if (this.rotating){
+        this.rotating = false;
+        rotateEvent.detail.rotation = this.rotation_;
+        document.dispatchEvent(rotateEvent);
+      }
   }
 
   updateCamera_(timeElapsedS, sceneObjects){
@@ -118,6 +126,10 @@ class FirstPersonCamera{
   updateRotation_(deltaTime){
       const xh = this.input_.current_.mouseXDelta / window.innerWidth;
       const yh = this.input_.current_.mouseYDelta / window.innerHeight;
+
+      if(!(xh == 0)){
+        this.rotating = true;
+      }
 
       this.phi_ += -xh * this.phiSpeed_;
 
