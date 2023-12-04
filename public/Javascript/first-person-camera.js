@@ -45,7 +45,7 @@ class FirstPersonCamera{
       this.input_.update(timeElapsedS);
       if (this.rotating){
         this.rotating = false;
-        rotateEvent.detail.rotation = THREE.MathUtils.radToDeg(this.camera_.rotation.y);
+        rotateEvent.detail.rotation = this.camera_.rotation;
         document.dispatchEvent(rotateEvent);
       }
   }

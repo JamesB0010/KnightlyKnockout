@@ -74,9 +74,7 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
 })
 
 socket.on("NetworkedPlayerRotate", info =>{
-  console.log(info.rotation);
-  const radians = info.rotation > 0? info.rotation: (2 * Math.PI) + info.rotation;
-  game.players.get(info.id).gltfScene.rotation.y = radians;
+  game.players.get(info.id).gltfScene.rotation.set(info.rotation._x, info.rotation._y, info.rotation._z, info.rotation._w);
 })
 
 socket.on("NetworkedPlayerStoppedMoving", id =>{
