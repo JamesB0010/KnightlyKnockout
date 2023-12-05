@@ -186,7 +186,7 @@ class Game {
     inputEnabled = false
   }) {
     //load the player model
-    this.gltfLoader.load('../GameAssets/Models/Player/KnightMan.glb', gltf =>{
+    this.gltfLoader.load('../GameAssets/Models/Player/knight-man-additive-complete.glb', gltf =>{
       //once the model has loaded add it to the scene then create the new player
       this.scene.add(gltf.scene);
       let _newPlayer = new GameObject({

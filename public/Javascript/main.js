@@ -78,7 +78,6 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
   //use info.id to find a player and then update its position using info.position
   game.UpdateNetworkedPlayer(info.id, info.position);
   if(game.players.get(info.id)){
-    game.players.get(info.id).SetAnimationFromVelocities(info.velocities);
   }
 })
 
@@ -97,7 +96,6 @@ socket.on("NetworkedPlayerRotate", info =>{
 
 socket.on("NetworkedPlayerStoppedMoving", id =>{
   try{
-    game.players.get(id).SetAnimation(6);
   }
   catch{
   }
@@ -119,11 +117,6 @@ socket.on("removeId", id =>{
 })
 
 socket.on("NetworkedPlayerDeath", info =>{
-  game.players.get(info.id).SetAnimation(3);
-  setTimeout(() =>{
-    game.roundManager.playerDead(info.id);
-    game.players.get(info.id).ResetToIdleAnim();
-  }, 5000)
 })
 
 socket.on("ResetClientHealth", () =>{
@@ -134,17 +127,14 @@ socket.on("networkedAttack", info =>{
   console.log(info);
   try{
     game.players.get(info.id).children[0].PlayRandomAttack();
-    game.players.get(info.id).SetAnimation(info.attackAnimIndex);
   }
   catch{};
 })
 
 socket.on("networkedStartBlock", id =>{
-  game.players.get(id).SetAnimation(1);
 })
 
 socket.on("networkedEndBlock", id =>{
-  game.players.get(id).SetAnimation(6);
 })
 
 socket.on("networkedPlayerInsult", info =>{
