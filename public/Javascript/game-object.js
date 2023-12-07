@@ -36,8 +36,8 @@ class GameObject extends THREE.Mesh {
         walkRightAdditive: { weight: 0 }
     }
 
-    #currentAdditiveAction = "walkForwardAdditive";
-    #currentBaseAction = "walkForwardBase";
+    #currentAdditiveAction = "idleAdditive";
+    #currentBaseAction = "idleBase";
     #numAnimations;
     constructor({
         height = 1,
@@ -232,9 +232,7 @@ class GameObject extends THREE.Mesh {
         let owner = this;
         
         function onLoopFinished(event) {
-            console.log(owner);
             if (event.action == startAction) {
-                console.log(owner.GetAnimMixer);
                 owner.GetAnimMixer().removeEventListener('loop', onLoopFinished);
                 
                 owner.ExecuteCrossFade(startAction, endAction, duration);
