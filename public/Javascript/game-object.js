@@ -14,8 +14,8 @@ class GameObject extends THREE.Mesh {
     #model;
     #leftFoot;
     #baseActions = {
-        idleBase: { weight: 0 },
-        walkForwardBase: { weight: 1 },
+        idleBase: { weight: 1 },
+        walkForwardBase: { weight: 0 },
         walkBackBase: { weight: 0 },
         walkLeftBase: { weight: 0 },
         walkRightBase: { weight: 0 },
@@ -29,8 +29,8 @@ class GameObject extends THREE.Mesh {
         hitReactionHead: { weight: 0 },
         lightAttack: { weight: 0 },
         heavyAttack: { weight: 0 },
-        walkForwardAdditive: { weight: 1 },
-        idleAdditive: { weight: 0 },
+        walkForwardAdditive: { weight: 0 },
+        idleAdditive: { weight: 1 },
         walkBackAdditive: { weight: 0 },
         walkLeftAdditive: { weight: 0 },
         walkRightAdditive: { weight: 0 }
@@ -206,48 +206,56 @@ class GameObject extends THREE.Mesh {
         //if the current action is 'idleBase', execute the crossfade immediately;
         //else wait until the current action has finished its current loop
 
-        if (currentBaseAction === 'idleBase' || !startAction || !endAction) {
-            executeCrossFade(startAction, endAction, duration);
+        if (this.#currentBaseAction === 'idleBase' || !startAction || !endAction) {
+            this.ExecuteCrossFade(startAction, endAction, duration);
         }
         else {
-            synchronizeCrossFade(startAction, endAction, duration);
+            this.#SynchroniseCrossFade(startAction, endAction, duration);
         }
 
         if (endAction) {
             const clip = endAction.getClip();
-            currentBaseAction = clip.name;
+            this.#currentBaseAction = clip.name;
         }
         else {
-            currentBaseAction = 'None';
+            this.#currentBaseAction = 'None';
         }
     }
 
+    GetAnimMixer(){
+        return this.#animationMixer;
+    }
+
     #SynchroniseCrossFade(startAction, endAction, duration) {
-        mixer.addEventListener('loop', onLoopFinished);
+        this.#animationMixer.addEventListener('loop', onLoopFinished);
 
+        let owner = this;
+        
         function onLoopFinished(event) {
+            console.log(owner);
             if (event.action == startAction) {
-                mixer.removeEventListener('loop', onLoopFinished);
-
-                executeCrossFade(startAction, endAction, duration);
+                console.log(owner.GetAnimMixer);
+                owner.GetAnimMixer().removeEventListener('loop', onLoopFinished);
+                
+                owner.ExecuteCrossFade(startAction, endAction, duration);
             }
         }
     }
 
     //this function is needed, since animationAction.crossFadeTo() disables its start action and sets
     //the start actions timescale to ((start animations duration) / (end animations duration))
-    #ExecuteCrossFade(startAction, endAction, duration) {
+    ExecuteCrossFade(startAction, endAction, duration) {
         //not only the start action, but also the end action must have a weight of 1 before fading
         //for start action this is the case
         if (endAction) {
-            setWeight(endAction, 1);
+            this.#SetWeight(endAction, 1);
             endAction.time = 0;
 
             if (startAction) {
                 //crossfade with warping
                 startAction.crossFadeTo(endAction, duration, true);
-                baseActions[startAction.getClip().name].weight = 0;
-                baseActions[endAction.getClip().name].weight = 1;
+                this.#baseActions[startAction.getClip().name].weight = 0;
+                this.#baseActions[endAction.getClip().name].weight = 1;
             }
             else {
                 endAction.fadeIn(duration);
@@ -261,6 +269,36 @@ class GameObject extends THREE.Mesh {
 
     #PlayDeathAnimation(){
 
+    }
+
+    SetAnimationFromVelocities(velocities){
+        //forwardVelocity
+        //sidewaysVelocity
+
+        if(!velocities){
+            return;
+        }
+
+        let forwards = velocities.forwardVelocity == 1;
+        let backwards = velocities.forwardVelocity == -1;
+        let left = velocities.sidewaysVelocity == 1;
+        let right = velocities.sidewaysVelocity == -1;
+
+        if (forwards){
+            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkForwardBase"].action, 0.35);
+        }
+        else if (backwards){
+            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkBackBase"].action, 0.35);
+        }
+        else if(left){
+            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0.35);
+        }
+        else if(right){
+            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0.35);
+        }
+        else{
+            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["idleBase"].action, 0.35);
+        }
     }
 }
 

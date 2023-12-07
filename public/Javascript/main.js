@@ -78,6 +78,7 @@ socket.on("UpdateNetworkedPlayerPos", info=>{
   //use info.id to find a player and then update its position using info.position
   game.UpdateNetworkedPlayer(info.id, info.position);
   if(game.players.get(info.id)){
+    game.players.get(info.id).SetAnimationFromVelocities(info.velocities);
   }
 })
 
