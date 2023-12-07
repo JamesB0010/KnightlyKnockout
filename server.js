@@ -13,7 +13,7 @@ const io = require("socket.io")(server, {
   cors: {
     //list trusted sources
     origin: [
-      "https://chat-app--coder100.repl.co", "http://localhost:3000", "http://localhost:5173"]
+      "https://year2uniwebgame.jamesbland.repl.co", "http://localhost:3000", "http://localhost:5173"]
   }
 }); // create instance of socketio
 
