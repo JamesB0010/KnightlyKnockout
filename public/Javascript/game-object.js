@@ -23,14 +23,14 @@ class GameObject extends THREE.Mesh {
     }
 
     #additiveActions = {
-        blockIdle: { weight: 0 },
+        blockIdle: { weight: 1 },
         blockReact: { weight: 0 },
         hitReactionGut: { weight: 0 },
         hitReactionHead: { weight: 0 },
         lightAttack: { weight: 0 },
         heavyAttack: { weight: 0 },
         walkForwardAdditive: { weight: 0 },
-        idleAdditive: { weight: 1 },
+        idleAdditive: { weight: 0 },
         walkBackAdditive: { weight: 0 },
         walkLeftAdditive: { weight: 0 },
         walkRightAdditive: { weight: 0 }
@@ -277,25 +277,34 @@ class GameObject extends THREE.Mesh {
             return;
         }
 
+        if(this.#currentBaseAction != "idleBase" && velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0){
+            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["idleBase"].action, 0);
+        }
+
         let forwards = velocities.forwardVelocity == 1;
         let backwards = velocities.forwardVelocity == -1;
         let left = velocities.sidewaysVelocity == 1;
         let right = velocities.sidewaysVelocity == -1;
 
         if (forwards){
-            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkForwardBase"].action, 0.35);
+            if(this.#currentBaseAction != "walkForwardBase"){
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkForwardBase"].action, 0);
+            }
         }
         else if (backwards){
-            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkBackBase"].action, 0.35);
+            if(this.#currentBaseAction != "walkBackBase"){
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkBackBase"].action, 0);
+            }
         }
         else if(left){
-            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0.35);
+            if(this.#currentBaseAction != "walkLeftBase"){
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0);
+            }
         }
         else if(right){
-            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0.35);
-        }
-        else{
-            this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["idleBase"].action, 0.35);
+            if(this.#currentBaseAction != "walkRightBase"){
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0);
+            }
         }
     }
 }

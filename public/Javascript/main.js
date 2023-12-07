@@ -97,6 +97,7 @@ socket.on("NetworkedPlayerRotate", info =>{
 
 socket.on("NetworkedPlayerStoppedMoving", id =>{
   try{
+    game.players.get(id).SetAnimationFromVelocities({forwardVelocity: 0, sidewaysVelocity: 0});
   }
   catch{
   }
