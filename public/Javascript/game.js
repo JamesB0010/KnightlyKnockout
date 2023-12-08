@@ -7,7 +7,28 @@ import {RoundManager} from './round-manager.js';
 import {Cloud} from "./cloud.js";
 import { PlayerAudio } from './player-audio.js';
 
-class Game{};
+class Game{
+  constructor() {
+    this.scene;
+    /*lol*/
+    this.camera;
+    this.renderer;
+    this.gameObjects = [];
+    this.player;
+    this.enemy;
+    this.players = new Map();
+    this.fpsCamera;
+    this.clock = new THREE.Clock();
+    this.gltfLoader = new GLTFLoader();
+    //an array of socket id's each id being a client connected to the server
+    this.connectionArray =[];
+    //this clients socket id
+    this.clientId;
+
+    this.roundManager;
+
+  };
+};
 
 import('three/addons/physics/RapierPhysics.js').then(RAPIER =>{
   let stats;
@@ -37,39 +58,19 @@ import('three/addons/physics/RapierPhysics.js').then(RAPIER =>{
       OnEverythingLoaded();
     }
   }
+
+  Game.prototype.OnWindowResize = game =>{
+    //making window responsive
+    game.camera.aspect = window.innerWidth / window.innerHeight;
   
-  class Game {
-    constructor() {
-      this.scene;
-      /*lol*/
-      this.camera;
-      this.renderer;
-      this.gameObjects = [];
-      this.player;
-      this.enemy;
-      this.players = new Map();
-      this.fpsCamera;
-      this.clock = new THREE.Clock();
-      this.gltfLoader = new GLTFLoader();
-      //an array of socket id's each id being a client connected to the server
-      this.connectionArray =[];
-      //this clients socket id
-      this.clientId;
-  
-      this.roundManager;
-  
-    };
-    OnWindowResize(game) {
-      //making window responsive
-      game.camera.aspect = window.innerWidth / window.innerHeight;
-  
-      game.camera.updateProjectionMatrix();
-  
-      game.renderer.setSize(window.innerWidth, window.innerHeight);
-    }
+    game.camera.updateProjectionMatrix();
+
+    game.renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  Game.prototype.Init = function(){
     //init initialises and sets up the game
-    Init() {
-      this.scene = new THREE.Scene();
+    this.scene = new THREE.Scene();
       this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
       this.listener = new THREE.AudioListener();
       this.camera.add(this.listener);
@@ -157,12 +158,10 @@ import('three/addons/physics/RapierPhysics.js').then(RAPIER =>{
           this.onClientDeath();
         }
       };
-  
-    }
-  
-    //update is called every animation frame
-    Update() {
-      let deltaTime = this.clock.getDelta();
+
+      Game.prototype.Update = function(){
+        //update is called every animation frame
+        let deltaTime = this.clock.getDelta();
       //update the fps cameras position
       this.fpsCamera.update(deltaTime);
       //if player isnt null then set their position and update the gltf position
@@ -177,7 +176,17 @@ import('three/addons/physics/RapierPhysics.js').then(RAPIER =>{
         this.enemy.UpdateAnimMixer(deltaTime);
       }
       this.Render();
-    }
+      }
+
+
+      Game.prototype.Render = function(){
+        this.renderer.render(this.scene, this.camera);
+      }
+  }
+  
+  class Game {
+  
+  
   
     Render() {
       this.renderer.render(this.scene, this.camera);
