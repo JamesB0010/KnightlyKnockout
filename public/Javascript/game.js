@@ -6,8 +6,6 @@ import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.modul
 import {RoundManager} from './round-manager.js';
 import {Cloud} from "./cloud.js";
 import { PlayerAudio } from './player-audio.js';
-import * as RAPIER from 'three/addons/physics/RapierPhysics.js';
-
 
 let stats;
 
@@ -56,6 +54,11 @@ class Game {
     this.clientId;
 
     this.roundManager;
+
+    this.updateFunctions = [()=>{}];
+
+    // this.gravity = {x: 0.0, y: -9.81, z:0.0};
+    // this.physicsWorld = new RAPIER.World(this.gravity);
 
   };
   OnWindowResize(game) {
@@ -175,6 +178,11 @@ class Game {
     if(this.enemy){
       this.enemy.UpdateAnimMixer(deltaTime);
     }
+
+    this.updateFunctions.forEach(func => {
+      func(deltaTime);
+    });
+
     this.Render();
   }
 
