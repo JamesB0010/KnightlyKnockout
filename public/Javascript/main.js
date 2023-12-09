@@ -114,7 +114,6 @@ Ammo().then(lib => {
       rigidBodies[i].mesh.quaternion.copy(quat3);
     }
   })
-})
 
 
 
@@ -133,10 +132,13 @@ Ammo().then(lib => {
   socket.on("setId", id => {
     game.clientId = id;
     game.connectionArray.push(id);
-    game.NewPlayer(id, { color: 0xffffff, inputEnabled: true });
+    let _playerPromise = game.NewPlayer(id, { color: 0xffffff, inputEnabled: true });
     if (sessionStorage.username) {
       socket.emit("profileInfo", sessionStorage.username)
     }
+    _playerPromise.then((player) =>{
+      console.log("Complete");
+    })
   })
 
   //whenever a player joins the server send the cupdateConnectionsArr message to all clients 
@@ -168,7 +170,6 @@ Ammo().then(lib => {
   });
 
   socket.on("updatePlayerUsernames", usernames => {
-    console.log(usernames);
     usernamesMap = new Map();
     usernames = JSON.parse(usernames);
 
@@ -330,3 +331,4 @@ Ammo().then(lib => {
   if (sessionStorage.username) {
     document.getElementById("clientProfilePicture").src = sessionStorage.profilePicture.substring(4, sessionStorage.profilePicture.length)
   }
+})

@@ -197,7 +197,7 @@ class Game {
     inputEnabled = false
   }) {
     //load the player model
-    this.gltfLoader.load('../GameAssets/Models/Player/knight-man-additive-complete.glb', gltf =>{
+    let playerLoadPromise = this.gltfLoader.loadAsync('../GameAssets/Models/Player/knight-man-additive-complete.glb').then(gltf =>{
       //once the model has loaded add it to the scene then create the new player
       this.scene.add(gltf.scene);
       let _newPlayer = new GameObject({
@@ -228,7 +228,9 @@ class Game {
         this.scene.add(_newPlayer);
         this.roundManager.addKeyValToMap(id, 0);
         _newPlayer.add(new PlayerAudio(["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],this.listener));
-    })
+        return _newPlayer;
+    });
+    return playerLoadPromise;
   };
 
   RemovePlayer(id) {
