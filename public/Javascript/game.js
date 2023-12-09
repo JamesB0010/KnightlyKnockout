@@ -104,12 +104,13 @@ class Game {
     this.scene.add(points);
 
     //================Physics init stuff==================
+    //this code spawns a three js box where the physics world box exists, uncomment the scene.add line to see it in the scene
     const ground = new THREE.Mesh(
-      new THREE.BoxGeometry(100, 1, 100),
+      new THREE.BoxGeometry(9, 1, 40),
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
     ground.position.y = -2;
-    this.scene.add(ground);
+    // this.scene.add(ground);
 
     const rbGround = new RigidBody();
     rbGround.CreateBox(0, ground.position, ground.quaternion, new THREE.Vector3(100, 1, 100));
