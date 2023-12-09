@@ -63,56 +63,11 @@ const physicsJsPromise = new Promise((res, rej) => {
     APP = new PhysicsWorld();
     APP.Initialise();
 
-    // game.updateFunctions.push(deltaTime =>{
-    //   APP.physicsWorld.stepSimulation(deltaTime);
-    // })
-    // const ground = new THREE.Mesh(
-    //   new THREE.BoxGeometry(100, 1, 100),
-    //   new THREE.MeshStandardMaterial({color: 0x808080})
-    // );
-    // ground.position.y = -2;
-    // game.scene.add(ground);
-
-    // const rbGround = new RigidBody();
-    // rbGround.CreateBox(0, ground.position, ground.quaternion, new THREE.Vector3(100, 1, 100));
-    // rbGround.setRestitution(0.99);
-    // APP.physicsWorld.addRigidBody(rbGround.body);
-
-    // const box = new THREE.Mesh(
-    //   new THREE.BoxGeometry(4,4,4),
-    //   new THREE.MeshStandardMaterial({color: 0x808080})
-    // );
-    // box.position.set(0, 100, 0);
-    // game.scene.add(box);
-
-    // const rbBox = new RigidBody();
-    // rbBox.CreateBox(1, box.position, box.quaternion, new THREE.Vector3(4,4,4));
-    // rbBox.setRestitution(0.25);
-    // rbBox.setFriction(1);
-    // rbBox.setRollingFriction(5);
-    // APP.physicsWorld.addRigidBody(rbBox.body);
-
-    // const rigidBodies = [{mesh: box, rigidBody: rbBox}];
-
-    // let tmpTransform = new Ammo.btTransform();
-
-    // game.updateFunctions.push(() =>{
-    //   for (let i = 0; i < rigidBodies.length; i++){
-    //     rigidBodies[i].rigidBody.motionState.getWorldTransform(tmpTransform);
-    //     const pos = tmpTransform.getOrigin();
-    //     const quat = tmpTransform.getRotation();
-    //     const pos3 = new THREE.Vector3(pos.x(), pos.y(), pos.z());
-    //     const quat3 = new THREE.Quaternion(quat.x(), quat.y(), quat.z(), quat.w());
-
-    //     rigidBodies[i].mesh.position.copy(pos3);
-    //     rigidBodies[i].mesh.quaternion.copy(quat3);
-    //   }
-    // })
     return Ammo;
   });
 
   AmmoPromise.then(_ammo => {
-    res([_ammo, APP]);
+    res([_ammo, APP, RigidBody]);
   })
 });
 
