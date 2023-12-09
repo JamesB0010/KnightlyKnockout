@@ -113,7 +113,7 @@ class Game {
     // this.scene.add(ground);
 
     const rbGround = new RigidBody();
-    rbGround.CreateBox(0, ground.position, ground.quaternion, new THREE.Vector3(100, 1, 100));
+    rbGround.CreateBox(0, ground.position, ground.quaternion, new THREE.Vector3(100, 2, 100));
     rbGround.setRestitution(0.99);
     APP.physicsWorld.addRigidBody(rbGround.body);
 
@@ -132,7 +132,21 @@ class Game {
     rbBox.setRollingFriction(5);
     APP.physicsWorld.addRigidBody(rbBox.body);
 
-    this.rigidBodies = [{mesh: box, rigidBody: rbBox}];
+    const capsule = new THREE.Mesh(
+      new THREE.CapsuleGeometry(1, 1, 4, 8),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    capsule.position.set(0, 5, 0);
+    this.scene.add(capsule);
+
+    const rbCapsule = new RigidBody();
+    rbCapsule.CreateCapsule(1, capsule.position, capsule.quaternion, 1, 1);
+    rbCapsule.setRestitution(0.25);
+    rbCapsule.setFriction(1);
+    rbCapsule.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbBox.body);
+
+    this.rigidBodies = [{mesh: box, rigidBody: rbBox}, {mesh: capsule, rigidBody: rbCapsule}];
 
     this.tmpTransform = new Ammo.btTransform();
 
