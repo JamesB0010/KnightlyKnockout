@@ -7,6 +7,13 @@ import {RoundManager} from './round-manager.js';
 import {Cloud} from "./cloud.js";
 import { PlayerAudio } from './player-audio.js';
 
+const gamePromise = new Promise((res, rej) =>{
+
+import('./physics.js').then(info =>{
+  info.physicsJsPromise.then(AmmoAndApp =>{
+    const Ammo = AmmoAndApp[0];
+    const App = AmmoAndApp[1];
+
 let stats;
 
 const numThingsTOLoad = 2;
@@ -260,4 +267,11 @@ class Game {
     }, 5000)
   };
 }
-export { Game };
+
+res(Game);
+return Game;
+})
+});
+});
+
+export { gamePromise };
