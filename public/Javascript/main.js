@@ -2,6 +2,8 @@ import { Game } from '/game.js';
 import * as THREE from 'three';
 
 
+//reference for getting a hello world of ammo js where a cube falls from the sky https://www.youtube.com/watch?v=puDiCbrjIzc
+
 class RigidBody{
   constructor(){
   };
@@ -28,6 +30,18 @@ class RigidBody{
     this.body = new Ammo.btRigidBody(this.info);
 
     Ammo.destroy(btSize);
+  }
+
+  setRestitution(val){
+    this.body.setRestitution(val);
+  }
+
+  setFriction(val){
+    this.body.setFriction(val);
+  }
+
+  setRollingFriction(val){
+    this.body.setRollingFriction(val);
   }
 }
 
@@ -67,6 +81,7 @@ Ammo().then(lib => {
   
   const rbGround = new RigidBody();
   rbGround.CreateBox(0, ground.position, ground.quaternion, new THREE.Vector3(100, 1, 100));
+  rbGround.setRestitution(0.99);
   APP.physicsWorld.addRigidBody(rbGround.body);
 
   const box = new THREE.Mesh(
@@ -78,6 +93,9 @@ Ammo().then(lib => {
 
   const rbBox = new RigidBody();
   rbBox.CreateBox(1, box.position, box.quaternion, new THREE.Vector3(4,4,4));
+  rbBox.setRestitution(0.25);
+  rbBox.setFriction(1);
+  rbBox.setRollingFriction(5);
   APP.physicsWorld.addRigidBody(rbBox.body);
 
   const rigidBodies = [{mesh: box, rigidBody: rbBox}];
