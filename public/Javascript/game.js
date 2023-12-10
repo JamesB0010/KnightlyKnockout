@@ -119,17 +119,21 @@ class Game {
     APP.physicsWorld.addRigidBody(rbGround.body);
 
 
+    //----------setup wall collisions
+    const WALLFRICTION = 0.4;
+
+
     const leftWall = new THREE.Mesh(
       new THREE.BoxGeometry(4,4,40),
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
     leftWall.position.set(-5.8, 0, 0);
-    this.scene.add(leftWall);
+    // this.scene.add(leftWall);
 
     const rbLeftWall = new RigidBody();
     rbLeftWall.CreateBox(0, leftWall.position, leftWall.quaternion, new THREE.Vector3(4,4,40));
     rbLeftWall.setRestitution(0.25);
-    rbLeftWall.setFriction(1);
+    rbLeftWall.setFriction(WALLFRICTION);
     rbLeftWall.setRollingFriction(5);
     APP.physicsWorld.addRigidBody(rbLeftWall.body);
 
@@ -138,21 +142,137 @@ class Game {
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
     rightWall.position.set(5.8, 0, 0);
-    this.scene.add(rightWall);
+    // this.scene.add(rightWall);
 
     const rbRightWall = new RigidBody();
     rbRightWall.CreateBox(0, rightWall.position, rightWall.quaternion, new THREE.Vector3(4,4,40));
     rbRightWall.setRestitution(0.25);
-    rbRightWall.setFriction(1);
+    rbRightWall.setFriction(WALLFRICTION);
     rbRightWall.setRollingFriction(5);
     APP.physicsWorld.addRigidBody(rbRightWall.body);
+
+    const backWall_left = new THREE.Mesh(
+      new THREE.BoxGeometry(2.8,4,10),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    backWall_left.position.set(-2.4, 0, -22.5);
+    // this.scene.add(backWall_left);
+
+    const rbBackWall_left = new RigidBody();
+    rbBackWall_left.CreateBox(0, backWall_left.position, backWall_left.quaternion, new THREE.Vector3(2.8,4,10));
+    rbBackWall_left.setRestitution(0.25);
+    rbBackWall_left.setFriction(WALLFRICTION);
+    rbBackWall_left.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbBackWall_left.body);
+
+    const backWall_right = new THREE.Mesh(
+      new THREE.BoxGeometry(2.8,4,10),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    backWall_right.position.set(2.6, 0, -22.5);
+    // this.scene.add(backWall_right);
+
+    const rbBackWall_right = new RigidBody();
+    rbBackWall_right.CreateBox(0, backWall_right.position, backWall_right.quaternion, new THREE.Vector3(2.8,4,10));
+    rbBackWall_right.setRestitution(0.25);
+    rbBackWall_right.setFriction(WALLFRICTION);
+    rbBackWall_right.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbBackWall_right.body);
+
+    const backWall_back = new THREE.Mesh(
+      new THREE.BoxGeometry(2.8,4,10),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    backWall_back.position.set(0, 0, -25.5);
+    // this.scene.add(backWall_back);
+
+    const rbBackWall_back = new RigidBody();
+    rbBackWall_back.CreateBox(0, backWall_back.position, backWall_back.quaternion, new THREE.Vector3(2.8,4,10));
+    rbBackWall_back.setRestitution(0.25);
+    rbBackWall_back.setFriction(WALLFRICTION);
+    rbBackWall_back.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbBackWall_back.body);
+
+    const frontwall_center = new THREE.Mesh(
+      new THREE.BoxGeometry(2.6,4,10),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    frontwall_center.position.set(0.25, 0, 24.1);
+    // this.scene.add(frontwall_center);
+
+    const rbfrontwall_center = new RigidBody();
+    rbfrontwall_center.CreateBox(0, frontwall_center.position, frontwall_center.quaternion, new THREE.Vector3(2.6,4,10));
+    rbfrontwall_center.setRestitution(0.25);
+    rbfrontwall_center.setFriction(WALLFRICTION);
+    rbfrontwall_center.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbfrontwall_center.body);
+
+    const frontwall_left = new THREE.Mesh(
+      new THREE.BoxGeometry(2.6,4,10),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    frontwall_left.position.set(3.73, 0, 22.3);
+    // this.scene.add(frontwall_left);
+
+    const rbfrontwall_left = new RigidBody();
+    rbfrontwall_left.CreateBox(0, frontwall_left.position, frontwall_left.quaternion, new THREE.Vector3(2.6,4,10));
+    rbfrontwall_left.setRestitution(0.25);
+    rbfrontwall_left.setFriction(WALLFRICTION);
+    rbfrontwall_left.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbfrontwall_left.body);
+
+    const frontwall_right = new THREE.Mesh(
+      new THREE.BoxGeometry(2.6,4,10),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    frontwall_right.position.set(-3.3, 0, 22.3);
+    // this.scene.add(frontwall_right);
+
+    const rbfrontwall_right = new RigidBody();
+    rbfrontwall_right.CreateBox(0, frontwall_right.position, frontwall_right.quaternion, new THREE.Vector3(2.6,4,10));
+    rbfrontwall_right.setRestitution(0.25);
+    rbfrontwall_right.setFriction(WALLFRICTION);
+    rbfrontwall_right.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbfrontwall_right.body);
+
+    const frontwallPillar_left = new THREE.Mesh(
+      new THREE.CapsuleGeometry(1, 5, 4, 16),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    frontwallPillar_left.position.set(-2.3, 0, 19.5);
+    // this.scene.add(frontwallPillar_left);
+
+    const rbfrontwallPillar_left = new RigidBody();
+    rbfrontwallPillar_left.CreateCapsule(0, frontwallPillar_left.position, frontwallPillar_left.quaternion, 1, 5);
+    rbfrontwallPillar_left.setRestitution(0.25);
+    rbfrontwallPillar_left.setFriction(WALLFRICTION);
+    rbfrontwallPillar_left.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbfrontwallPillar_left.body);
+
+    const frontwallPillar_right = new THREE.Mesh(
+      new THREE.CapsuleGeometry(1, 5, 4, 16),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    frontwallPillar_right.position.set(2.5, 0, 19.4);
+    // this.scene.add(frontwallPillar_right);
+
+    const rbfrontwallPillar_right = new RigidBody();
+    rbfrontwallPillar_right.CreateCapsule(0, frontwallPillar_right.position, frontwallPillar_right.quaternion, 1, 5);
+    rbfrontwallPillar_right.setRestitution(0.25);
+    rbfrontwallPillar_right.setFriction(WALLFRICTION);
+    rbfrontwallPillar_right.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbfrontwallPillar_right.body);
 
     const capsule = new THREE.Mesh(
       new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
     capsule.position.set(0, 5, 0);
-    this.scene.add(capsule);
+    // this.scene.add(capsule);
+
+
+    //----------setup wall collisions
+    
 
     const rbCapsule = new RigidBody();
     rbCapsule.CreateCapsule(1, capsule.position, capsule.quaternion, 0.4, 0.8);
@@ -163,7 +283,7 @@ class Game {
     rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
     APP.physicsWorld.addRigidBody(rbCapsule.body);
 
-    this.rigidBodies = [{mesh: leftWall, rigidBody: rbLeftWall}, {mesh: rightWall, rigidBody: rbRightWall}, {mesh: capsule, rigidBody: rbCapsule}];
+    this.rigidBodies = [{mesh: capsule, rigidBody: rbCapsule}];
 
     this.tmpTransform = new Ammo.btTransform();
 
