@@ -28,14 +28,14 @@ class RigidBody {
     Ammo.destroy(btSize);
   }
 
-  CreateCapsule(mass, pos, quat, radius, height){
+  CreateCapsule(mass, pos, quat, radius, length){
     this.transform = new Ammo.btTransform();
     this.transform.setIdentity();
     this.transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
     this.transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w));
     this.motionState = new Ammo.btDefaultMotionState(this.transform);
 
-    this.shape = new Ammo.btCapsuleShape(radius, height);
+    this.shape = new Ammo.btCapsuleShape(radius, length);
     this.shape.setMargin(0.05);
 
     this.inertia = new Ammo.btVector3(0, 0, 0);

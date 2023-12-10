@@ -14,6 +14,7 @@ import('./physics.js').then(info =>{
     const Ammo = AmmoAndApp[0];
     const APP = AmmoAndApp[1];
     const RigidBody = AmmoAndApp[2];
+    const STATE = {DISABLE_DEACTIVATION : 4};
 
 let stats;
 
@@ -106,7 +107,7 @@ class Game {
     //================Physics init stuff==================
     //this code spawns a three js box where the physics world box exists, uncomment the scene.add line to see it in the scene
     const ground = new THREE.Mesh(
-      new THREE.BoxGeometry(9, 1, 40),
+      new THREE.BoxGeometry(15, 1, 40),
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
     ground.position.y = -2;
@@ -118,35 +119,51 @@ class Game {
     APP.physicsWorld.addRigidBody(rbGround.body);
 
 
-    const box = new THREE.Mesh(
-      new THREE.BoxGeometry(4,4,4),
+    const leftWall = new THREE.Mesh(
+      new THREE.BoxGeometry(4,4,40),
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
-    box.position.set(0, 100, 0);
-    this.scene.add(box);
+    leftWall.position.set(-5.8, 0, 0);
+    this.scene.add(leftWall);
 
-    const rbBox = new RigidBody();
-    rbBox.CreateBox(1, box.position, box.quaternion, new THREE.Vector3(4,4,4));
-    rbBox.setRestitution(0.25);
-    rbBox.setFriction(1);
-    rbBox.setRollingFriction(5);
-    APP.physicsWorld.addRigidBody(rbBox.body);
+    const rbLeftWall = new RigidBody();
+    rbLeftWall.CreateBox(0, leftWall.position, leftWall.quaternion, new THREE.Vector3(4,4,40));
+    rbLeftWall.setRestitution(0.25);
+    rbLeftWall.setFriction(1);
+    rbLeftWall.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbLeftWall.body);
+
+    const rightWall = new THREE.Mesh(
+      new THREE.BoxGeometry(4,4,40),
+      new THREE.MeshStandardMaterial({color: 0x808080})
+    );
+    rightWall.position.set(5.8, 0, 0);
+    this.scene.add(rightWall);
+
+    const rbRightWall = new RigidBody();
+    rbRightWall.CreateBox(0, rightWall.position, rightWall.quaternion, new THREE.Vector3(4,4,40));
+    rbRightWall.setRestitution(0.25);
+    rbRightWall.setFriction(1);
+    rbRightWall.setRollingFriction(5);
+    APP.physicsWorld.addRigidBody(rbRightWall.body);
 
     const capsule = new THREE.Mesh(
-      new THREE.CapsuleGeometry(1, 1, 4, 8),
+      new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
       new THREE.MeshStandardMaterial({color: 0x808080})
     );
     capsule.position.set(0, 5, 0);
     this.scene.add(capsule);
 
     const rbCapsule = new RigidBody();
-    rbCapsule.CreateCapsule(1, capsule.position, capsule.quaternion, 1, 1);
+    rbCapsule.CreateCapsule(1, capsule.position, capsule.quaternion, 0.4, 0.8);
     rbCapsule.setRestitution(0.25);
     rbCapsule.setFriction(1);
     rbCapsule.setRollingFriction(5);
-    APP.physicsWorld.addRigidBody(rbBox.body);
+    rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
+    rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
+    APP.physicsWorld.addRigidBody(rbCapsule.body);
 
-    this.rigidBodies = [{mesh: box, rigidBody: rbBox}, {mesh: capsule, rigidBody: rbCapsule}];
+    this.rigidBodies = [{mesh: leftWall, rigidBody: rbLeftWall}, {mesh: rightWall, rigidBody: rbRightWall}, {mesh: capsule, rigidBody: rbCapsule}];
 
     this.tmpTransform = new Ammo.btTransform();
 
@@ -178,7 +195,7 @@ class Game {
       setTimeout(CheckEverythingsLoaded, 500);
     });
 
-    this.fpsCamera = new FirstPersonCamera(this.camera);
+    this.fpsCamera = new FirstPersonCamera(this.camera, rbCapsule, Ammo);
 
     this.scene.add(new THREE.AmbientLight(0xffffff, 0.4), this.camera);
 

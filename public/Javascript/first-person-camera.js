@@ -22,7 +22,7 @@ const stopEvent = new Event("OnClientStop");
 const rotateEvent = new CustomEvent("OnClientRotate", {detail:{rotation: new THREE.Quaternion}});
 
 class FirstPersonCamera{
-  constructor(camera){
+  constructor(camera, rigidbody, Ammo){
       this.camera_ = camera;
       this.input_ = new InputController();
       this.rotation_ = new THREE.Quaternion();
@@ -35,6 +35,9 @@ class FirstPersonCamera{
       this.headBobTimer_ = 0;
       this.lastMoving_ = false;
       this.rotating = false;
+      this.rigidBody = rigidbody;
+      this.Ammo = Ammo;
+      this.linearVelocity = new Ammo.btVector3(this.rigidBody.body.getLinearVelocity().x(), this.rigidBody.body.getLinearVelocity().y(), this.rigidBody.body.getLinearVelocity().z());
   }
 
   update(timeElapsedS, sceneObjects){
@@ -54,6 +57,17 @@ class FirstPersonCamera{
     //update the cameras position and rotation
       this.camera_.quaternion.copy(this.rotation_);
       this.camera_.position.copy(this.translation_);
+      this.rigidBody.body.setLinearVelocity(new this.Ammo.btVector3(this.linearVelocity.x(), this.rigidBody.body.getLinearVelocity().y(), this.linearVelocity.z()));
+      
+      //update camera based on rigidbody position
+      let tmpTransform = new this.Ammo.btTransform();
+      this.rigidBody.motionState.getWorldTransform(tmpTransform);
+
+
+      const pos = tmpTransform.getOrigin();
+
+      const pos3 = new THREE.Vector3(pos.x(), pos.y(), pos.z());
+      this.camera_.position.copy(pos3);
 
       //use sin wave to make camera go up and down
       this.camera_.position.y += (Math.sin(this.headBobTimer_ * 10) * 0.04) + 0.5;
@@ -116,6 +130,12 @@ class FirstPersonCamera{
 
       this.translation_.add(forward);
       this.translation_.add(left);
+
+      this.linearVelocity.setX(0);
+      this.linearVelocity.setZ(0);
+      this.linearVelocity.op_add(new this.Ammo.btVector3(forward.x, forward.y, forward.z));
+      this.linearVelocity.op_add(new this.Ammo.btVector3(left.x, left.y, left.z));
+      this.linearVelocity.op_mul(60);
 
       //if weve been moving then set head bob active to true
       if(forwardVelocity != 0 || strafeVelocity != 0){
