@@ -30,10 +30,10 @@ const fs = require('fs');
 //this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
 //so if you re enable these comments make sure there is an images folder in the project
 const fileStorageEngine = multer.diskStorage({
-  destination: (req, file, cb) =>{
+  destination: (req, file, cb) => {
     cb(null, './images');
   },
-  filename: (req, file, cb) =>{
+  filename: (req, file, cb) => {
     cb(null, Date.now() + '--' + file.originalname);
   }
 })
@@ -55,8 +55,8 @@ const database = mySql.createConnection({
 
 //setting the directiories which we will serve to the client (static files)
 app.use(express.static("public/HTML"));
-app.use(express.static("public/CSS")); 
-app.use(express.static("public/Javascript")); 
+app.use(express.static("public/CSS"));
+app.use(express.static("public/Javascript"));
 app.use(express.static("public"));
 app.use(express.static("public/GameAssets"));
 app.use(express.static("public/GameAssets/SkyboxTextures"));
@@ -65,45 +65,60 @@ app.use(express.static("public/GameAssets/Models/Environment"));
 app.use(express.static("public/GameAssets/Models/Player"));
 app.use(express.static("views"));
 
+//how to get a list of all files in a directory
+let backgroundSongs;
+
+fs.promises.readdir("./ServerRescources/Sounds/BackgroundMusic").then((files) =>{
+  backgroundSongs = files;
+})
+
+
+
+app.get("/randomSong", (req, res) => {
+  let randomIndex = Math.floor(Math.random() * (backgroundSongs.length));
+  let song = fs.readFileSync("./ServerRescources/Sounds/BackgroundMusic/" + backgroundSongs[randomIndex]);
+  res.send({song: song.toString('base64')});
+})
+
 //database stuff
-app.get("/getUser/:username/:password", (req, res) =>{
+app.get("/getUser/:username/:password", (req, res) => {
   let sql = `SELECT * FROM users WHERE username = '${req.params.username}' AND password = '${req.params.password}'`;
-  database.query(sql, (err, result) =>{
+  database.query(sql, (err, result) => {
     if (err) throw err;
-    if(result.length != 0){
-      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data){
-        if(err){
+    if (result.length != 0) {
+      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data) {
+        if (err) {
           throw err;
         }
-        res.send({body: "Logged in!", profilePicture: data.toString('base64')});
+        res.send({ body: "Logged in!", profilePicture: data.toString('base64') });
 
       })
     }
-    else{
-      res.send({error: "no user found"});
+    else {
+      res.send({ error: "no user found" });
     }
   })
 });
 
-app.get("/getProfilePicture/:username", (req, res) =>{
+app.get("/getProfilePicture/:username", (req, res) => {
   let sql = `SELECT * FROM users WHERE username = '${req.params.username}'`;
-  database.query(sql, (err, result) =>{
+  database.query(sql, (err, result) => {
     if (err) throw err;
-    if(result.length != 0){
-      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data){
-        if(err){
+    if (result.length != 0) {
+      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data) {
+        if (err) {
           throw err;
         }
-        res.send({profilePicture: data.toString('base64')});
+        res.send({ profilePicture: data.toString('base64') });
       })
     }
-    else{
-      res.send({error: "no user found"});
+    else {
+      res.send({ error: "no user found" });
     }
   })
 })
 
-app.post("/newUser", upload.array('image', 3), (req, res) =>{
+app.post("/newUser", upload.array('image', 3), (req, res) => {
   let username = req.body.image[0];
   let password = req.body.image[1];
   let profilePic = req.files[0];
@@ -113,33 +128,33 @@ app.post("/newUser", upload.array('image', 3), (req, res) =>{
 
   let check = `SELECT * FROM users WHERE username = '${username}'`;
 
-  database.query(check, (err, result)=>{
-    if (result.length > 0){
-      res.send({body: "user already exists"});
-      fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
+  database.query(check, (err, result) => {
+    if (result.length > 0) {
+      res.send({ body: "user already exists" });
+      fs.unlink(path.join(__dirname, "images", profilePicFileName), err => {
         if (err) throw err;
       })
       return;
     }
 
-    if(profilePic.originalname == "default.png"){
-      fs.unlink(path.join(__dirname, "images", profilePicFileName), err =>{
+    if (profilePic.originalname == "default.png") {
+      fs.unlink(path.join(__dirname, "images", profilePicFileName), err => {
         if (err) throw err;
       })
       profilePicFileName = "default.png";
     }
 
-    let post = {username: username, password: password, profilePicture: profilePicFileName};
+    let post = { username: username, password: password, profilePicture: profilePicFileName };
     let sql = "INSERT INTO users SET ?"
-    database.query(sql, post, (err, result) =>{
+    database.query(sql, post, (err, result) => {
     })
-    res.send({body: "user created sucessfully"});
+    res.send({ body: "user created sucessfully" });
   })
 
 })
 
 //configure 404 page
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   res.status(404).sendFile(path.join(__dirname, "views", "404.html"))
 });
 
@@ -159,16 +174,16 @@ io.on("connection", socket => {
   //add this new clients id to the connections array
   connections.push(socket.id);
   //update all clients using new list of connections
-io.emit("updateConnectionsArr", connections);
+  io.emit("updateConnectionsArr", connections);
 
-  socket.on("profileInfo", username =>{
+  socket.on("profileInfo", username => {
     playerUsernames.set(socket.id, username);
     io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
     console.log(playerUsernames);
   })
 
 
-  socket.on("PlayerRotate", info =>{
+  socket.on("PlayerRotate", info => {
     socket.broadcast.emit("NetworkedPlayerRotate", info);
   })
 
@@ -177,32 +192,32 @@ io.emit("updateConnectionsArr", connections);
   //make every client send an update player movement to set all of the clients networked players (other player) to the correct position
   io.emit("GetClientPlayerIdPosition");
 
-//whenever a player moves their new position and id inside the info object will be sent to all clients except from the sender
-  socket.on("UpdatePlayerMovement", info =>{
+  //whenever a player moves their new position and id inside the info object will be sent to all clients except from the sender
+  socket.on("UpdatePlayerMovement", info => {
     socket.broadcast.emit("UpdateNetworkedPlayerPos", info);
   })
 
-  socket.on("clientStoppedMoving", id =>{
+  socket.on("clientStoppedMoving", id => {
     socket.broadcast.emit("NetworkedPlayerStoppedMoving", id);
   })
 
-  socket.on("PlayerAttack", info =>{
+  socket.on("PlayerAttack", info => {
     socket.broadcast.emit("networkedAttack", info);
   })
 
-  socket.on("startBlock", id =>{
+  socket.on("startBlock", id => {
     socket.broadcast.emit("networkedStartBlock", id);
   })
 
-  socket.on("endBlock", id =>{
+  socket.on("endBlock", id => {
     socket.broadcast.emit("networkedEndBlock", id);
   })
 
-  socket.on("PlayerInsult", (info) =>{
+  socket.on("PlayerInsult", (info) => {
     socket.broadcast.emit("networkedPlayerInsult", info);
   })
 
-  socket.on("PlayerDeath", info =>{
+  socket.on("PlayerDeath", info => {
     socket.broadcast.emit("NetworkedPlayerDeath", info);
     socket.emit("ResetClientHealth");
     socket.broadcast.emit("ResetClientHealth");
@@ -212,7 +227,7 @@ io.emit("updateConnectionsArr", connections);
   socket.on('disconnect', () => {
     console.log(socket.id + " Disconnected");
     //remove current socket from server
-    connections = connections.filter(connection =>{connection != socket.id});
+    connections = connections.filter(connection => { connection != socket.id });
     io.emit("removeId", socket.id);
     playerUsernames.delete(socket.id);
   })
