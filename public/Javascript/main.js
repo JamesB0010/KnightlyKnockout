@@ -1,8 +1,8 @@
 import * as THREE from 'three';
+
 let gamePromise = import('/game.js');
 gamePromise.then((promise)=>{
   promise.gamePromise.then(Game =>{
-
 
 let game = new Game();
 game.Init();

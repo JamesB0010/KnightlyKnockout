@@ -7,6 +7,9 @@ import { RoundManager } from './round-manager.js';
 import { Cloud } from "./cloud.js";
 import { PlayerAudio } from './player-audio.js';
 
+let joyStickData = {cardinalDirection: "C", x: 0, xPosition:100 , y:0 , yPosition:100};
+let prevJoyStickData = {cardinalDirection: "C", x: 0, xPosition:100 , y:0 , yPosition:100};;
+
 const gamePromise = new Promise((res, rej) => {
 
   import('./physics.js').then(info => {
@@ -35,6 +38,11 @@ const gamePromise = new Promise((res, rej) => {
 
         let loadingScreenDiv = document.getElementsByClassName("loadingScreen");
         loadingScreenDiv[0].style["display"] = "none";
+
+        var joy1 = new JoyStick('joy1Div', {}, function (stickData) {
+          prevJoyStickData = {cardinalDirection: joyStickData.cardinalDirection, x: joyStickData.x, xPosition:joyStickData.xPosition , y:joyStickData.y , yPosition:joyStickData.yPosition};
+          joyStickData = {cardinalDirection: stickData.cardinalDirection, x: stickData.x, xPosition:stickData.xPosition , y:stickData.y , yPosition:stickData.yPosition};
+        });
       }
 
       function CheckEverythingsLoaded() {
@@ -110,7 +118,7 @@ const gamePromise = new Promise((res, rej) => {
 
           PlayRandomSong(this.listener);
 
-          document.addEventListener("OnSongOver", function(){
+          document.addEventListener("OnSongOver", function () {
             PlayRandomSong(this.listener);
           }.bind(this))
 
@@ -342,7 +350,7 @@ const gamePromise = new Promise((res, rej) => {
             setTimeout(CheckEverythingsLoaded, 500);
           });
 
-          this.fpsCamera = new FirstPersonCamera(this.camera, rbCapsule, Ammo);
+          this.fpsCamera = new FirstPersonCamera(this.camera, rbCapsule, Ammo, joyStickData);
 
           this.scene.add(new THREE.AmbientLight(0xffffff, 0.4), this.camera);
 
@@ -381,6 +389,12 @@ const gamePromise = new Promise((res, rej) => {
         //update is called every animation frame
         Update() {
           let deltaTime = this.clock.getDelta();
+
+          if (prevJoyStickData.x != joyStickData.x || prevJoyStickData.y != joyStickData.y) {
+            //console.log(joyStickData);
+            prevJoyStickData = {cardinalDirection: joyStickData.cardinalDirection, x: joyStickData.x, xPosition:joyStickData.xPosition , y:joyStickData.y , yPosition:joyStickData.yPosition};
+          }
+          this.fpsCamera.movementJoystick = joyStickData;
           //update the fps cameras position
           this.fpsCamera.update(deltaTime);
           //if player isnt null then set their position and update the gltf position
