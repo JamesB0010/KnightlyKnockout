@@ -6,6 +6,7 @@ import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.modul
 import { RoundManager } from './round-manager.js';
 import { Cloud } from "./cloud.js";
 import { PlayerAudio } from './player-audio.js';
+import serverAddress from "./serverAddress.js";
 
 let joyStickData = {cardinalDirection: "C", x: 0, xPosition:100 , y:0 , yPosition:100};
 let prevJoyStickData = {cardinalDirection: "C", x: 0, xPosition:100 , y:0 , yPosition:100};;
@@ -96,7 +97,7 @@ const gamePromise = new Promise((res, rej) => {
           document.body.appendChild(this.renderer.domElement);
 
           function PlayRandomSong(audioListener) {
-            fetch("http://localhost:3000/randomSong").then(response => {
+            fetch(serverAddress + "/randomSong").then(response => {
               response.json().then(json => {
                 let song = json.song;
 

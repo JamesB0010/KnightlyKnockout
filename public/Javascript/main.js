@@ -71,7 +71,7 @@ game.Init();
     });
     try {
 
-      fetch(`http://localhost:3000/getProfilePicture/${usernamesMap.get(latestClient[0])}`).then(response => {
+      fetch(`${serverAddress}/getProfilePicture/${usernamesMap.get(latestClient[0])}`).then(response => {
         response.json().then(json => {
           console.log(json);
           if (json.error != "no user found") {
