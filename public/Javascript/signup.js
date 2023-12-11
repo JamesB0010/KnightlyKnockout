@@ -79,7 +79,7 @@ if(sessionStorage.username){
                 alert("user not found");
                 return;
             }
-            profilePicDiv.style.backgroundImage = `url(data:image/png;base64,${json.profilePicture})`;
+            profilePicDiv.style.backgroundImage = `url(data:image/png;${json.profilePicture})`;
             setTimeout(() => {
                 alert(json.body);
             }, 200);

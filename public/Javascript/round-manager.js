@@ -21,13 +21,16 @@ class RoundManager{
     }
 
     #CheckPlayerHasWon(){
+        console.log(sessionStorage);
         this.#playerScores.forEach((value, key) =>{
             if (value >= this.#maxScore){
                 if(key == this.#clientId){
                     document.getElementsByClassName("playerWonGame")[0].style["display"] = "flex";
+                    console.log(sessionStorage);
                 }
                 else{
                     document.getElementsByClassName("playerLostGame")[0].style["display"] = "flex";
+                    console.log(sessionStorage);
                 }
                 //alert("Player won");
                 setTimeout(() =>{

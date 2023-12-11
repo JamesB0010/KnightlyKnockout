@@ -5,6 +5,7 @@
 
 //this is the server that serves all the game files and runs the networking of the game
 
+const crypto = require('crypto');
 const path = require("path");
 const express = require("express"); // use express
 const app = express(); // create instance of express
@@ -82,7 +83,8 @@ app.get("/randomSong", (req, res) => {
 
 //database stuff
 app.get("/getUser/:username/:password", (req, res) => {
-  let sql = `SELECT * FROM users WHERE username = '${req.params.username}' AND password = '${req.params.password}'`;
+  let password = crypto.createHash('md5').update(req.params.password).digest('hex');
+  let sql = `SELECT * FROM users WHERE username = '${req.params.username}' AND password = '${password}'`;
   database.query(sql, (err, result) => {
     if (err) throw err;
     if (result.length != 0) {
@@ -90,7 +92,9 @@ app.get("/getUser/:username/:password", (req, res) => {
         if (err) {
           throw err;
         }
-        res.send({ body: "Logged in!", profilePicture: data.toString('base64') });
+
+        console.log(result);
+        res.send({ body: "Logged in!", profilePicture: data.toString('base64'), gamesPlayed:0, gamesWon: 0 });
 
       })
     }
@@ -118,9 +122,11 @@ app.get("/getProfilePicture/:username", (req, res) => {
   })
 })
 
+//how to hash a string https://stackoverflow.com/questions/5878682/node-js-hash-string
 app.post("/newUser", upload.array('image', 3), (req, res) => {
   let username = req.body.image[0];
   let password = req.body.image[1];
+  password = crypto.createHash('md5').update(password).digest('hex');
   let profilePic = req.files[0];
   let profilePicFileName = profilePic.filename;
 

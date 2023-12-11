@@ -481,7 +481,7 @@ const gamePromise = new Promise((res, rej) => {
           document.dispatchEvent(playerDead);
           setTimeout(() => {
             this.roundManager.playerDead(this.clientId);
-            this.player.ResetToIdleAnim();
+            // this.player.ResetToIdleAnim();
           }, 5000)
         };
       }
