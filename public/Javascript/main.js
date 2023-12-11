@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 
+import serverAddress from "./serverAddress.js";
+console.log(serverAddress);
+
 let gamePromise = import('/game.js');
 gamePromise.then((promise)=>{
   promise.gamePromise.then(Game =>{
