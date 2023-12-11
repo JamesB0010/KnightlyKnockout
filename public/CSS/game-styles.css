@@ -262,3 +262,23 @@ body{
   border-radius: 50%;
 
 }
+
+#blockIcon{
+  width: 150px;
+  height: 150px;
+}
+
+#blockIconWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 70vw;
+  top: 70vh;
+  width: 100px;
+  height: 100px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50%;
+
+}

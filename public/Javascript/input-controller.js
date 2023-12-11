@@ -35,6 +35,8 @@ class InputController {
             document.addEventListener("mousemove", e => this.onMouseMove_(e), false);
             document.addEventListener("keydown", e => this.onKeyDown_(e), false);
             document.addEventListener("keyup", e => this.onKeyUp_(e), false);
+            document.getElementById("attackIconWrapper").style["display"] = "none";
+            document.getElementById("joy1Div").style["display"] = "none";
         }
 
         window.addEventListener('touchstart', e => {

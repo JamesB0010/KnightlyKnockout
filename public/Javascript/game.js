@@ -41,10 +41,12 @@ const gamePromise = new Promise((res, rej) => {
         let loadingScreenDiv = document.getElementsByClassName("loadingScreen");
         loadingScreenDiv[0].style["display"] = "none";
 
-        var joy1 = new JoyStick('joy1Div', {}, function (stickData) {
-          prevJoyStickData = {cardinalDirection: joyStickData.cardinalDirection, x: joyStickData.x, xPosition:joyStickData.xPosition , y:joyStickData.y , yPosition:joyStickData.yPosition};
-          joyStickData = {cardinalDirection: stickData.cardinalDirection, x: stickData.x, xPosition:stickData.xPosition , y:stickData.y , yPosition:stickData.yPosition};
-        });
+        if("ontouchstart" in document.documentElement){
+          var joy1 = new JoyStick('joy1Div', {}, function (stickData) {
+            prevJoyStickData = {cardinalDirection: joyStickData.cardinalDirection, x: joyStickData.x, xPosition:joyStickData.xPosition , y:joyStickData.y , yPosition:joyStickData.yPosition};
+            joyStickData = {cardinalDirection: stickData.cardinalDirection, x: stickData.x, xPosition:stickData.xPosition , y:stickData.y , yPosition:stickData.yPosition};
+          });
+        }
       }
 
       function CheckEverythingsLoaded() {
