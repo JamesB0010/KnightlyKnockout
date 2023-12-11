@@ -1,4 +1,5 @@
 //import * as THREE from 'three';
+//credits for attack icon https://www.flaticon.com/free-icon/slash_4334055?term=attack&page=2&position=19&origin=tag&related_id=4334055
 import * as THREE from 'three';
 
 import serverAddress from "./serverAddress.js";

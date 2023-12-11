@@ -242,3 +242,23 @@ body{
 	height:200px;
 	margin:50px;
 }
+
+#attackIcon{
+  width: 70px;
+  height: 70px;
+}
+
+#attackIconWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 80vw;
+  top: 50vh;
+  width: 100px;
+  height: 100px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50%;
+
+}

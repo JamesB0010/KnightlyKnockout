@@ -2,100 +2,167 @@
 const startBlock = new Event("startBlock");
 const endBlock = new Event("endBlock");
 const spacePressed = new Event("Insult");
-class InputController{
-    constructor(){
+class InputController {
+    constructor() {
         this.initialise_();
     }
 
-    initialise_(){
+    initialise_() {
         this.current_ = {
             leftButton: false,
             leftButtonDownTimer: 0,
             rightButton: false,
             mouseX: 0,
-            mouseY:0,
+            mouseY: 0,
             mouseXDelta: 0,
             mouseYDelta: 0
         };
         this.previous_ = null;
         this.keys_ = {};
         this.previousKeys = {};
+        this.touchDown = false;
+        this.prevTouchDown = false;
 
         //add event listeners for mousemove events
 
-        document.addEventListener("mousedown", e => this.onMouseDown_(e), false);
-        document.addEventListener("mouseup", e => this.onMouseUp_(e), false);
-        document.addEventListener("mousemove", e => this.onMouseMove_(e), false);
-        document.addEventListener("keydown", e => this.onKeyDown_(e), false);
-        document.addEventListener("keyup", e => this.onKeyUp_(e), false);
+        //credits for the if statement https://github.com/bobboteck/JoyStick/blob/master/joy.js
+        if("ontouchstart" in document.documentElement){
+
+        }
+        else{
+            document.addEventListener("mousedown", e => this.onMouseDown_(e), false);
+            document.addEventListener("mouseup", e => this.onMouseUp_(e), false);
+            document.addEventListener("mousemove", e => this.onMouseMove_(e), false);
+            document.addEventListener("keydown", e => this.onKeyDown_(e), false);
+            document.addEventListener("keyup", e => this.onKeyUp_(e), false);
+        }
+
+        window.addEventListener('touchstart', e => {
+            this.prevTouchDown = this.touchDown;
+            this.touchDown = true;
+            console.log(this);
+            if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
+                e.button = 0;
+                this.onMouseDown_(e);
+            }
+        })
+
+        window.addEventListener('touchend', e => {
+            this.prevTouchDown = this.touchDown;
+            this.touchDown = false;
+            console.log(this.touchDown);
+            if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
+                e.button = 0;
+                this.onMouseUp_(e);
+            }
+        })
+
+        window.addEventListener('touchmove', e => {
+            if (e.target != document.getElementById("joystick")) {
+                this.onTouchMove(e);
+            }
+        })
     };
 
-    onMouseDown_(e){
-        switch(e.button){
-            case 0:{
+    onMouseDown_(e) {
+        switch (e.button) {
+            case 0: {
                 this.current_.leftButton = true;
                 break;
             }
-            case 2:{
+            case 2: {
                 this.current_.leftButton = true;
                 document.dispatchEvent(startBlock);
                 break;
             }
         }
     };
-    onMouseUp_(e){
-        switch(e.button){
-            case 0:{
+    onMouseUp_(e) {
+        switch (e.button) {
+            case 0: {
                 let attackTypeThreshold = 0.3;
-                const attack = new CustomEvent("Attack", {detail: {attackAnimIndex: this.current_.leftButtonDownTimer >= attackTypeThreshold? 4: 7}});
+                console.log(this.current_.leftButtonDownTimer >= attackTypeThreshold ? 4 : 7);
+                const attack = new CustomEvent("Attack", { detail: { attackAnimIndex: this.current_.leftButtonDownTimer >= attackTypeThreshold ? 4 : 7 } });
                 this.current_.leftButton = false;
                 this.current_.leftButtonDownTimer = 0;
                 document.dispatchEvent(attack);
                 break;
             }
-            case 2:{
+            case 2: {
                 this.current_.leftButton = false;
                 document.dispatchEvent(endBlock);
                 break;
             }
         }
     };
-    onMouseMove_(e){
+    onMouseMove_(e) {
         this.current_.mouseX += e.movementX;
         this.current_.mouseY += e.movementY;
 
-        if (this.previous_ === null){
-            this.previous_ = {...this.current_};
+        if (this.previous_ === null) {
+            this.previous_ = { ...this.current_ };
         }
 
         this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
         this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
     };
-    onKeyDown_(e){
+
+    onTouchMove(e) {
+        let touch = e.touches[0];
+
+        let lastMovementX = this.current_.mouseX;
+        let lastMovementY = this.current_.mouseY;
+
+
+        let movementX = touch.screenX;
+        let movementY = touch.screenY;
+
+
+        let differenceX = movementX - lastMovementX;
+        let differenceY = movementY - lastMovementY;
+
+        this.current_.mouseX = movementX;
+        this.current_.mouseY = movementY;
+
+        if (this.previous_ === null) {
+            this.previous_ = { ...this.current_ };
+        }
+
+        if(this.prevTouchDown == false && this.touchDown == true){
+            this.current_.mouseXDelta = 0;
+            this.current_.mouseYDelta = 0;
+            this.prevTouchDown = true;
+        }
+        else{
+            this.current_.mouseXDelta = differenceX;
+            this.current_.mouseYDelta = differenceY;
+        }
+    }
+    onKeyDown_(e) {
         this.keys_[e.keyCode] = true;
-        if(e.keyCode == 32){
+        if (e.keyCode == 32) {
             document.dispatchEvent(spacePressed);
         }
     };
-    onKeyUp_(e){
+    onKeyUp_(e) {
         this.keys_[e.keyCode] = false;
     };
 
-    update(deltaTime){
-        if(this.previous_ !== null){
+    update(deltaTime) {
+        if (this.previous_ !== null) {
             this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
             this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
 
-            this.previous_ = {...this.current_};
+            this.previous_ = { ...this.current_ };
         }
-        if(this.current_.leftButton){
+        if (this.current_.leftButton) {
             this.current_.leftButtonDownTimer += deltaTime;
         }
     }
 
-    key(keyCode){
+    key(keyCode) {
         return !!this.keys_[keyCode];
     }
 }
 
-export {InputController};
+export { InputController };
