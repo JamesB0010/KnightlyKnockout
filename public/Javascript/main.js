@@ -126,6 +126,9 @@ game.Init();
   })
 
   socket.on("NetworkedPlayerDeath", info => {
+    setTimeout(() =>{
+      game.roundManager.playerDead(info.id);
+    }, 5000)
   })
 
   socket.on("ResetClientHealth", () => {
@@ -216,7 +219,8 @@ game.Init();
   Animate();
 
   if (sessionStorage.username) {
-    document.getElementById("clientProfilePicture").src = sessionStorage.profilePicture.substring(4, sessionStorage.profilePicture.length)
+    document.getElementById("clientProfilePicture").src = `data:image/png;base64,${sessionStorage.profilePicture}`;
+    console.log(sessionStorage);
   }
 })
 })

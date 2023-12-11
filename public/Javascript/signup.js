@@ -62,6 +62,8 @@ form.addEventListener("submit", e =>{
             sessionStorage.setItem("username", username);
             sessionStorage.setItem("password", password);
             sessionStorage.setItem("profilePicture", reader.result? reader.result: "default");
+            sessionStorage.setItem("gamesPlayed", 0);
+            sessionStorage.setItem("gamesWon", 0);
         })
     })
     .catch(err =>{
@@ -79,7 +81,7 @@ if(sessionStorage.username){
                 alert("user not found");
                 return;
             }
-            profilePicDiv.style.backgroundImage = `url(data:image/png;base64,${json.profilePicture})`;
+            profilePicDiv.style.backgroundImage = `url(data:image/png;${json.profilePicture})`;
             setTimeout(() => {
                 alert(json.body);
             }, 200);

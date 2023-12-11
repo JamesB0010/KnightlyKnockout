@@ -19,15 +19,28 @@ class RoundManager{
     addKeyValToMap(key, val){
         this.#playerScores.set(key,val);
     }
+    
+    #SaveStatsToServer(){
+        fetch(`http://localhost:3000/updateScore/${sessionStorage.getItem("username")}/${sessionStorage.getItem("password")}/${sessionStorage.getItem("gamesPlayed")}/${sessionStorage.getItem("gamesWon")}`, {
+            method: "PUT"
+        });
+    }
 
     #CheckPlayerHasWon(){
         this.#playerScores.forEach((value, key) =>{
             if (value >= this.#maxScore){
                 if(key == this.#clientId){
                     document.getElementsByClassName("playerWonGame")[0].style["display"] = "flex";
+                    sessionStorage.setItem("gamesWon", parseInt(sessionStorage.getItem("gamesWon")) + 1);
+                    sessionStorage.setItem("gamesPlayed", parseInt(sessionStorage.getItem("gamesPlayed")) + 1);
+                    console.log(sessionStorage);
+                    this.#SaveStatsToServer();
                 }
                 else{
                     document.getElementsByClassName("playerLostGame")[0].style["display"] = "flex";
+                    sessionStorage.setItem("gamesPlayed", parseInt(sessionStorage.getItem("gamesPlayed")) + 1);
+                    console.log(sessionStorage);
+                    this.#SaveStatsToServer();
                 }
                 //alert("Player won");
                 setTimeout(() =>{
