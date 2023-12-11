@@ -1,4 +1,5 @@
 import {InputController} from './input-controller.js';
+//import * as THREE from 'three';
 import * as THREE from 'three';
 
 //credits for fps controller https://www.youtube.com/watch?v=oqKzxPMLWxo

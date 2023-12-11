@@ -1,8 +1,9 @@
+//import * as THREE from 'three';
 import * as THREE from 'three';
 import { GameObject } from './game-object.js';
 import { FirstPersonCamera, KEYS } from './first-person-camera.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import Stats from "https://unpkg.com/three@0.157.0/examples/jsm/libs/stats.module.js";
+import Stats from "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/libs/stats.module.js";
 import { RoundManager } from './round-manager.js';
 import { Cloud } from "./cloud.js";
 import { PlayerAudio } from './player-audio.js';

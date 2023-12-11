@@ -1,3 +1,4 @@
+//import * as THREE from 'three';
 import * as THREE from 'three';
 
 const gravity = -0.002;

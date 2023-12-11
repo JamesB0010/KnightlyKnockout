@@ -1,3 +1,4 @@
+//import * as THREE from 'three';
 import * as THREE from 'three';
 
 //Randomize matrix function from three js github https://github.com/mrdoob/three.js/blob/dev/examples/webgl_instancing_performance.html
