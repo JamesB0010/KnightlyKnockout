@@ -62,6 +62,8 @@ form.addEventListener("submit", e =>{
             sessionStorage.setItem("username", username);
             sessionStorage.setItem("password", password);
             sessionStorage.setItem("profilePicture", reader.result? reader.result: "default");
+            sessionStorage.setItem("gamesPlayed", 0);
+            sessionStorage.setItem("gamesWon", 0);
         })
     })
     .catch(err =>{

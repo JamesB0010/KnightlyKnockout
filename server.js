@@ -92,9 +92,7 @@ app.get("/getUser/:username/:password", (req, res) => {
         if (err) {
           throw err;
         }
-
-        console.log(result);
-        res.send({ body: "Logged in!", profilePicture: data.toString('base64'), gamesPlayed:0, gamesWon: 0 });
+        res.send({ body: "Logged in!", profilePicture: data.toString('base64'), gamesPlayed:result[0].gamesPlayed, gamesWon: result[0].gamesWon });
 
       })
     }
@@ -157,6 +155,20 @@ app.post("/newUser", upload.array('image', 3), (req, res) => {
     res.send({ body: "user created sucessfully" });
   })
 
+})
+
+app.put("/updateScore/:username/:password/:gamesPlayed/:gamesWon", (req, res) =>{
+  let password = crypto.createHash('md5').update(req.params.password).digest('hex');
+  let sql = `UPDATE users SET gamesPlayed = '${req.params.gamesPlayed}', gamesWon = '${req.params.gamesWon}' WHERE username = '${req.params.username}' AND password = '${password}'`;
+  database.query(sql, (err, result) => {
+    if (err) throw err;
+    if (result.length != 0) {
+      res.send({body: "user score updated"});
+    }
+    else {
+      res.send({ error: "no user found" });
+    }
+  })
 })
 
 //configure 404 page

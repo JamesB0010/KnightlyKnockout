@@ -26,6 +26,8 @@ form.addEventListener("submit", e =>{
             sessionStorage.setItem("username", username);
             sessionStorage.setItem("password", password);
             sessionStorage.setItem("profilePicture", json.profilePicture);
+            sessionStorage.setItem("gamesPlayed", parseInt(json.gamesPlayed));
+            sessionStorage.setItem("gamesWon", parseInt(json.gamesWon));
             setTimeout(() => {
                 alert(json.body);
             }, 200);
@@ -45,6 +47,9 @@ if(sessionStorage.username){
             profilePicDiv.style.backgroundImage = `url(data:image/png;base64,${json.profilePicture})`;
             gamesPlayedText.innerText = `Games Played: ${json.gamesPlayed}`;
             gamesWonText.innerText = `Games Won: ${json.gamesWon}`;
+
+            sessionStorage.setItem("gamesPlayed", parseInt(json.gamesPlayed));
+            sessionStorage.setItem("gamesWon", parseInt(json.gamesWon));
 
             setTimeout(() => {
                 alert(json.body);
