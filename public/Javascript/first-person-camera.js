@@ -101,7 +101,6 @@ class FirstPersonCamera{
 
       let noMovementKeysPressed = (!this.input_.key(KEYS.w) && !this.input_.key(KEYS.s)) && (!this.input_.key(KEYS.a) && !this.input_.key(KEYS.d));
       if(noMovementKeysPressed){
-        console.log(this.movementJoystick);
         forwardVelocity = this.movementJoystick.y * 0.01;
         strafeVelocity = this.movementJoystick.x * -0.01;
       }
