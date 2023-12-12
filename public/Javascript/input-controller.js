@@ -37,14 +37,19 @@ class InputController {
             document.addEventListener("keyup", e => this.onKeyUp_(e), false);
             document.getElementById("attackIconWrapper").style["display"] = "none";
             document.getElementById("joy1Div").style["display"] = "none";
+            document.getElementById("blockIconWrapper").style["display"] = "none";
         }
 
         window.addEventListener('touchstart', e => {
             this.prevTouchDown = this.touchDown;
             this.touchDown = true;
-            console.log(this);
+            console.log(e.target);
             if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
                 e.button = 0;
+                this.onMouseDown_(e);
+            }
+            else if(e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")){
+                e.button = 2;
                 this.onMouseDown_(e);
             }
         })
@@ -55,6 +60,10 @@ class InputController {
             console.log(this.touchDown);
             if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
                 e.button = 0;
+                this.onMouseUp_(e);
+            }
+            else if(e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")){
+                e.button = 2;
                 this.onMouseUp_(e);
             }
         })
@@ -75,6 +84,7 @@ class InputController {
             case 2: {
                 this.current_.leftButton = true;
                 document.dispatchEvent(startBlock);
+                console.log("start blocking");
                 break;
             }
         }
@@ -93,6 +103,7 @@ class InputController {
             case 2: {
                 this.current_.leftButton = false;
                 document.dispatchEvent(endBlock);
+                console.log("end blocking");
                 break;
             }
         }
