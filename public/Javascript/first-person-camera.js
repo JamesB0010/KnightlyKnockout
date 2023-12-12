@@ -1,6 +1,6 @@
 import {InputController} from './input-controller.js';
 //import * as THREE from 'three';
-import * as THREE from 'three';
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
 
 //credits for fps controller https://www.youtube.com/watch?v=oqKzxPMLWxo
 
