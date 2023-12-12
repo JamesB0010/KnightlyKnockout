@@ -6,6 +6,7 @@
 //this is the server that serves all the game files and runs the networking of the game
 
 const crypto = require('crypto');
+const cors = require('cors');
 const path = require("path");
 const express = require("express"); // use express
 const app = express(); // create instance of express
@@ -65,6 +66,8 @@ app.use(express.static("public/GameAssets/Models"));
 app.use(express.static("public/GameAssets/Models/Environment"));
 app.use(express.static("public/GameAssets/Models/Player"));
 app.use(express.static("views"));
+
+app.use(cors());
 
 //how to get a list of all files in a directory
 let backgroundSongs;

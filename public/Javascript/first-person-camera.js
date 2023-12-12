@@ -1,5 +1,8 @@
 import {InputController} from './input-controller.js';
-import * as THREE from 'three';
+//import * as THREE from 'three';
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
+
+//the use of setLinearVelocity on a rigidbody https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
 
 //credits for fps controller https://www.youtube.com/watch?v=oqKzxPMLWxo
 
@@ -22,7 +25,7 @@ const stopEvent = new Event("OnClientStop");
 const rotateEvent = new CustomEvent("OnClientRotate", {detail:{rotation: new THREE.Quaternion}});
 
 class FirstPersonCamera{
-  constructor(camera, rigidbody, Ammo){
+  constructor(camera, rigidbody, Ammo, joyStick1){
       this.camera_ = camera;
       this.input_ = new InputController();
       this.rotation_ = new THREE.Quaternion();
@@ -38,6 +41,7 @@ class FirstPersonCamera{
       this.rigidBody = rigidbody;
       this.Ammo = Ammo;
       this.linearVelocity = new Ammo.btVector3(this.rigidBody.body.getLinearVelocity().x(), this.rigidBody.body.getLinearVelocity().y(), this.rigidBody.body.getLinearVelocity().z());
+      this.movementJoystick = joyStick1;
   }
 
   update(timeElapsedS, sceneObjects){
@@ -94,9 +98,15 @@ class FirstPersonCamera{
 
   updateTranslation_(timeElapsedS){
     //find if we are moving forwards and which direction
-      const forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0);
+      let forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0);
       //find if we are moving sideways and in which direction
-      const strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0);
+      let strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0);
+
+      let noMovementKeysPressed = (!this.input_.key(KEYS.w) && !this.input_.key(KEYS.s)) && (!this.input_.key(KEYS.a) && !this.input_.key(KEYS.d));
+      if(noMovementKeysPressed){
+        forwardVelocity = this.movementJoystick.y * 0.01;
+        strafeVelocity = this.movementJoystick.x * -0.01;
+      }
 
       //if moving dispach the onMove event
       const moving = forwardVelocity != 0 || strafeVelocity != 0;

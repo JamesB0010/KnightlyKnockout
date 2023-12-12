@@ -1,4 +1,4 @@
-
+import serverAddress from "./serverAddress.js";
 const roundCounterDom = document.getElementById("roundCounter");
 
 class RoundManager{
@@ -21,7 +21,7 @@ class RoundManager{
     }
     
     #SaveStatsToServer(){
-        fetch(`http://localhost:3000/updateScore/${sessionStorage.getItem("username")}/${sessionStorage.getItem("password")}/${sessionStorage.getItem("gamesPlayed")}/${sessionStorage.getItem("gamesWon")}`, {
+        fetch(`${serverAddress}/updateScore/${sessionStorage.getItem("username")}/${sessionStorage.getItem("password")}/${sessionStorage.getItem("gamesPlayed")}/${sessionStorage.getItem("gamesWon")}`, {
             method: "PUT"
         });
     }

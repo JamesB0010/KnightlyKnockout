@@ -1,3 +1,8 @@
+*
+{
+	box-sizing: border-box;
+}
+
 body{
     margin:0px;
     background-color: white;
@@ -19,6 +24,14 @@ body{
    background-image: url("../GameAssets/Images/BloodSplatteruiEffect2.png");
 
    opacity: 0;
+   position: absolute;
+   left: 0vw;
+   top: 0vh;
+   width: 100vw;
+   height: 100vh;
+
+   /*pointer evens none https://stackoverflow.com/questions/1009753/pass-mouse-events-through-absolutely-positioned-element*/
+   pointer-events: none;
 
    /* Full height */
    height: 100%;
@@ -230,4 +243,50 @@ body{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+#joy1Div{
+  width:200px;
+	height:200px;
+	margin:50px;
+}
+
+#attackIcon{
+  width: 70px;
+  height: 70px;
+}
+
+#attackIconWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 80vw;
+  top: 50vh;
+  width: 100px;
+  height: 100px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50%;
+
+}
+
+#blockIcon{
+  width: 150px;
+  height: 150px;
+}
+
+#blockIconWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 70vw;
+  top: 70vh;
+  width: 100px;
+  height: 100px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50%;
+
 }
