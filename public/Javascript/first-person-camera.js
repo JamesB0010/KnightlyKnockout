@@ -2,6 +2,8 @@ import {InputController} from './input-controller.js';
 //import * as THREE from 'three';
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
 
+//the use of setLinearVelocity on a rigidbody https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
+
 //credits for fps controller https://www.youtube.com/watch?v=oqKzxPMLWxo
 
 function clamp(x, a, b) {
