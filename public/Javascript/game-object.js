@@ -146,10 +146,10 @@ class GameObject extends THREE.Mesh {
 
     UpdateAnimMixer(deltaTime){
         this.#animationMixer.update(deltaTime);
-        this.#leftFoot.rotation.order = "YZX";
-        this.#leftFoot.rotation.x -= 0.27 * Math.PI;
-        this.#leftFoot.children[0].rotation.order = "YZX";
-        this.#leftFoot.children[0].rotation.x += 0.1 * Math.PI;
+        // this.#leftFoot.rotation.order = "YZX";
+        // this.#leftFoot.rotation.x -= 0.27 * Math.PI;
+        // this.#leftFoot.children[0].rotation.order = "YZX";
+        // this.#leftFoot.children[0].rotation.x += 0.1 * Math.PI;
     }
 
     UpdateBloodSpatterOpacity() {
@@ -206,13 +206,7 @@ class GameObject extends THREE.Mesh {
     #PrepareCrossFade(startAction, endAction, duration) {
         //if the current action is 'idleBase', execute the crossfade immediately;
         //else wait until the current action has finished its current loop
-
-        if (this.#currentBaseAction === 'idleBase' || !startAction || !endAction) {
-            this.ExecuteCrossFade(startAction, endAction, duration);
-        }
-        else {
-            this.#SynchroniseCrossFade(startAction, endAction, duration);
-        }
+        this.ExecuteCrossFade(startAction, endAction, duration);
 
         if (endAction) {
             const clip = endAction.getClip();
@@ -227,20 +221,6 @@ class GameObject extends THREE.Mesh {
         return this.#animationMixer;
     }
 
-    #SynchroniseCrossFade(startAction, endAction, duration) {
-        this.#animationMixer.addEventListener('loop', onLoopFinished);
-
-        let owner = this;
-        
-        function onLoopFinished(event) {
-            if (event.action == startAction) {
-                owner.GetAnimMixer().removeEventListener('loop', onLoopFinished);
-                
-                owner.ExecuteCrossFade(startAction, endAction, duration);
-            }
-        }
-    }
-
     //this function is needed, since animationAction.crossFadeTo() disables its start action and sets
     //the start actions timescale to ((start animations duration) / (end animations duration))
     ExecuteCrossFade(startAction, endAction, duration) {
@@ -252,7 +232,9 @@ class GameObject extends THREE.Mesh {
 
             if (startAction) {
                 //crossfade with warping
-                startAction.crossFadeTo(endAction, duration, true);
+                // startAction.crossFadeTo(endAction, duration, true);
+                startAction.fadeOut(0.15);
+                endAction.fadeIn(0.15);
                 this.#baseActions[startAction.getClip().name].weight = 0;
                 this.#baseActions[endAction.getClip().name].weight = 1;
             }
@@ -289,22 +271,22 @@ class GameObject extends THREE.Mesh {
 
         if (forwards){
             if(this.#currentBaseAction != "walkForwardBase"){
-                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkForwardBase"].action, 0);
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkForwardBase"].action, 0.35);
             }
         }
         else if (backwards){
             if(this.#currentBaseAction != "walkBackBase"){
-                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkBackBase"].action, 0);
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkBackBase"].action, 0.35);
             }
         }
         else if(left){
             if(this.#currentBaseAction != "walkLeftBase"){
-                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0);
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0.35);
             }
         }
         else if(right){
             if(this.#currentBaseAction != "walkRightBase"){
-                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0);
+                this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0.35);
             }
         }
     }
