@@ -24,6 +24,8 @@ let prevJoyStickData = {
   yPosition: 100,
 };
 
+const FLAGS = {CF_KINEMATIC_OBJECT: 2};
+
 const gamePromise = new Promise((res, rej) => {
   import("./physics.js").then((info) => {
     info.physicsJsPromise.then((AmmoAndApp) => {
@@ -377,8 +379,29 @@ const gamePromise = new Promise((res, rej) => {
           rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
           rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
           APP.physicsWorld.addRigidBody(rbCapsule.body);
-          this.rigidBodies = [{ mesh: capsule, rigidBody: rbCapsule }];
-          this.tmpTransform = new Ammo.btTransform();
+          
+          
+          //add kinematic rb for the enemy player collision
+
+          const enemyCapsule = new THREE.Mesh(
+            new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
+            new THREE.MeshStandardMaterial({ color: 0x808080 }),
+          );
+          //this.scene.add(enemyCapsule);
+          this.enemyRb = new RigidBody();
+          this.enemyRb.CreateKinematicCapsule(1,
+            enemyCapsule.position,
+            enemyCapsule.quaternion,
+            0.4,
+            0.8,)
+            this.enemyRb.body.setActivationState(STATE.DISABLE_DEACTIVATION);
+            this.enemyRb.setCollisionFlags(FLAGS.CF_KINEMATIC_OBJECT);
+            APP.physicsWorld.addRigidBody(this.enemyRb.body);
+
+
+
+            this.rigidBodies = [{ mesh: capsule, rigidBody: rbCapsule }];
+            this.tmpTransform = new Ammo.btTransform();
           //=================================================
           //add skybox
           const textureLoader = new THREE.TextureLoader();
@@ -478,12 +501,19 @@ const gamePromise = new Promise((res, rej) => {
               this.camera.position.z,
             );
             this.player.updateGltfPosition();
+            //update player kinematic body
           }
           if (gameLoaded) {
             stats.update();
           }
           if (this.enemy) {
+            //credits for how to move a kinematic rb https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
             this.enemy.UpdateAnimMixer(deltaTime);
+            const enemyPos = this.enemy.GetPosition();
+            let tempTrans = new Ammo.btTransform();
+            tempTrans.setIdentity();
+            tempTrans.setOrigin(new Ammo.btVector3(enemyPos.x,enemyPos.y,enemyPos.z));
+            this.enemyRb.motionState.setWorldTransform(tempTrans);
           }
           APP.physicsWorld.stepSimulation(deltaTime);
           for (let i = 0; i < this.rigidBodies.length; i++) {
@@ -499,8 +529,11 @@ const gamePromise = new Promise((res, rej) => {
               quat.z(),
               quat.w(),
             );
-            this.rigidBodies[i].mesh.position.copy(pos3);
-            this.rigidBodies[i].mesh.quaternion.copy(quat3);
+            try{
+              this.rigidBodies[i].mesh.position.copy(pos3);
+              this.rigidBodies[i].mesh.quaternion.copy(quat3);
+            }
+            catch{};
           }
           this.Render();
         }

@@ -209,6 +209,10 @@ class GameObject extends THREE.Mesh {
         }
     }
 
+    GetPosition(){
+        return this.#model.position;
+    }
+
     ResetHealth() {
         this.health = 100;
         this.UpdateBloodSpatterOpacity();
