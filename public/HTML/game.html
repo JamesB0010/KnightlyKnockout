@@ -2,28 +2,40 @@
 <html>
 	<head lang="en">
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
+		<title>Knightly Knockout</title>
 		<link rel="stylesheet" href="../CSS/game-styles.css">
     <link rel="icon" type="image/x-icon" href="../GameAssets/Images/DefaultKnightFacingLeft.png">
     <script type="importmap">
       {
         "imports": {
-          "three": "https://unpkg.com/three@v0.157.0/build/three.module.js",
-          "three/addons/": "https://unpkg.com/three@v0.157.0/examples/jsm/"
+          "three": "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/"
         }
       }
     </script>
+<!--LOAD AMMO JS-->
+<script src="https://cdn.jsdelivr.net/gh/kripken/ammo.js@HEAD/builds/ammo.wasm.js"></script>
+
+<!--Load joystick-->
+<script src="https://cdn.jsdelivr.net/gh/bobboteck/JoyStick@master/joy.js"></script>
     <link rel="stylesheet" href="../CSS/global-styles.css">
 	</head>
-	<body>
-    <div class = "loadingScreen">
-      <h1>Loading screen</h1>
-      <!-- reference https://www.w3schools.com/tags/tag_comment.asp-->
-      <div class="loader"></div>
-    </div>
-    <!--credits to https://www.youtube.com/watch?v=leAbQ0yfVX0 for how to use pointer lock-->
-		<div class = "gameUi" onclick="document.body.requestPointerLock()">
-      <div class = "bloodSplatter"></div>
+  <div class = "loadingScreen">
+    <h1>Loading screen</h1>
+    <!-- reference https://www.w3schools.com/tags/tag_comment.asp-->
+    <div class="loader"></div>
+  </div>
+  <!--credits to https://www.youtube.com/watch?v=leAbQ0yfVX0 for how to use pointer lock-->
+  <div class = "gameUi" onclick="if('ontouchstart' in document.documentElement){}else{document.body.requestPointerLock()}">
+    <body>
+      <div id = "attackIconWrapper">
+        <img src="../GameAssets/Images/slash.png" id = "attackIcon">
+      </div>
+      <div id = "blockIconWrapper">
+        <img src="../GameAssets/Images/shieldIcon.png" id = "blockIcon">
+      </div>
+      <div id="joy1Div"></div>
+      <div class = "bloodSplatter" id = "bloodSplatter"></div>
       <div class = "playerWonRound">
         <h1>You Won the round!</h1>
       </div>

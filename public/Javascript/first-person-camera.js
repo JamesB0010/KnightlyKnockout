@@ -1,5 +1,8 @@
 import {InputController} from './input-controller.js';
-import * as THREE from 'three';
+//import * as THREE from 'three';
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
+
+//the use of setLinearVelocity on a rigidbody https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5
 
 //credits for fps controller https://www.youtube.com/watch?v=oqKzxPMLWxo
 
@@ -22,7 +25,7 @@ const stopEvent = new Event("OnClientStop");
 const rotateEvent = new CustomEvent("OnClientRotate", {detail:{rotation: new THREE.Quaternion}});
 
 class FirstPersonCamera{
-  constructor(camera){
+  constructor(camera, rigidbody, Ammo, joyStick1){
       this.camera_ = camera;
       this.input_ = new InputController();
       this.rotation_ = new THREE.Quaternion();
@@ -35,6 +38,10 @@ class FirstPersonCamera{
       this.headBobTimer_ = 0;
       this.lastMoving_ = false;
       this.rotating = false;
+      this.rigidBody = rigidbody;
+      this.Ammo = Ammo;
+      this.linearVelocity = new Ammo.btVector3(this.rigidBody.body.getLinearVelocity().x(), this.rigidBody.body.getLinearVelocity().y(), this.rigidBody.body.getLinearVelocity().z());
+      this.movementJoystick = joyStick1;
   }
 
   update(timeElapsedS, sceneObjects){
@@ -54,6 +61,17 @@ class FirstPersonCamera{
     //update the cameras position and rotation
       this.camera_.quaternion.copy(this.rotation_);
       this.camera_.position.copy(this.translation_);
+      this.rigidBody.body.setLinearVelocity(new this.Ammo.btVector3(this.linearVelocity.x(), this.rigidBody.body.getLinearVelocity().y(), this.linearVelocity.z()));
+      
+      //update camera based on rigidbody position
+      let tmpTransform = new this.Ammo.btTransform();
+      this.rigidBody.motionState.getWorldTransform(tmpTransform);
+
+
+      const pos = tmpTransform.getOrigin();
+
+      const pos3 = new THREE.Vector3(pos.x(), pos.y(), pos.z());
+      this.camera_.position.copy(pos3);
 
       //use sin wave to make camera go up and down
       this.camera_.position.y += (Math.sin(this.headBobTimer_ * 10) * 0.04) + 0.5;
@@ -80,9 +98,15 @@ class FirstPersonCamera{
 
   updateTranslation_(timeElapsedS){
     //find if we are moving forwards and which direction
-      const forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0);
+      let forwardVelocity = (this.input_.key(KEYS.w) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0);
       //find if we are moving sideways and in which direction
-      const strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0);
+      let strafeVelocity = (this.input_.key(KEYS.a) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0);
+
+      let noMovementKeysPressed = (!this.input_.key(KEYS.w) && !this.input_.key(KEYS.s)) && (!this.input_.key(KEYS.a) && !this.input_.key(KEYS.d));
+      if(noMovementKeysPressed){
+        forwardVelocity = this.movementJoystick.y * 0.01;
+        strafeVelocity = this.movementJoystick.x * -0.01;
+      }
 
       //if moving dispach the onMove event
       const moving = forwardVelocity != 0 || strafeVelocity != 0;
@@ -116,6 +140,12 @@ class FirstPersonCamera{
 
       this.translation_.add(forward);
       this.translation_.add(left);
+
+      this.linearVelocity.setX(0);
+      this.linearVelocity.setZ(0);
+      this.linearVelocity.op_add(new this.Ammo.btVector3(forward.x, forward.y, forward.z));
+      this.linearVelocity.op_add(new this.Ammo.btVector3(left.x, left.y, left.z));
+      this.linearVelocity.op_mul(60);
 
       //if weve been moving then set head bob active to true
       if(forwardVelocity != 0 || strafeVelocity != 0){
