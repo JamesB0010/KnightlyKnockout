@@ -28,7 +28,8 @@ gamePromise.then((promise) => {
       let _playerPromise = game.NewPlayer(info.id, {
         color: 0xffffff,
         inputEnabled: true,
-        playerIndex: info.playerIndex
+        playerIndex: info.playerIndex,
+        isClient: true
       });
       if (sessionStorage.username) {
         socket.emit("profileInfo", sessionStorage.username);
@@ -191,6 +192,7 @@ gamePromise.then((promise) => {
 
     //whenever the local player moves send it to the server
     document.addEventListener("OnClientMove", (e) => {
+      game.player.SetAnimationFromVelocities(e.detail);
       try {
         socket.emit("UpdatePlayerMovement", {
           position: game.player.position,
@@ -201,15 +203,21 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("OnClientStop", (e) => {
+      game.player.SetAnimationFromVelocities({
+        forwardVelocity: 0,
+        sidewaysVelocity: 0,
+      });
       socket.emit("clientStoppedMoving", game.clientId);
     });
 
     //make listener for player death
     document.addEventListener("PlayerDead", (e) => {
+      game.player.PlayDeathAnimation();
       socket.emit("PlayerDeath", { id: game.clientId });
     });
 
     document.addEventListener("Attack", (e) => {
+      game.player.Attack(e.detail.attackName);
       socket.emit("PlayerAttack", {
         id: game.clientId,
         attackName: e.detail.attackName,
@@ -217,10 +225,12 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("startBlock", (e) => {
+      game.player.StartBlock();
       socket.emit("startBlock", game.clientId);
     });
 
     document.addEventListener("endBlock", (e) => {
+      game.player.EndBlock();
       socket.emit("endBlock", game.clientId);
     });
 
@@ -236,6 +246,17 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("OnClientRotate", (e) => {
+      let theta_y = Math.atan2(e.detail.rotation.y, e.detail.rotation.w);
+      let yRotation = [0, Math.sin(theta_y), 0, Math.cos(theta_y)];
+      try{
+        game.player.gltfScene.quaternion.set(
+              yRotation[0],
+              yRotation[1],
+              yRotation[2],
+              yRotation[3],
+            );
+      }
+      catch{}
       socket.emit("PlayerRotate", {
         rotation: e.detail.rotation,
         id: game.clientId,

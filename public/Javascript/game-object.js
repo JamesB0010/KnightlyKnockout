@@ -82,7 +82,7 @@ class GameObject extends THREE.Mesh {
 
         //if input enabled (ie, this is the local player)
         if (inputEnabled) {
-            this.#model.children[0].visible = false;
+            //this.#model.children[0].visible = false;
             document.addEventListener("Attack", () => {
                 this.children[0].PlayRandomAttack();
             });

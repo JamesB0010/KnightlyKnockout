@@ -378,7 +378,6 @@ const gamePromise = new Promise((res, rej) => {
           APP.physicsWorld.addRigidBody(this.enemyRb.body);
 
 
-
           this.rigidBodies = [];
           this.tmpTransform = new Ammo.btTransform();
           //=================================================
@@ -447,6 +446,23 @@ const gamePromise = new Promise((res, rej) => {
             }
           };
         }
+
+        SwordRaycast(model = null) {
+          if (model == null) return;
+
+          model = model.getObjectByName('mixamorigRightHand');
+          const dir = new THREE.Vector3(0, 1, 0);
+
+          //normalize the direction vector (convert to vector of length 1)
+          dir.normalize();
+
+          const origin = model.position;
+          const length = 3;
+          const hex = 0xffff00;
+
+          const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
+          this.scene.add(arrowHelper);
+        }
         //update is called every animation frame
         Update() {
           let deltaTime = this.clock.getDelta();
@@ -476,6 +492,7 @@ const gamePromise = new Promise((res, rej) => {
               this.camera.position.y,
               this.camera.position.z,
             );
+            this.player.UpdateAnimMixer(deltaTime);
             this.player.updateGltfPosition();
             //update player kinematic body
           }
@@ -511,6 +528,10 @@ const gamePromise = new Promise((res, rej) => {
             }
             catch { };
           }
+          try {
+            this.SwordRaycast(this.player.gltfScene);
+          }
+          catch { };
           this.Render();
         }
         Render() {
@@ -518,16 +539,16 @@ const gamePromise = new Promise((res, rej) => {
         }
         //this is how new players are created and added to the game. this includes the local player and any networked player
         //The function is called from the main.js script
-        NewPlayer(id, { color = 0xff0000, inputEnabled = false, playerIndex = 0 }) {
+        NewPlayer(id, { color = 0xff0000, inputEnabled = false, playerIndex = 0, isClient= false }) {
           if (id == this.clientId) {
             const capsule = new THREE.Mesh(
               new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
               new THREE.MeshStandardMaterial({ color: 0x808080 }),
             );
-            if(playerIndex == 0){
+            if (playerIndex == 0) {
               capsule.position.set(0, 5, 15);
             }
-            else{
+            else {
               capsule.position.set(0, 5, -15);
             }
             // this.scene.add(capsule);
@@ -559,7 +580,7 @@ const gamePromise = new Promise((res, rej) => {
 
           //load the player model
           let playerLoadPromise = this.gltfLoader
-            .loadAsync(
+            .loadAsync(isClient? "../GameAssets/Models/Player/knightAnimationsForKnightlyKnockoutAdditiveHeadless.glb" :
               "../GameAssets/Models/Player/knight-man-additive-complete.glb",
             )
             .then((gltf) => {
