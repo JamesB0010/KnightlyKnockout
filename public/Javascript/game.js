@@ -134,7 +134,7 @@ const gamePromise = new Promise((res, rej) => {
                     },
                     sound.buffer.duration * 1000 - 2000,
                   );
-                  sound.setVolume(0.6);
+                  sound.setVolume(0.3);
                   sound.play();
                 });
               });
@@ -377,10 +377,26 @@ const gamePromise = new Promise((res, rej) => {
           this.enemyRb.setCollisionFlags(FLAGS.CF_KINEMATIC_OBJECT);
           APP.physicsWorld.addRigidBody(this.enemyRb.body);
 
+          this.playerSword = new THREE.Mesh(
+            new THREE.CapsuleGeometry(0.2, 0.6, 4, 16),
+            new THREE.MeshStandardMaterial({color: 0x0000ff})
+          )
+          this.scene.add(this.playerSword);
+
+
+          this.enemySword = new THREE.Mesh(
+            new THREE.CapsuleGeometry(0.2, 0.6, 4, 16),
+            new THREE.MeshStandardMaterial({color:0xff0000})
+          );
+          this.scene.add(this.enemySword);
+
+
+
 
           this.rigidBodies = [];
           this.tmpTransform = new Ammo.btTransform();
           //=================================================
+
           //add skybox
           const textureLoader = new THREE.TextureLoader();
           textureLoader.load(
@@ -447,22 +463,6 @@ const gamePromise = new Promise((res, rej) => {
           };
         }
 
-        SwordRaycast(model = null) {
-          if (model == null) return;
-
-          model = model.getObjectByName('mixamorigRightHand');
-          const dir = new THREE.Vector3(0, 1, 0);
-
-          //normalize the direction vector (convert to vector of length 1)
-          dir.normalize();
-
-          const origin = model.position;
-          const length = 3;
-          const hex = 0xffff00;
-
-          const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
-          this.scene.add(arrowHelper);
-        }
         //update is called every animation frame
         Update() {
           let deltaTime = this.clock.getDelta();
@@ -494,7 +494,15 @@ const gamePromise = new Promise((res, rej) => {
             );
             this.player.UpdateAnimMixer(deltaTime);
             this.player.updateGltfPosition();
-            //update player kinematic body
+            
+            let boneWorldPos = new THREE.Vector3();
+            let boneWorldRot = new THREE.Quaternion();
+            this.player.gltfScene.getObjectByName('mixamorigRightHand').getWorldPosition(boneWorldPos);
+            this.player.gltfScene.getObjectByName('mixamorigRightHand').getWorldQuaternion(boneWorldRot);
+            this.playerSword.position.set(boneWorldPos.x, boneWorldPos.y, boneWorldPos.z);
+            this.playerSword.quaternion.set(boneWorldRot.x , boneWorldRot.y, boneWorldRot.z, boneWorldRot.w);
+            this.playerSword.rotation.set(this.playerSword.rotation.x, this.playerSword.rotation.y, this.playerSword.rotation.z + Math.PI * 0.5);
+            this.playerSword.translateY(-0.5);
           }
           if (gameLoaded) {
             stats.update();
@@ -507,6 +515,15 @@ const gamePromise = new Promise((res, rej) => {
             tempTrans.setIdentity();
             tempTrans.setOrigin(new Ammo.btVector3(enemyPos.x, enemyPos.y, enemyPos.z));
             this.enemyRb.motionState.setWorldTransform(tempTrans);
+
+            let boneWorldPos = new THREE.Vector3();
+            let boneWorldRot = new THREE.Quaternion();
+            this.enemy.gltfScene.getObjectByName('mixamorigRightHand').getWorldPosition(boneWorldPos);
+            this.enemy.gltfScene.getObjectByName('mixamorigRightHand').getWorldQuaternion(boneWorldRot);
+            this.enemySword.position.set(boneWorldPos.x, boneWorldPos.y, boneWorldPos.z);
+            this.enemySword.quaternion.set(boneWorldRot.x , boneWorldRot.y, boneWorldRot.z, boneWorldRot.w);
+            this.enemySword.rotation.set(this.enemySword.rotation.x, this.enemySword.rotation.y, this.enemySword.rotation.z + Math.PI * 0.5);
+            this.enemySword.translateY(-0.5);
           }
           APP.physicsWorld.stepSimulation(deltaTime);
           for (let i = 0; i < this.rigidBodies.length; i++) {
@@ -528,10 +545,6 @@ const gamePromise = new Promise((res, rej) => {
             }
             catch { };
           }
-          try {
-            this.SwordRaycast(this.player.gltfScene);
-          }
-          catch { };
           this.Render();
         }
         Render() {
