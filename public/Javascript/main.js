@@ -144,6 +144,10 @@ gamePromise.then((promise) => {
       game.connectionArray = game.connectionArray.filter((connection) => {
         connection != id;
       });
+      alert("enemy left returning to landing page...");
+      setTimeout(()=>{
+        window.location.href = serverAddress;
+      }, 3000);
     });
 
     socket.on("NetworkedPlayerDeath", (info) => {
