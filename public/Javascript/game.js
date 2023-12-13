@@ -13,7 +13,7 @@ import serverAddress from "./serverAddress.js";
 let colGroupPlayer = 0b1110;
 let colMaskPlayer = 0b0001;
 let colGroupEnvironment = 0b0111; 
-let colGroupEnemy = 0b1101;
+let colGroupEnemy = 0b1100;
 let colMaskEnemy = 0b1111;
 
 let joyStickData = {
@@ -469,6 +469,42 @@ const gamePromise = new Promise((res, rej) => {
           };
         }
 
+        //credit for tutorial on collision detection with ammo https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef
+        DetectCollision(){
+
+          let dispatcher = APP.physicsWorld.getDispatcher();
+          let numManifolds = dispatcher.getNumManifolds();
+        
+          for ( let i = 0; i < numManifolds; i ++ ) {
+        
+            let contactManifold = dispatcher.getManifoldByIndexInternal( i );
+
+            let rb0 = Ammo.castObject(contactManifold.getBody0(), Ammo.btRigidBody);
+            let rb1 = Ammo.castObject(contactManifold.getBody1(), Ammo.btRigidBody);
+
+            let isEnemy0 = rb0.isEnemy;
+            let isEnemy1 = rb1.isEnemy;
+
+            if(!isEnemy0 && !isEnemy1) continue;
+
+
+            let numContacts = contactManifold.getNumContacts();
+        
+            for ( let j = 0; j < numContacts; j++ ) {
+        
+              let contactPoint = contactManifold.getContactPoint( j );
+              let distance = contactPoint.getDistance();
+        
+              if(distance > 0.0) continue;
+              //console.log({manifoldIndex: i, contactIndex: j, distance: distance});
+              console.log("enemy hit");
+        
+            }
+        
+        
+          }
+        
+        }
         //update is called every animation frame
         Update() {
           let deltaTime = this.clock.getDelta();
@@ -548,6 +584,8 @@ const gamePromise = new Promise((res, rej) => {
             }
             catch { };
           }
+
+          this.DetectCollision();
           this.Render();
         }
         Render() {
@@ -582,6 +620,7 @@ const gamePromise = new Promise((res, rej) => {
             rbCapsule.setRollingFriction(5);
             rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
             rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
+            rbCapsule.body.isEnemy = !isClient;
             APP.physicsWorld.addRigidBody(rbCapsule.body, colGroupPlayer, colMaskPlayer);
 
             this.rigidBodies.push({ mesh: capsule, rigidBody: rbCapsule });
