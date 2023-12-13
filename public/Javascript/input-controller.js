@@ -82,7 +82,7 @@ class InputController {
                 break;
             }
             case 2: {
-                this.current_.leftButton = true;
+                this.current_.leftButton = false;
                 document.dispatchEvent(startBlock);
                 console.log("start blocking");
                 break;
@@ -92,9 +92,9 @@ class InputController {
     onMouseUp_(e) {
         switch (e.button) {
             case 0: {
-                let attackTypeThreshold = 0.3;
+                let attackTypeThreshold = 0.5;
                 console.log(this.current_.leftButtonDownTimer >= attackTypeThreshold ? 4 : 7);
-                const attack = new CustomEvent("Attack", { detail: { attackName: this.current_.leftButtonDownTimer >= attackTypeThreshold ? "lightAttack" : "heavyAttack" } });
+                const attack = new CustomEvent("Attack", { detail: { attackName: this.current_.leftButtonDownTimer >= attackTypeThreshold ? "heavyAttack" : "lightAttack" } });
                 this.current_.leftButton = false;
                 this.current_.leftButtonDownTimer = 0;
                 document.dispatchEvent(attack);

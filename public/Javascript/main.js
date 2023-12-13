@@ -163,9 +163,13 @@ gamePromise.then((promise) => {
       } catch {}
     });
 
-    socket.on("networkedStartBlock", (id) => {});
+    socket.on("networkedStartBlock", (id) => {
+      game.players.get(id).StartBlock();
+    });
 
-    socket.on("networkedEndBlock", (id) => {});
+    socket.on("networkedEndBlock", (id) => {
+      game.players.get(id).EndBlock();
+    });
 
     socket.on("networkedPlayerInsult", (info) => {
       console.log(info.insultIndex);

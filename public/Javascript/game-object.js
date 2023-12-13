@@ -28,14 +28,14 @@ class GameObject extends THREE.Mesh {
         blockIdle: { weight: 0, priority: 2 },
         blockReact: { weight: 0, priority: 1 },
         hitReactionGut: { weight: 0, priority: 1 },
-        hitReactionHead: { weight: 0 , priority:1},
-        lightAttack: { weight: 0 , priority: 2},
-        heavyAttack: { weight: 0 , priority: 2},
-        walkForwardAdditive: { weight: 0, priority:3 },
-        idleAdditive: { weight: 1, priority:3 },
-        walkBackAdditive: { weight: 0, priority:3 },
-        walkLeftAdditive: { weight: 0, priority:3 },
-        walkRightAdditive: { weight: 0, priority:3 }
+        hitReactionHead: { weight: 0, priority: 1 },
+        lightAttack: { weight: 0, priority: 2 },
+        heavyAttack: { weight: 0, priority: 2 },
+        walkForwardAdditive: { weight: 0, priority: 3 },
+        idleAdditive: { weight: 1, priority: 3 },
+        walkBackAdditive: { weight: 0, priority: 3 },
+        walkLeftAdditive: { weight: 0, priority: 3 },
+        walkRightAdditive: { weight: 0, priority: 3 }
     }
 
     #currentAdditiveAction = "idleAdditive";
@@ -99,6 +99,9 @@ class GameObject extends THREE.Mesh {
             this.#leftFoot = this.#model.getObjectByName('mixamorigLeftFoot');
             //rotate a quater
             this.#model.rotation.y = -Math.PI * 0.25;
+
+            //setup animations
+
             const animations = gltfFile.animations;
 
             this.#animationMixer = new THREE.AnimationMixer(gltfScene);
@@ -163,8 +166,16 @@ class GameObject extends THREE.Mesh {
         // this.#leftFoot.children[0].rotation.x += 0.1 * Math.PI;
     }
 
-    Attack(animName){
+    Attack(animName) {
         this.#ChangeAdditiveAnimation(animName);
+    }
+
+    StartBlock(){
+        this.#ChangeAdditiveAnimation("blockIdle");
+    }
+
+    EndBlock(){
+        this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
     }
 
     UpdateBloodSpatterOpacity() {
@@ -267,14 +278,34 @@ class GameObject extends THREE.Mesh {
 
     }
 
-    #ChangeAdditiveAnimation(animName) {
-        if(this.#additiveActions[this.#currentAdditiveAction].priority <  this.#additiveActions[animName].priority) return;
 
-        
-        console.log(this.#additiveActions[animName].action);
-        setTimeout(()=>{
-            console.log("anim over");
-        }, this.#additiveActions[animName].action.loop)
+    #FindLinkedBaseAnimFromAdditive(animName) {
+        switch (animName) {
+            case "idleBase":
+                return "idleAdditive";
+            case "walkForwardBase":
+                return "walkForwardAdditive";
+            case "walkBackBase":
+                return "walkBackAdditive";
+            case "walkLeftBase":
+                return "walkLeftAdditive";
+            case "walkRightBase":
+                return "walkRightAdditive";
+        }
+    }
+
+    //overide changes the additive action despite the one which is currently playing
+    #ChangeAdditiveAnimation(animName, override = false) {
+        if (this.#additiveActions[this.#currentAdditiveAction].priority <= this.#additiveActions[animName].priority && !override) return;
+
+        const nonLoopAnim = (animName == "blockReact" || animName == "hitReactionGut" || animName == "hitReactionHead" || animName == "lightAttack" || animName == "heavyAttack");
+
+        if (nonLoopAnim) {
+            setTimeout(() => {
+                console.log("anim over");
+                this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
+            }, (this.#additiveActions[animName].action._clip.duration * 1000) - 50)
+        }
         this.#additiveActions[this.#currentAdditiveAction].weight = 0;
         this.#additiveActions[animName].weight = 1;
         this.#activateAction(this.#additiveActions[animName].action);
@@ -314,7 +345,7 @@ class GameObject extends THREE.Mesh {
         }
         else if (left) {
             if (this.#currentBaseAction != "walkLeftBase") {
-                this.#ChangeAdditiveAnimation("walkLeftAdditive");
+                this.#ChangeAdditiveAnimation("idleAdditive");
                 this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0.35);
             }
         }
