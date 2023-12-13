@@ -110,6 +110,8 @@ const gamePromise = new Promise((res, rej) => {
             antialias: true,
             alpha: true,
           });
+          this.renderer.shadowMap.enabled = true;
+          this.renderer.shadowMap.type = THREE.BasicShadowMap;
           this.camera.position.z = 5;
           this.renderer.shadowMap.enabled = true;
           this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -162,6 +164,7 @@ const gamePromise = new Promise((res, rej) => {
           });
           const points = new THREE.Points(geometry, material);
           this.scene.add(points);
+
           //================Physics init stuff==================
           //this code spawns a three js box where the physics world box exists, uncomment the scene.add line to see it in the scene
           const ground = new THREE.Mesh(
@@ -398,8 +401,12 @@ const gamePromise = new Promise((res, rej) => {
             "../GameAssets/Models/Environment/MedivalBridgeLowPoly.glb",
           );
           loadBridgePromise.then((gltf) => {
+            gltf.recieveShadow = true;
             gltf.scene.position.y = -1.05;
             gltf.scene.scale.multiplyScalar(0.5);
+            gltf.scene.traverse(function (node){
+              if (node.isMesh){node.castShadow = true; node.recieveShadow = true}
+            })
             this.scene.add(gltf.scene);
             numThingsLoaded++;
             setTimeout(CheckEverythingsLoaded, 500);
@@ -414,6 +421,14 @@ const gamePromise = new Promise((res, rej) => {
           let direcLight = new THREE.DirectionalLight(0xffffff, 1);
           direcLight.position.y = 2;
           direcLight.castShadow = true;
+          direcLight.shadow.mapSize.width = 512;  
+          direcLight.shadow.mapSize.height = 512; 
+          direcLight.shadow.camera.near = 0.1;
+          direcLight.shadow.camera.far = 500.0;
+          direcLight.shadow.camera.left = -15;
+          direcLight.shadow.camera.right = 15;
+          direcLight.shadow.camera.top = 40;
+          direcLight.shadow.camera.bottom = -40;
           this.scene.add(direcLight);
           this.gameObjects.forEach((element) => {
             this.scene.add(element);
@@ -501,6 +516,10 @@ const gamePromise = new Promise((res, rej) => {
               "../GameAssets/Models/Player/knight-man-additive-complete.glb",
             )
             .then((gltf) => {
+              gltf.castShadow = true;
+              gltf.scene.traverse(function(node){
+                if(node.isMesh){node.castShadow = true; node.recieveShadow = true};
+              })
               //once the model has loaded add it to the scene then create the new player
               this.scene.add(gltf.scene);
               let _newPlayer = new GameObject({

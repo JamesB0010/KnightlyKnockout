@@ -94,7 +94,7 @@ class InputController {
             case 0: {
                 let attackTypeThreshold = 0.3;
                 console.log(this.current_.leftButtonDownTimer >= attackTypeThreshold ? 4 : 7);
-                const attack = new CustomEvent("Attack", { detail: { attackAnimIndex: this.current_.leftButtonDownTimer >= attackTypeThreshold ? 4 : 7 } });
+                const attack = new CustomEvent("Attack", { detail: { attackName: this.current_.leftButtonDownTimer >= attackTypeThreshold ? "lightAttack" : "heavyAttack" } });
                 this.current_.leftButton = false;
                 this.current_.leftButtonDownTimer = 0;
                 document.dispatchEvent(attack);

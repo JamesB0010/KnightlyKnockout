@@ -159,6 +159,7 @@ gamePromise.then((promise) => {
       console.log(info);
       try {
         game.players.get(info.id).children[0].PlayRandomAttack();
+        game.players.get(info.id).Attack(info.attackName);
       } catch {}
     });
 
@@ -202,7 +203,7 @@ gamePromise.then((promise) => {
     document.addEventListener("Attack", (e) => {
       socket.emit("PlayerAttack", {
         id: game.clientId,
-        attackAnimIndex: e.detail.attackAnimIndex,
+        attackName: e.detail.attackName,
       });
     });
 

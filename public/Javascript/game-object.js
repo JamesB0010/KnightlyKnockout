@@ -1,5 +1,6 @@
 //import * as THREE from 'three';
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
+import { GLTFLoader } from "./GLTFLoader.js";
 
 const gravity = -0.002;
 
@@ -24,17 +25,17 @@ class GameObject extends THREE.Mesh {
     }
 
     #additiveActions = {
-        blockIdle: { weight: 1 },
-        blockReact: { weight: 0 },
-        hitReactionGut: { weight: 0 },
-        hitReactionHead: { weight: 0 },
-        lightAttack: { weight: 0 },
-        heavyAttack: { weight: 0 },
-        walkForwardAdditive: { weight: 0 },
-        idleAdditive: { weight: 0 },
-        walkBackAdditive: { weight: 0 },
-        walkLeftAdditive: { weight: 0 },
-        walkRightAdditive: { weight: 0 }
+        blockIdle: { weight: 0, priority: 2 },
+        blockReact: { weight: 0, priority: 1 },
+        hitReactionGut: { weight: 0, priority: 1 },
+        hitReactionHead: { weight: 0 , priority:1},
+        lightAttack: { weight: 0 , priority: 2},
+        heavyAttack: { weight: 0 , priority: 2},
+        walkForwardAdditive: { weight: 0, priority:3 },
+        idleAdditive: { weight: 1, priority:3 },
+        walkBackAdditive: { weight: 0, priority:3 },
+        walkLeftAdditive: { weight: 0, priority:3 },
+        walkRightAdditive: { weight: 0, priority:3 }
     }
 
     #currentAdditiveAction = "idleAdditive";
@@ -99,24 +100,25 @@ class GameObject extends THREE.Mesh {
             //rotate a quater
             this.#model.rotation.y = -Math.PI * 0.25;
             const animations = gltfFile.animations;
-            
+
             this.#animationMixer = new THREE.AnimationMixer(gltfScene);
 
             this.#numAnimations = animations.length;
 
-            for (let i = 0; i != this.#numAnimations; i++){
+            for (let i = 0; i != this.#numAnimations; i++) {
                 let clip = animations[i];
                 const name = clip.name;
 
-                if(this.#baseActions[name]){
+                if (this.#baseActions[name]) {
                     const action = this.#animationMixer.clipAction(clip);
                     this.#activateAction(action);
                     this.#baseActions[name].action = action;
                     this.#allActions.push(action);
                 }
-                else if(this.#additiveActions[name]){
+                else if (this.#additiveActions[name]) {
                     //make the clip additive
                     THREE.AnimationUtils.makeClipAdditive(clip, 0, this.#baseActions["walkForwardBase"].action.getClip());
+
 
                     const action = this.#animationMixer.clipAction(clip);
                     this.#activateAction(action);
@@ -126,6 +128,15 @@ class GameObject extends THREE.Mesh {
             }
 
             //load the "right walk" animation as for some reason was not able to include it in the main knight glb file
+            new GLTFLoader().loadAsync("../GameAssets/Models/Player/knightManWalkRight.glb").then(gltf => {
+                const clip = gltf.animations[0];
+                const name = "walkRightAdditive";
+                THREE.AnimationUtils.makeClipAdditive(clip, 0, this.#baseActions["walkForwardBase"].action.getClip());
+                const action = this.#animationMixer.clipAction(clip);
+                this.#activateAction(action);
+                this.#additiveActions[name].action = action;
+                this.#allActions.push(action);
+            })
         }
 
         this.velocity = {
@@ -144,12 +155,16 @@ class GameObject extends THREE.Mesh {
         this.#model.position.z = this.position.z;
     }
 
-    UpdateAnimMixer(deltaTime){
+    UpdateAnimMixer(deltaTime) {
         this.#animationMixer.update(deltaTime);
-        // this.#leftFoot.rotation.order = "YZX";
-        // this.#leftFoot.rotation.x -= 0.27 * Math.PI;
+        this.#leftFoot.rotation.order = "YZX";
+        this.#leftFoot.rotation.x -= 0.27 * Math.PI;
         // this.#leftFoot.children[0].rotation.order = "YZX";
         // this.#leftFoot.children[0].rotation.x += 0.1 * Math.PI;
+    }
+
+    Attack(animName){
+        this.#ChangeAdditiveAnimation(animName);
     }
 
     UpdateBloodSpatterOpacity() {
@@ -217,7 +232,7 @@ class GameObject extends THREE.Mesh {
         }
     }
 
-    GetAnimMixer(){
+    GetAnimMixer() {
         return this.#animationMixer;
     }
 
@@ -248,19 +263,35 @@ class GameObject extends THREE.Mesh {
         }
     }
 
-    #PlayDeathAnimation(){
+    #PlayDeathAnimation() {
 
     }
 
-    SetAnimationFromVelocities(velocities){
+    #ChangeAdditiveAnimation(animName) {
+        if(this.#additiveActions[this.#currentAdditiveAction].priority <  this.#additiveActions[animName].priority) return;
+
+        
+        console.log(this.#additiveActions[animName].action);
+        setTimeout(()=>{
+            console.log("anim over");
+        }, this.#additiveActions[animName].action.loop)
+        this.#additiveActions[this.#currentAdditiveAction].weight = 0;
+        this.#additiveActions[animName].weight = 1;
+        this.#activateAction(this.#additiveActions[animName].action);
+        this.#activateAction(this.#additiveActions[this.#currentAdditiveAction].action);
+        this.#currentAdditiveAction = animName;
+    }
+
+    SetAnimationFromVelocities(velocities) {
         //forwardVelocity
         //sidewaysVelocity
 
-        if(!velocities){
+        if (!velocities) {
             return;
         }
 
-        if(this.#currentBaseAction != "idleBase" && velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0){
+        if (this.#currentBaseAction != "idleBase" && velocities.forwardVelocity == 0 && velocities.sidewaysVelocity == 0) {
+            this.#ChangeAdditiveAnimation("idleAdditive");
             this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["idleBase"].action, 0);
         }
 
@@ -269,23 +300,28 @@ class GameObject extends THREE.Mesh {
         let left = velocities.sidewaysVelocity == 1;
         let right = velocities.sidewaysVelocity == -1;
 
-        if (forwards){
-            if(this.#currentBaseAction != "walkForwardBase"){
+        if (forwards) {
+            if (this.#currentBaseAction != "walkForwardBase") {
+                this.#ChangeAdditiveAnimation("walkForwardAdditive");
                 this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkForwardBase"].action, 0.35);
             }
         }
-        else if (backwards){
-            if(this.#currentBaseAction != "walkBackBase"){
+        else if (backwards) {
+            if (this.#currentBaseAction != "walkBackBase") {
+                this.#ChangeAdditiveAnimation("walkBackAdditive");
                 this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkBackBase"].action, 0.35);
             }
         }
-        else if(left){
-            if(this.#currentBaseAction != "walkLeftBase"){
+        else if (left) {
+            if (this.#currentBaseAction != "walkLeftBase") {
+                this.#ChangeAdditiveAnimation("walkLeftAdditive");
                 this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkLeftBase"].action, 0.35);
             }
         }
-        else if(right){
-            if(this.#currentBaseAction != "walkRightBase"){
+        else if (right) {
+            console.log("walk right");
+            if (this.#currentBaseAction != "walkRightBase") {
+                this.#ChangeAdditiveAnimation("walkRightAdditive");
                 this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0.35);
             }
         }
