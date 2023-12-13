@@ -22,12 +22,13 @@ gamePromise.then((promise) => {
 
     //setup socket listeners
     //when a client joins the server a setId message will be sent to the client, they set their client id and connection array and make a new player
-    socket.on("setId", (id) => {
-      game.clientId = id;
-      game.connectionArray.push(id);
-      let _playerPromise = game.NewPlayer(id, {
+    socket.on("setId", info => {
+      game.clientId = info.id;
+      game.connectionArray.push(info.id);
+      let _playerPromise = game.NewPlayer(info.id, {
         color: 0xffffff,
         inputEnabled: true,
+        playerIndex: info.playerIndex
       });
       if (sessionStorage.username) {
         socket.emit("profileInfo", sessionStorage.username);

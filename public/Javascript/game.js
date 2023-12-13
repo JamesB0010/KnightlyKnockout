@@ -24,7 +24,7 @@ let prevJoyStickData = {
   yPosition: 100,
 };
 
-const FLAGS = {CF_KINEMATIC_OBJECT: 2};
+const FLAGS = { CF_KINEMATIC_OBJECT: 2 };
 
 const gamePromise = new Promise((res, rej) => {
   import("./physics.js").then((info) => {
@@ -358,35 +358,14 @@ const gamePromise = new Promise((res, rej) => {
           rbfrontwallPillar_right.setFriction(WALLFRICTION);
           rbfrontwallPillar_right.setRollingFriction(5);
           APP.physicsWorld.addRigidBody(rbfrontwallPillar_right.body);
-          const capsule = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
-            new THREE.MeshStandardMaterial({ color: 0x808080 }),
-          );
-          capsule.position.set(0, 5, 0);
-          // this.scene.add(capsule);
-          //----------setup wall collisions
-          const rbCapsule = new RigidBody();
-          rbCapsule.CreateCapsule(
-            1,
-            capsule.position,
-            capsule.quaternion,
-            0.4,
-            0.8,
-          );
-          rbCapsule.setRestitution(0.25);
-          rbCapsule.setFriction(1);
-          rbCapsule.setRollingFriction(5);
-          rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
-          rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
-          APP.physicsWorld.addRigidBody(rbCapsule.body);
-          
-          
+
           //add kinematic rb for the enemy player collision
 
           const enemyCapsule = new THREE.Mesh(
             new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
           );
+          enemyCapsule.position.set(-20, 0, 0);
           //this.scene.add(enemyCapsule);
           this.enemyRb = new RigidBody();
           this.enemyRb.CreateKinematicCapsule(1,
@@ -394,14 +373,14 @@ const gamePromise = new Promise((res, rej) => {
             enemyCapsule.quaternion,
             0.4,
             0.8,)
-            this.enemyRb.body.setActivationState(STATE.DISABLE_DEACTIVATION);
-            this.enemyRb.setCollisionFlags(FLAGS.CF_KINEMATIC_OBJECT);
-            APP.physicsWorld.addRigidBody(this.enemyRb.body);
+          this.enemyRb.body.setActivationState(STATE.DISABLE_DEACTIVATION);
+          this.enemyRb.setCollisionFlags(FLAGS.CF_KINEMATIC_OBJECT);
+          APP.physicsWorld.addRigidBody(this.enemyRb.body);
 
 
 
-            this.rigidBodies = [{ mesh: capsule, rigidBody: rbCapsule }];
-            this.tmpTransform = new Ammo.btTransform();
+          this.rigidBodies = [];
+          this.tmpTransform = new Ammo.btTransform();
           //=================================================
           //add skybox
           const textureLoader = new THREE.TextureLoader();
@@ -427,25 +406,19 @@ const gamePromise = new Promise((res, rej) => {
             gltf.recieveShadow = true;
             gltf.scene.position.y = -1.05;
             gltf.scene.scale.multiplyScalar(0.5);
-            gltf.scene.traverse(function (node){
-              if (node.isMesh){node.castShadow = true; node.recieveShadow = true}
+            gltf.scene.traverse(function (node) {
+              if (node.isMesh) { node.castShadow = true; node.recieveShadow = true }
             })
             this.scene.add(gltf.scene);
             numThingsLoaded++;
             setTimeout(CheckEverythingsLoaded, 500);
           });
-          this.fpsCamera = new FirstPersonCamera(
-            this.camera,
-            rbCapsule,
-            Ammo,
-            joyStickData,
-          );
           this.scene.add(new THREE.AmbientLight(0xffffff, 0.4), this.camera);
           let direcLight = new THREE.DirectionalLight(0xffffff, 1);
           direcLight.position.y = 2;
           direcLight.castShadow = true;
-          direcLight.shadow.mapSize.width = 512;  
-          direcLight.shadow.mapSize.height = 512; 
+          direcLight.shadow.mapSize.width = 512;
+          direcLight.shadow.mapSize.height = 512;
           direcLight.shadow.camera.near = 0.1;
           direcLight.shadow.camera.far = 500.0;
           direcLight.shadow.camera.left = -15;
@@ -490,9 +463,12 @@ const gamePromise = new Promise((res, rej) => {
               yPosition: joyStickData.yPosition,
             };
           }
-          this.fpsCamera.movementJoystick = joyStickData;
-          //update the fps cameras position
-          this.fpsCamera.update(deltaTime);
+          try {
+            this.fpsCamera.movementJoystick = joyStickData;
+            //update the fps cameras position
+            this.fpsCamera.update(deltaTime);
+          }
+          catch { };
           //if player isnt null then set their position and update the gltf position
           if (this.player) {
             this.player.position.set(
@@ -512,7 +488,7 @@ const gamePromise = new Promise((res, rej) => {
             const enemyPos = this.enemy.GetPosition();
             let tempTrans = new Ammo.btTransform();
             tempTrans.setIdentity();
-            tempTrans.setOrigin(new Ammo.btVector3(enemyPos.x,enemyPos.y,enemyPos.z));
+            tempTrans.setOrigin(new Ammo.btVector3(enemyPos.x, enemyPos.y, enemyPos.z));
             this.enemyRb.motionState.setWorldTransform(tempTrans);
           }
           APP.physicsWorld.stepSimulation(deltaTime);
@@ -529,11 +505,11 @@ const gamePromise = new Promise((res, rej) => {
               quat.z(),
               quat.w(),
             );
-            try{
+            try {
               this.rigidBodies[i].mesh.position.copy(pos3);
               this.rigidBodies[i].mesh.quaternion.copy(quat3);
             }
-            catch{};
+            catch { };
           }
           this.Render();
         }
@@ -542,7 +518,45 @@ const gamePromise = new Promise((res, rej) => {
         }
         //this is how new players are created and added to the game. this includes the local player and any networked player
         //The function is called from the main.js script
-        NewPlayer(id, { color = 0xff0000, inputEnabled = false }) {
+        NewPlayer(id, { color = 0xff0000, inputEnabled = false, playerIndex = 0 }) {
+          if (id == this.clientId) {
+            const capsule = new THREE.Mesh(
+              new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
+              new THREE.MeshStandardMaterial({ color: 0x808080 }),
+            );
+            if(playerIndex == 0){
+              capsule.position.set(0, 5, 15);
+            }
+            else{
+              capsule.position.set(0, 5, -15);
+            }
+            // this.scene.add(capsule);
+            //----------setup wall collisions
+            const rbCapsule = new RigidBody();
+            rbCapsule.CreateCapsule(
+              1,
+              capsule.position,
+              capsule.quaternion,
+              0.4,
+              0.8,
+            );
+            rbCapsule.setRestitution(0.25);
+            rbCapsule.setFriction(1);
+            rbCapsule.setRollingFriction(5);
+            rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
+            rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
+            APP.physicsWorld.addRigidBody(rbCapsule.body);
+
+            this.rigidBodies.push({ mesh: capsule, rigidBody: rbCapsule });
+
+            this.fpsCamera = new FirstPersonCamera(
+              this.camera,
+              rbCapsule,
+              Ammo,
+              joyStickData,
+            );
+          }
+
           //load the player model
           let playerLoadPromise = this.gltfLoader
             .loadAsync(
@@ -550,8 +564,8 @@ const gamePromise = new Promise((res, rej) => {
             )
             .then((gltf) => {
               gltf.castShadow = true;
-              gltf.scene.traverse(function(node){
-                if(node.isMesh){node.castShadow = true; node.recieveShadow = true};
+              gltf.scene.traverse(function (node) {
+                if (node.isMesh) { node.castShadow = true; node.recieveShadow = true };
               })
               //once the model has loaded add it to the scene then create the new player
               this.scene.add(gltf.scene);
@@ -603,7 +617,7 @@ const gamePromise = new Promise((res, rej) => {
               .get(id)
               .position.set(position.x, position.y, position.z);
             this.players.get(id).updateGltfPosition();
-          } catch {}
+          } catch { }
         }
         onClientDeath() {
           document.dispatchEvent(playerDead);
