@@ -9,6 +9,13 @@ import { Cloud } from "./cloud.js";
 import { PlayerAudio } from "./player-audio.js";
 import serverAddress from "./serverAddress.js";
 
+//setting up collision bit masks
+let colGroupPlayer = 0b1110;
+let colMaskPlayer = 0b0001;
+let colGroupEnvironment = 0b0111; 
+let colGroupEnemy = 0b1101;
+let colMaskEnemy = 0b1111;
+
 let joyStickData = {
   cardinalDirection: "C",
   x: 0,
@@ -183,7 +190,7 @@ const gamePromise = new Promise((res, rej) => {
             new THREE.Vector3(100, 2, 100),
           );
           rbGround.setRestitution(0.99);
-          APP.physicsWorld.addRigidBody(rbGround.body);
+          APP.physicsWorld.addRigidBody(rbGround.body, colGroupEnvironment, colGroupPlayer);
           //----------setup wall collisions
           const WALLFRICTION = 0.4;
           const leftWall = new THREE.Mesh(
@@ -202,7 +209,7 @@ const gamePromise = new Promise((res, rej) => {
           rbLeftWall.setRestitution(0.25);
           rbLeftWall.setFriction(WALLFRICTION);
           rbLeftWall.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbLeftWall.body);
+          APP.physicsWorld.addRigidBody(rbLeftWall.body, colGroupEnvironment, colGroupPlayer);
           const rightWall = new THREE.Mesh(
             new THREE.BoxGeometry(4, 4, 40),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -219,7 +226,7 @@ const gamePromise = new Promise((res, rej) => {
           rbRightWall.setRestitution(0.25);
           rbRightWall.setFriction(WALLFRICTION);
           rbRightWall.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbRightWall.body);
+          APP.physicsWorld.addRigidBody(rbRightWall.body, colGroupEnvironment, colGroupPlayer);
           const backWall_left = new THREE.Mesh(
             new THREE.BoxGeometry(2.8, 4, 10),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -236,7 +243,7 @@ const gamePromise = new Promise((res, rej) => {
           rbBackWall_left.setRestitution(0.25);
           rbBackWall_left.setFriction(WALLFRICTION);
           rbBackWall_left.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbBackWall_left.body);
+          APP.physicsWorld.addRigidBody(rbBackWall_left.body, colGroupEnvironment, colGroupPlayer);
           const backWall_right = new THREE.Mesh(
             new THREE.BoxGeometry(2.8, 4, 10),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -253,7 +260,7 @@ const gamePromise = new Promise((res, rej) => {
           rbBackWall_right.setRestitution(0.25);
           rbBackWall_right.setFriction(WALLFRICTION);
           rbBackWall_right.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbBackWall_right.body);
+          APP.physicsWorld.addRigidBody(rbBackWall_right.body, colGroupEnvironment, colGroupPlayer);
           const backWall_back = new THREE.Mesh(
             new THREE.BoxGeometry(2.8, 4, 10),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -270,7 +277,7 @@ const gamePromise = new Promise((res, rej) => {
           rbBackWall_back.setRestitution(0.25);
           rbBackWall_back.setFriction(WALLFRICTION);
           rbBackWall_back.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbBackWall_back.body);
+          APP.physicsWorld.addRigidBody(rbBackWall_back.body, colGroupEnvironment, colGroupPlayer);
           const frontwall_center = new THREE.Mesh(
             new THREE.BoxGeometry(2.6, 4, 10),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -287,7 +294,7 @@ const gamePromise = new Promise((res, rej) => {
           rbfrontwall_center.setRestitution(0.25);
           rbfrontwall_center.setFriction(WALLFRICTION);
           rbfrontwall_center.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbfrontwall_center.body);
+          APP.physicsWorld.addRigidBody(rbfrontwall_center.body, colGroupEnvironment, colGroupPlayer);
           const frontwall_left = new THREE.Mesh(
             new THREE.BoxGeometry(2.6, 4, 10),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -304,7 +311,7 @@ const gamePromise = new Promise((res, rej) => {
           rbfrontwall_left.setRestitution(0.25);
           rbfrontwall_left.setFriction(WALLFRICTION);
           rbfrontwall_left.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbfrontwall_left.body);
+          APP.physicsWorld.addRigidBody(rbfrontwall_left.body, colGroupEnvironment, colGroupPlayer);
           const frontwall_right = new THREE.Mesh(
             new THREE.BoxGeometry(2.6, 4, 10),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -321,7 +328,7 @@ const gamePromise = new Promise((res, rej) => {
           rbfrontwall_right.setRestitution(0.25);
           rbfrontwall_right.setFriction(WALLFRICTION);
           rbfrontwall_right.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbfrontwall_right.body);
+          APP.physicsWorld.addRigidBody(rbfrontwall_right.body, colGroupEnvironment, colGroupPlayer);
           const frontwallPillar_left = new THREE.Mesh(
             new THREE.CapsuleGeometry(1, 5, 4, 16),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -339,7 +346,7 @@ const gamePromise = new Promise((res, rej) => {
           rbfrontwallPillar_left.setRestitution(0.25);
           rbfrontwallPillar_left.setFriction(WALLFRICTION);
           rbfrontwallPillar_left.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbfrontwallPillar_left.body);
+          APP.physicsWorld.addRigidBody(rbfrontwallPillar_left.body, colGroupEnvironment, colGroupPlayer);
           const frontwallPillar_right = new THREE.Mesh(
             new THREE.CapsuleGeometry(1, 5, 4, 16),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
@@ -357,7 +364,7 @@ const gamePromise = new Promise((res, rej) => {
           rbfrontwallPillar_right.setRestitution(0.25);
           rbfrontwallPillar_right.setFriction(WALLFRICTION);
           rbfrontwallPillar_right.setRollingFriction(5);
-          APP.physicsWorld.addRigidBody(rbfrontwallPillar_right.body);
+          APP.physicsWorld.addRigidBody(rbfrontwallPillar_right.body, colGroupEnvironment, colGroupPlayer);
 
           //add kinematic rb for the enemy player collision
 
@@ -375,7 +382,7 @@ const gamePromise = new Promise((res, rej) => {
             0.8,)
           this.enemyRb.body.setActivationState(STATE.DISABLE_DEACTIVATION);
           this.enemyRb.setCollisionFlags(FLAGS.CF_KINEMATIC_OBJECT);
-          APP.physicsWorld.addRigidBody(this.enemyRb.body);
+          APP.physicsWorld.addRigidBody(this.enemyRb.body, colGroupEnemy, colMaskEnemy);
 
           this.playerSword = new THREE.Mesh(
             new THREE.CapsuleGeometry(0.2, 0.6, 4, 16),
@@ -383,12 +390,11 @@ const gamePromise = new Promise((res, rej) => {
           )
           this.scene.add(this.playerSword);
 
-
-          this.enemySword = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.2, 0.6, 4, 16),
-            new THREE.MeshStandardMaterial({color:0xff0000})
-          );
-          this.scene.add(this.enemySword);
+          this.rbPlayerSword = new RigidBody();
+          this.rbPlayerSword.CreateKinematicCapsule(1, this.playerSword.position, this.playerSword.quaternion, 0.2, 0.6);
+          this.rbPlayerSword.body.setActivationState(STATE.DISABLE_DEACTIVATION);
+          this.rbPlayerSword.setCollisionFlags(FLAGS.CF_KINEMATIC_OBJECT);
+          APP.physicsWorld.addRigidBody(this.rbPlayerSword.body, colGroupPlayer, colMaskPlayer);
 
 
 
@@ -503,6 +509,12 @@ const gamePromise = new Promise((res, rej) => {
             this.playerSword.quaternion.set(boneWorldRot.x , boneWorldRot.y, boneWorldRot.z, boneWorldRot.w);
             this.playerSword.rotation.set(this.playerSword.rotation.x, this.playerSword.rotation.y, this.playerSword.rotation.z + Math.PI * 0.5);
             this.playerSword.translateY(-0.5);
+
+            let tempTrans = new Ammo.btTransform();
+            tempTrans.setIdentity();
+            tempTrans.setOrigin(new Ammo.btVector3(this.playerSword.position.x, this.playerSword.position.y, this.playerSword.position.z));
+            tempTrans.setRotation(new Ammo.btQuaternion(this.playerSword.quaternion.x, this.playerSword.quaternion.y, this.playerSword.quaternion.z, this.playerSword.quaternion.w));
+            this.enemyRb.motionState.setWorldTransform(tempTrans);
           }
           if (gameLoaded) {
             stats.update();
@@ -515,15 +527,6 @@ const gamePromise = new Promise((res, rej) => {
             tempTrans.setIdentity();
             tempTrans.setOrigin(new Ammo.btVector3(enemyPos.x, enemyPos.y, enemyPos.z));
             this.enemyRb.motionState.setWorldTransform(tempTrans);
-
-            let boneWorldPos = new THREE.Vector3();
-            let boneWorldRot = new THREE.Quaternion();
-            this.enemy.gltfScene.getObjectByName('mixamorigRightHand').getWorldPosition(boneWorldPos);
-            this.enemy.gltfScene.getObjectByName('mixamorigRightHand').getWorldQuaternion(boneWorldRot);
-            this.enemySword.position.set(boneWorldPos.x, boneWorldPos.y, boneWorldPos.z);
-            this.enemySword.quaternion.set(boneWorldRot.x , boneWorldRot.y, boneWorldRot.z, boneWorldRot.w);
-            this.enemySword.rotation.set(this.enemySword.rotation.x, this.enemySword.rotation.y, this.enemySword.rotation.z + Math.PI * 0.5);
-            this.enemySword.translateY(-0.5);
           }
           APP.physicsWorld.stepSimulation(deltaTime);
           for (let i = 0; i < this.rigidBodies.length; i++) {
@@ -579,7 +582,7 @@ const gamePromise = new Promise((res, rej) => {
             rbCapsule.setRollingFriction(5);
             rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
             rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
-            APP.physicsWorld.addRigidBody(rbCapsule.body);
+            APP.physicsWorld.addRigidBody(rbCapsule.body, colGroupPlayer, colMaskPlayer);
 
             this.rigidBodies.push({ mesh: capsule, rigidBody: rbCapsule });
 
