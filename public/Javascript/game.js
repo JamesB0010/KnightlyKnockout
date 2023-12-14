@@ -12,6 +12,8 @@ import { Particle } from "./particle.js";
 
 const swordCollisionEvent = new CustomEvent("OnSwordCollision");
 
+const swordBlockEvent = new CustomEvent("OnSwordBlock");
+
 let swordCollisionTimer = 2.0;
 let isSwinging = false;
 
@@ -499,9 +501,16 @@ const gamePromise = new Promise((res, rej) => {
 
         SwordCollided = () => {
           if (isSwinging) {
-            document.dispatchEvent(swordCollisionEvent);
-            this.particles.push(new Particle(this.enemy.position));
-            this.scene.add(this.particles[this.particles.length -1].points);
+            if(this.enemy.GetIsBlocking() == false){
+              document.dispatchEvent(swordCollisionEvent);
+              this.particles.push(new Particle(this.enemy.position));
+              this.scene.add(this.particles[this.particles.length -1].points);
+            }
+            else{
+              document.dispatchEvent(swordBlockEvent);
+              this.particles.push(new Particle(this.enemy.position, "yellow"));
+              this.scene.add(this.particles[this.particles.length -1].points);
+            }
             isSwinging = false;
           }
         }

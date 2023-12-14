@@ -41,6 +41,7 @@ class GameObject extends THREE.Mesh {
     #currentAdditiveAction = "idleAdditive";
     #currentBaseAction = "idleBase";
     #numAnimations;
+    #isBlocking = false;
     constructor({
         height = 1,
         width = 1,
@@ -158,6 +159,14 @@ class GameObject extends THREE.Mesh {
         this.#model.position.z = this.position.z;
     }
 
+    SetIsBlocking(val){
+        this.#isBlocking = val;
+    }
+
+    GetIsBlocking(){
+        return this.#isBlocking;
+    }
+
     UpdateAnimMixer(deltaTime) {
         this.#animationMixer.update(deltaTime);
         this.#leftFoot.rotation.order = "YZX";
@@ -200,6 +209,10 @@ class GameObject extends THREE.Mesh {
         else if (attackType == "heavyAttack"){
             this.#ChangeAdditiveAnimation("hitReactionHead");
         }
+    }
+
+    PlayBlockReactAnim(){
+        this.#ChangeAdditiveAnimation("blockReact");
     }
 
     GetSWingingAnimName(){
@@ -350,7 +363,16 @@ class GameObject extends THREE.Mesh {
         if (nonLoopAnim) {
             setTimeout(() => {
                 console.log("anim over");
-                this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
+                if(animName != "blockReact"){
+                    this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
+                }
+                else{
+                    this.#additiveActions[this.#currentAdditiveAction].weight = 0;
+                    this.#additiveActions["blockIdle"].weight = 1;
+                    this.#activateAction(this.#additiveActions["blockIdle"].action);
+                    this.#activateAction(this.#additiveActions[this.#currentAdditiveAction].action);
+                    this.#currentAdditiveAction = "blockIdle";
+                }
             }, (this.#additiveActions[animName].action._clip.duration * 1000) - 50)
         }
         this.#additiveActions[this.#currentAdditiveAction].weight = 0;
