@@ -22,12 +22,14 @@ gamePromise.then((promise) => {
 
     //setup socket listeners
     //when a client joins the server a setId message will be sent to the client, they set their client id and connection array and make a new player
-    socket.on("setId", (id) => {
-      game.clientId = id;
-      game.connectionArray.push(id);
-      let _playerPromise = game.NewPlayer(id, {
+    socket.on("setId", info => {
+      game.clientId = info.id;
+      game.connectionArray.push(info.id);
+      let _playerPromise = game.NewPlayer(info.id, {
         color: 0xffffff,
         inputEnabled: true,
+        playerIndex: info.playerIndex,
+        isClient: true
       });
       if (sessionStorage.username) {
         socket.emit("profileInfo", sessionStorage.username);
@@ -91,6 +93,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("UpdateNetworkedPlayerPos", (info) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       //use info.id to find a player and then update its position using info.position
       game.UpdateNetworkedPlayer(info.id, info.position);
       if (game.players.get(info.id)) {
@@ -99,6 +105,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedPlayerRotate", (info) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       //how to isolate y axis
       //reference https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation
       let theta_y = Math.atan2(info.rotation[1], info.rotation[3]);
@@ -116,6 +126,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedPlayerStoppedMoving", (id) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       try {
         game.players.get(id).SetAnimationFromVelocities({
           forwardVelocity: 0,
@@ -143,9 +157,14 @@ gamePromise.then((promise) => {
       game.connectionArray = game.connectionArray.filter((connection) => {
         connection != id;
       });
+      alert("enemy left returning to landing page...");
+      setTimeout(()=>{
+        window.location.href = serverAddress;
+      }, 3000);
     });
 
     socket.on("NetworkedPlayerDeath", (info) => {
+      game.players.get(info.id).PlayDeathAnimation();
       setTimeout(() => {
         game.roundManager.playerDead(info.id);
       }, 5000);
@@ -156,6 +175,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("networkedAttack", (info) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       console.log(info);
       try {
         game.players.get(info.id).children[0].PlayRandomAttack();
@@ -164,10 +187,18 @@ gamePromise.then((promise) => {
     });
 
     socket.on("networkedStartBlock", (id) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       game.players.get(id).StartBlock();
     });
 
     socket.on("networkedEndBlock", (id) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       game.players.get(id).EndBlock();
     });
 
@@ -184,8 +215,20 @@ gamePromise.then((promise) => {
       } catch {}
     });
 
+    socket.on("NetworkedSwordHit", ()=>{
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
+      let playerDead = game.player.Damage(25);
+      if (playerDead) {
+        game.onClientDeath();
+      }
+    })
+
     //whenever the local player moves send it to the server
     document.addEventListener("OnClientMove", (e) => {
+      game.player.SetAnimationFromVelocities(e.detail);
       try {
         socket.emit("UpdatePlayerMovement", {
           position: game.player.position,
@@ -196,15 +239,21 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("OnClientStop", (e) => {
+      game.player.SetAnimationFromVelocities({
+        forwardVelocity: 0,
+        sidewaysVelocity: 0,
+      });
       socket.emit("clientStoppedMoving", game.clientId);
     });
 
     //make listener for player death
     document.addEventListener("PlayerDead", (e) => {
+      game.player.PlayDeathAnimation();
       socket.emit("PlayerDeath", { id: game.clientId });
     });
 
     document.addEventListener("Attack", (e) => {
+      game.player.Attack(e.detail.attackName);
       socket.emit("PlayerAttack", {
         id: game.clientId,
         attackName: e.detail.attackName,
@@ -212,10 +261,12 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("startBlock", (e) => {
+      game.player.StartBlock();
       socket.emit("startBlock", game.clientId);
     });
 
     document.addEventListener("endBlock", (e) => {
+      game.player.EndBlock();
       socket.emit("endBlock", game.clientId);
     });
 
@@ -231,11 +282,33 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("OnClientRotate", (e) => {
+      let theta_y = Math.atan2(e.detail.rotation.y, e.detail.rotation.w);
+      let yRotation = [0, Math.sin(theta_y), 0, Math.cos(theta_y)];
+      try{
+        game.player.gltfScene.quaternion.set(
+              yRotation[0],
+              yRotation[1],
+              yRotation[2],
+              yRotation[3],
+            );
+      }
+      catch{}
       socket.emit("PlayerRotate", {
         rotation: e.detail.rotation,
         id: game.clientId,
       });
     });
+
+    document.addEventListener("OnSwordCollision", e =>{
+      console.log("sword Collision detected");
+      if(game.player.GetSWingingAnimName() == "lightAttack"){
+        game.enemy.PlayHurtAnimation("lightAttack");
+      }
+      if(game.player.GetSWingingAnimName() == "heavyAttack"){
+        game.enemy.PlayHurtAnimation("heavyAttack");
+      }
+      socket.emit("clientSwordCollisionWithEnemy")
+    })
 
     function ClientDeath() {
       game.onClientDeath();

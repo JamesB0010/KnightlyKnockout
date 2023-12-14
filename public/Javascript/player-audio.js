@@ -3,7 +3,8 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.m
 
 class PlayerAudio extends THREE.PositionalAudio{
     #attackSoundBuffers =[];
-    #insultSoundBuffers = [];
+    #insultSoundBuffers = {};
+    #insultBuffersLength;
     constructor(soundsToLoad, listener, soundsRootDirectory = "../GameAssets/Sounds/"){
         super(listener);
         const audioLoader = new THREE.AudioLoader();
@@ -22,9 +23,12 @@ class PlayerAudio extends THREE.PositionalAudio{
                 this.setRefDistance(0.6);
             });
         });
+        let i = 0;
         insultSounds.forEach(sound =>{
             audioLoader.load(insultsRootDirectory + sound, buffer =>{
-                this.#insultSoundBuffers.push(buffer);
+                this.#insultSoundBuffers[i] = (buffer);
+                this.#insultBuffersLength = i;
+                i++;
             })
         })
     }
@@ -37,7 +41,7 @@ class PlayerAudio extends THREE.PositionalAudio{
     }
 
     PlayRandomInsult(index = -1){
-        let randNum = Math.floor(Math.random() * this.#insultSoundBuffers.length);
+        let randNum = Math.floor(Math.random() * this.#insultBuffersLength);
         if(index != -1){
             randNum = index;
         }

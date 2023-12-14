@@ -189,7 +189,7 @@ io.on("connection", socket => {
 
   //when someone joins send their socket id to the client to be saved
   console.log("someone joined with id " + socket.id);
-  socket.emit('setId', socket.id);
+  socket.emit('setId', {id: socket.id, playerIndex: connections.length});
   io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
 
   //add this new clients id to the connections array
@@ -206,6 +206,10 @@ io.on("connection", socket => {
 
   socket.on("PlayerRotate", info => {
     socket.broadcast.emit("NetworkedPlayerRotate", info);
+  })
+
+  socket.on("clientSwordCollisionWithEnemy", ()=>{
+    socket.broadcast.emit("NetworkedSwordHit");
   })
 
 

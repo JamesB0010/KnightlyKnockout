@@ -54,10 +54,11 @@ p{
 
 #profilePicture{
   border-radius: 50%; 
-  width: 9.375vw;
-  height: 18.73vh;
+  width: 100px;
+  height: 100px;
   background-image: url("../GameAssets/Images/DefaultKnightFacingLeft.png");
   background-size:     cover;                    
   background-repeat:   no-repeat;
   background-position: center center;
+  object-fit: contain;
 }
