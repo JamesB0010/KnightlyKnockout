@@ -337,12 +337,6 @@ gamePromise.then((promise) => {
       game.ResetPlayerLocation();
     });
 
-    function ClientDeath() {
-      game.onClientDeath();
-    }
-
-    document.getElementById("deathButton").onclick = ClientDeath;
-
     //game loop
     function Animate() {
       requestAnimationFrame((t) => {

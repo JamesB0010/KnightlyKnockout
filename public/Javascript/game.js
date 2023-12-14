@@ -504,15 +504,6 @@ const gamePromise = new Promise((res, rej) => {
             cloudGroup.position.z = Math.random() * 60 - 30;
             this.scene.add(cloudGroup);
           }
-          document.getElementById("healButton").onclick = () => {
-            this.player.Heal(10);
-          };
-          document.getElementById("damageButton").onclick = () => {
-            let playerDead = this.player.Damage(10);
-            if (playerDead) {
-              this.onClientDeath();
-            }
-          };
         }
 
         SwordCollided = () => {
@@ -652,7 +643,7 @@ const gamePromise = new Promise((res, rej) => {
           //credits on how to move a dynamic rigidbody https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=6252
           let playerTrans = this.playerRbCapsule.body.getCenterOfMassTransform();
           playerTrans.setOrigin(new Ammo.btVector3(this.playerStartPosition.x, this.playerStartPosition.y, this.playerStartPosition.z));
-          this.playerRbCapsule.setCenterOfMassTransform(playerTrans);
+          this.playerRbCapsule.body.setCenterOfMassTransform(playerTrans);
           document.dispatchEvent(new CustomEvent("OnClientMove"));
         }
         Render() {
@@ -668,11 +659,11 @@ const gamePromise = new Promise((res, rej) => {
             );
             if (playerIndex == 0) {
               this.playerStartPosition = new THREE.Vector3(0,5,15);
-              capsule.position.set(0, 5, 15);
+              capsule.position.set(0, -0.1, 15);
             }
             else {
               this.playerStartPosition = new THREE.Vector3(0,5,-15);
-              capsule.position.set(0, 5, -15);
+              capsule.position.set(0, -0.1, -15);
             }
             // this.scene.add(capsule);
             //----------setup wall collisions

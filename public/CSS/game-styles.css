@@ -132,23 +132,6 @@ body{
   color:black;
 }
 
-#deathButton{
-  position: absolute;
-  top: 50vh;
-  left: 10vw;
-}
-
-#healButton{
-  position: absolute;
-  top: 45vh;
-  left: 10vw;
-}
-
-#damageButton{
-  position: absolute;
-  top: 40vh;
-  left: 10vw;
-}
 
 .playerLostRound{
   display: none;
