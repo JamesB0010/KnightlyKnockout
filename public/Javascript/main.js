@@ -152,6 +152,7 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedPlayerDeath", (info) => {
+      game.players.get(info.id).PlayDeathAnimation();
       setTimeout(() => {
         game.roundManager.playerDead(info.id);
       }, 5000);
@@ -189,6 +190,13 @@ gamePromise.then((promise) => {
           .children[0].PlayRandomInsult(info.insultIndex);
       } catch {}
     });
+
+    socket.on("NetworkedSwordHit", ()=>{
+      let playerDead = game.player.Damage(25);
+      if (playerDead) {
+        game.onClientDeath();
+      }
+    })
 
     //whenever the local player moves send it to the server
     document.addEventListener("OnClientMove", (e) => {
@@ -262,6 +270,11 @@ gamePromise.then((promise) => {
         id: game.clientId,
       });
     });
+
+    document.addEventListener("OnSwordCollision", e =>{
+      console.log("sword Collision detected");
+      socket.emit("clientSwordCollisionWithEnemy")
+    })
 
     function ClientDeath() {
       game.onClientDeath();

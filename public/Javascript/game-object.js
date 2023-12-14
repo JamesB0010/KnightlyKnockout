@@ -278,8 +278,26 @@ class GameObject extends THREE.Mesh {
         }
     }
 
-    #PlayDeathAnimation() {
+    PlayDeathAnimation() {
+        if(this.#currentBaseAction == "death") return;
+        this.#baseActions[this.#currentBaseAction].weight = 0;
+        this.#additiveActions[this.#currentAdditiveAction].weight = 0;
+        this.#baseActions['death'].weight = 1;
+        
+        this.#activateAction(this.#baseActions["death"].action);
+        this.#activateAction(this.#baseActions[this.#currentBaseAction].action);
+        this.#activateAction(this.#additiveActions[this.#currentAdditiveAction].action);
+        this.#currentAdditiveAction = null;
+        this.#currentBaseAction = "death";
 
+        setTimeout(()=>{
+            this.#currentBaseAction = "idleBase";
+            this.#baseActions["death"].weight = 0;
+            this.#baseActions["idleBase"].weight = 1;
+            this.#activateAction(this.#baseActions["death"].action);
+            this.#activateAction(this.#baseActions["idleBase"].action);
+            this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
+        }, 5000)
     }
 
 
