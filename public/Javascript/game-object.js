@@ -170,11 +170,11 @@ class GameObject extends THREE.Mesh {
         this.#ChangeAdditiveAnimation(animName);
     }
 
-    StartBlock(){
+    StartBlock() {
         this.#ChangeAdditiveAnimation("blockIdle");
     }
 
-    EndBlock(){
+    EndBlock() {
         this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
     }
 
@@ -191,6 +191,25 @@ class GameObject extends THREE.Mesh {
             console.log(this.health);
             this.UpdateBloodSpatterOpacity();
         }
+    }
+
+    PlayHurtAnimation(attackType){
+        if(attackType == "lightAttack"){
+            this.#ChangeAdditiveAnimation("hitReactionGut");
+        }
+        else if (attackType == "heavyAttack"){
+            this.#ChangeAdditiveAnimation("hitReactionHead");
+        }
+    }
+
+    GetSWingingAnimName(){
+        if(this.#additiveActions["lightAttack"].weight == 1){
+            return "lightAttack";
+        }
+        else if(this.#additiveActions["heavyAttack"].weight == 1){
+            return "heavyAttack";
+        }
+        return "null";
     }
     Damage(amount) {
         //return true if this damage caused the player to die
@@ -209,7 +228,7 @@ class GameObject extends THREE.Mesh {
         }
     }
 
-    GetPosition(){
+    GetPosition() {
         return this.#model.position;
     }
 
@@ -278,24 +297,30 @@ class GameObject extends THREE.Mesh {
         }
     }
 
+    FindIsDying(){
+        return this.#baseActions["death"].weight == 1;
+    }
+
     PlayDeathAnimation() {
-        if(this.#currentBaseAction == "death") return;
+        if (this.#currentBaseAction == "death") return;
+
+        this.gltfScene.rotation.y = 0;
         this.#baseActions[this.#currentBaseAction].weight = 0;
         this.#additiveActions[this.#currentAdditiveAction].weight = 0;
         this.#baseActions['death'].weight = 1;
-        
+
         this.#activateAction(this.#baseActions["death"].action);
         this.#activateAction(this.#baseActions[this.#currentBaseAction].action);
         this.#activateAction(this.#additiveActions[this.#currentAdditiveAction].action);
-        this.#currentAdditiveAction = null;
-        this.#currentBaseAction = "death";
 
-        setTimeout(()=>{
-            this.#currentBaseAction = "idleBase";
-            this.#baseActions["death"].weight = 0;
-            this.#baseActions["idleBase"].weight = 1;
+        setTimeout(() => {
+            this.#baseActions[this.#currentBaseAction].weight = 1;
+            this.#additiveActions[this.#currentAdditiveAction].weight = 1;
+            this.#baseActions['death'].weight = 0;
+
             this.#activateAction(this.#baseActions["death"].action);
-            this.#activateAction(this.#baseActions["idleBase"].action);
+            this.#activateAction(this.#baseActions[this.#currentBaseAction].action);
+            this.#activateAction(this.#additiveActions[this.#currentAdditiveAction].action);
             this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
         }, 5000)
     }
@@ -339,7 +364,7 @@ class GameObject extends THREE.Mesh {
         //forwardVelocity
         //sidewaysVelocity
 
-        if (!velocities) {
+        if (!velocities || this.FindIsDying()) {
             return;
         }
 

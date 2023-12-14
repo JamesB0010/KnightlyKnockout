@@ -8,6 +8,7 @@ import { RoundManager } from "./round-manager.js";
 import { Cloud } from "./cloud.js";
 import { PlayerAudio } from "./player-audio.js";
 import serverAddress from "./serverAddress.js";
+import { Particle } from "./particle.js";
 
 const swordCollisionEvent = new CustomEvent("OnSwordCollision");
 
@@ -17,13 +18,6 @@ let isSwinging = false;
 document.addEventListener("Attack", () => {
   isSwinging = true;
 })
-
-const SwordCollided = () => {
-  if (isSwinging) {
-    document.dispatchEvent(swordCollisionEvent);
-    isSwinging = false;
-  }
-}
 
 const CountdownSwordCollisionTimer = (dt) => {
   if (isSwinging) {
@@ -126,6 +120,8 @@ const gamePromise = new Promise((res, rej) => {
           //this clients socket id
           this.clientId;
           this.roundManager;
+
+          this.particles = [];
         }
         OnWindowResize(game) {
           //making window responsive
@@ -187,21 +183,6 @@ const gamePromise = new Promise((res, rej) => {
           window.addEventListener("resize", () => {
             this.OnWindowResize(this);
           });
-          //add pointMaterials for lesson
-          const radius = 7;
-          const widthSegments = 12;
-          const heightSegments = 8;
-          const geometry = new THREE.SphereGeometry(
-            radius,
-            widthSegments,
-            heightSegments,
-          );
-          const material = new THREE.PointsMaterial({
-            color: "red",
-            size: 0.2,
-          });
-          const points = new THREE.Points(geometry, material);
-          this.scene.add(points);
 
           //================Physics init stuff==================
           //this code spawns a three js box where the physics world box exists, uncomment the scene.add line to see it in the scene
@@ -516,6 +497,15 @@ const gamePromise = new Promise((res, rej) => {
           };
         }
 
+        SwordCollided = () => {
+          if (isSwinging) {
+            document.dispatchEvent(swordCollisionEvent);
+            this.particles.push(new Particle(this.enemy.position));
+            this.scene.add(this.particles[this.particles.length -1].points);
+            isSwinging = false;
+          }
+        }
+
         //credit for tutorial on collision detection with ammo https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef
         DetectCollision() {
 
@@ -534,7 +524,7 @@ const gamePromise = new Promise((res, rej) => {
 
             if (!rb0.isSword && !rb1.isSword) continue;
 
-            SwordCollided();
+            this.SwordCollided();
             return;
           }
 
@@ -621,6 +611,15 @@ const gamePromise = new Promise((res, rej) => {
           }
 
           this.DetectCollision();
+
+          this.particles.forEach(particle =>{
+            let destroyParticle = particle.update(deltaTime);
+            if(destroyParticle){
+              let ptcle = this.particles.shift();
+              ptcle.points.position.set(0, -30, 0);
+            }
+          })
+
           this.Render();
         }
         Render() {
@@ -696,24 +695,29 @@ const gamePromise = new Promise((res, rej) => {
               //update appropriate game variables
               if (inputEnabled) {
                 this.player = _newPlayer;
-                //create the round manager
-                this.roundManager = new RoundManager(this.clientId);
+                if(this.roundManager == undefined){
+                  //create the round manager
+                  this.roundManager = new RoundManager(this.clientId);
+                };
               } else {
                 this.enemy = _newPlayer;
+                if(this.roundManager == undefined){
+                  this.roundManager = new RoundManager(this.clientId);
+                }
               }
               this.gameObjects.push(_newPlayer);
               this.players.set(id, _newPlayer);
               //console.log(this.players);
               this.scene.add(_newPlayer);
-              try {
+              //try {
                 this.roundManager.addKeyValToMap(id, 0);
-              }
-              catch {
-                alert("A Fatal error occured returning to landing page, please try again");
-                setTimeout(() => {
-                  window.location.href = serverAddress;
-                }, 3000);
-              }
+              //}
+              // catch {
+              //   alert("A Fatal error occured returning to landing page, please try again");
+              //   setTimeout(() => {
+              //     window.location.href = serverAddress;
+              //   }, 3000);
+              // }
               _newPlayer.add(
                 new PlayerAudio(
                   ["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],

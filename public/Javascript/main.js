@@ -93,6 +93,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("UpdateNetworkedPlayerPos", (info) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       //use info.id to find a player and then update its position using info.position
       game.UpdateNetworkedPlayer(info.id, info.position);
       if (game.players.get(info.id)) {
@@ -101,6 +105,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedPlayerRotate", (info) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       //how to isolate y axis
       //reference https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation
       let theta_y = Math.atan2(info.rotation[1], info.rotation[3]);
@@ -118,6 +126,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedPlayerStoppedMoving", (id) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       try {
         game.players.get(id).SetAnimationFromVelocities({
           forwardVelocity: 0,
@@ -163,6 +175,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("networkedAttack", (info) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       console.log(info);
       try {
         game.players.get(info.id).children[0].PlayRandomAttack();
@@ -171,10 +187,18 @@ gamePromise.then((promise) => {
     });
 
     socket.on("networkedStartBlock", (id) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       game.players.get(id).StartBlock();
     });
 
     socket.on("networkedEndBlock", (id) => {
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       game.players.get(id).EndBlock();
     });
 
@@ -192,6 +216,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedSwordHit", ()=>{
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
       let playerDead = game.player.Damage(25);
       if (playerDead) {
         game.onClientDeath();
@@ -273,6 +301,12 @@ gamePromise.then((promise) => {
 
     document.addEventListener("OnSwordCollision", e =>{
       console.log("sword Collision detected");
+      if(game.player.GetSWingingAnimName() == "lightAttack"){
+        game.enemy.PlayHurtAnimation("lightAttack");
+      }
+      if(game.player.GetSWingingAnimName() == "heavyAttack"){
+        game.enemy.PlayHurtAnimation("heavyAttack");
+      }
       socket.emit("clientSwordCollisionWithEnemy")
     })
 
