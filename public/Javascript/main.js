@@ -218,12 +218,12 @@ gamePromise.then((promise) => {
       } catch {}
     });
 
-    socket.on("NetworkedSwordHit", ()=>{
+    socket.on("NetworkedSwordHit", (damage)=>{
       try{
         if (game.player.FindIsDying()) return;
       }
       catch{};
-      let playerDead = game.player.Damage(25);
+      let playerDead = game.player.Damage(damage);
       game.particles.push(new Particle(game.player.position));
       game.scene.add(game.particles[game.particles.length -1].points);
       if (playerDead) {
@@ -315,13 +315,16 @@ gamePromise.then((promise) => {
 
     document.addEventListener("OnSwordCollision", e =>{
       console.log("sword Collision detected");
+      let damage = 0;
       if(game.player.GetSWingingAnimName() == "lightAttack"){
         game.enemy.PlayHurtAnimation("lightAttack");
+        damage = 25;
       }
       if(game.player.GetSWingingAnimName() == "heavyAttack"){
         game.enemy.PlayHurtAnimation("heavyAttack");
+        damage = 40;
       }
-      socket.emit("clientSwordCollisionWithEnemy")
+      socket.emit("clientSwordCollisionWithEnemy", damage);
     })
 
     document.addEventListener("OnSwordBlock", e=>{

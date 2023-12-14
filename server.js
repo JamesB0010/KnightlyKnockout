@@ -208,8 +208,8 @@ io.on("connection", socket => {
     socket.broadcast.emit("NetworkedPlayerRotate", info);
   })
 
-  socket.on("clientSwordCollisionWithEnemy", ()=>{
-    socket.broadcast.emit("NetworkedSwordHit");
+  socket.on("clientSwordCollisionWithEnemy", (damage)=>{
+    socket.broadcast.emit("NetworkedSwordHit", damage);
   })
 
   socket.on("clientBlockCollision", ()=>{

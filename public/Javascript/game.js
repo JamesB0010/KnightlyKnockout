@@ -17,8 +17,23 @@ const swordBlockEvent = new CustomEvent("OnSwordBlock");
 let swordCollisionTimer = 2.0;
 let isSwinging = false;
 
-document.addEventListener("Attack", () => {
-  isSwinging = true;
+let lightAttackLength = 1899;
+let heavyAttackLength = 2299;
+let timeToCooldown = 2299;
+
+document.addEventListener("Attack", (e) => {
+  if(e.detail.attackName == "lightAttack"){
+    setTimeout(()=>{
+      isSwinging = true;
+      timeToCooldown = (lightAttackLength - 200) * 0.001;
+    }, 200);
+  }
+  else if(e.detail.attackName == "heavyAttack"){
+    setTimeout(()=>{
+      isSwinging = true;
+      timeToCooldown = (lightAttackLength - 800) * 0.001
+    }, 800)
+  }
 })
 
 const CountdownSwordCollisionTimer = (dt) => {
