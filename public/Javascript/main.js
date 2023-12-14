@@ -1,6 +1,7 @@
 //import * as THREE from 'three';
 //credits for attack icon https://www.flaticon.com/free-icon/slash_4334055?term=attack&page=2&position=19&origin=tag&related_id=4334055
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
+import { Particle } from "./particle.js";
 
 import serverAddress from "./serverAddress.js";
 console.log(serverAddress);
@@ -192,6 +193,7 @@ gamePromise.then((promise) => {
       }
       catch{};
       game.players.get(id).StartBlock();
+      game.players.get(id).SetIsBlocking(true);
     });
 
     socket.on("networkedEndBlock", (id) => {
@@ -200,6 +202,7 @@ gamePromise.then((promise) => {
       }
       catch{};
       game.players.get(id).EndBlock();
+      game.players.get(id).SetIsBlocking(false);
     });
 
     socket.on("networkedPlayerInsult", (info) => {
@@ -221,9 +224,20 @@ gamePromise.then((promise) => {
       }
       catch{};
       let playerDead = game.player.Damage(25);
+      game.particles.push(new Particle(game.player.position));
+      game.scene.add(game.particles[game.particles.length -1].points);
       if (playerDead) {
         game.onClientDeath();
       }
+    })
+
+    socket.on("NetworkedBlockCollision", ()=>{
+      try{
+        if (game.players.get(info.id).FindIsDying()) return;
+      }
+      catch{};
+      game.particles.push(new Particle(game.player.position, "yellow"));
+      game.scene.add(game.particles[game.particles.length -1].points);
     })
 
     //whenever the local player moves send it to the server
@@ -308,6 +322,12 @@ gamePromise.then((promise) => {
         game.enemy.PlayHurtAnimation("heavyAttack");
       }
       socket.emit("clientSwordCollisionWithEnemy")
+    })
+
+    document.addEventListener("OnSwordBlock", e=>{
+      console.log("Sword block detected");
+      game.enemy.PlayBlockReactAnim();
+      socket.emit("clientBlockCollision");
     })
 
     function ClientDeath() {

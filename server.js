@@ -212,6 +212,10 @@ io.on("connection", socket => {
     socket.broadcast.emit("NetworkedSwordHit");
   })
 
+  socket.on("clientBlockCollision", ()=>{
+    socket.broadcast.emit("NetworkedBlockCollision");
+  })
+
 
 
   //make every client send an update player movement to set all of the clients networked players (other player) to the correct position

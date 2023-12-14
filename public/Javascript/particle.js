@@ -1,7 +1,7 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js";
 
 class Particle{
-    constructor(position){
+    constructor(position, color= "red"){
         const radius = 0.1;
           const widthSegments = 10;
           const heightSegments = 10;
@@ -12,7 +12,7 @@ class Particle{
             heightSegments,
           );
           const material = new THREE.PointsMaterial({
-            color: "red",
+            color: color,
             size: 0.2,
           });
           this.points = new THREE.Points(geometry, material);
