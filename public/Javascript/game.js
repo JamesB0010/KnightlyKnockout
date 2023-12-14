@@ -104,6 +104,7 @@ const gamePromise = new Promise((res, rej) => {
           OnEverythingLoaded();
         }
       }
+
       class Game {
         constructor() {
           this.scene;
@@ -395,7 +396,7 @@ const gamePromise = new Promise((res, rej) => {
             new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
             new THREE.MeshStandardMaterial({ color: 0x808080 }),
           );
-          enemyCapsule.position.set(-20, 0, 0);
+          enemyCapsule.position.set(0, -30, 0);
           //this.scene.add(enemyCapsule);
           this.enemyRb = new RigidBody();
           this.enemyRb.CreateKinematicCapsule(1,
@@ -501,15 +502,15 @@ const gamePromise = new Promise((res, rej) => {
 
         SwordCollided = () => {
           if (isSwinging) {
-            if(this.enemy.GetIsBlocking() == false){
+            if (this.enemy.GetIsBlocking() == false) {
               document.dispatchEvent(swordCollisionEvent);
               this.particles.push(new Particle(this.enemy.position));
-              this.scene.add(this.particles[this.particles.length -1].points);
+              this.scene.add(this.particles[this.particles.length - 1].points);
             }
-            else{
+            else {
               document.dispatchEvent(swordBlockEvent);
               this.particles.push(new Particle(this.enemy.position, "yellow"));
-              this.scene.add(this.particles[this.particles.length -1].points);
+              this.scene.add(this.particles[this.particles.length - 1].points);
             }
             isSwinging = false;
           }
@@ -621,15 +622,23 @@ const gamePromise = new Promise((res, rej) => {
 
           this.DetectCollision();
 
-          this.particles.forEach(particle =>{
+          this.particles.forEach(particle => {
             let destroyParticle = particle.update(deltaTime);
-            if(destroyParticle){
+            if (destroyParticle) {
               let ptcle = this.particles.shift();
               ptcle.points.position.set(0, -30, 0);
             }
           })
 
           this.Render();
+        }
+
+        ResetPlayerLocation() {
+          //credits on how to move a dynamic rigidbody https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=6252
+          let playerTrans = this.playerRbCapsule.body.getCenterOfMassTransform();
+          playerTrans.setOrigin(new Ammo.btVector3(this.playerStartPosition.x, this.playerStartPosition.y, this.playerStartPosition.z));
+          this.playerRbCapsule.setCenterOfMassTransform(playerTrans);
+          document.dispatchEvent(new CustomEvent("OnClientMove"));
         }
         Render() {
           this.renderer.render(this.scene, this.camera);
@@ -643,34 +652,36 @@ const gamePromise = new Promise((res, rej) => {
               new THREE.MeshStandardMaterial({ color: 0x808080 }),
             );
             if (playerIndex == 0) {
+              this.playerStartPosition = new THREE.Vector3(0,5,15);
               capsule.position.set(0, 5, 15);
             }
             else {
+              this.playerStartPosition = new THREE.Vector3(0,5,-15);
               capsule.position.set(0, 5, -15);
             }
             // this.scene.add(capsule);
             //----------setup wall collisions
-            const rbCapsule = new RigidBody();
-            rbCapsule.CreateCapsule(
+            this.playerRbCapsule = new RigidBody();
+            this.playerRbCapsule.CreateCapsule(
               1,
               capsule.position,
               capsule.quaternion,
               0.4,
               0.8,
             );
-            rbCapsule.setRestitution(0.25);
-            rbCapsule.setFriction(1);
-            rbCapsule.setRollingFriction(5);
-            rbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
-            rbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
-            rbCapsule.body.isEnvironment = false;
-            APP.physicsWorld.addRigidBody(rbCapsule.body, colGroupPlayer, colMaskPlayer);
+            this.playerRbCapsule.setRestitution(0.25);
+            this.playerRbCapsule.setFriction(1);
+            this.playerRbCapsule.setRollingFriction(5);
+            this.playerRbCapsule.body.setActivationState(STATE.DISABLE_DEACTIVATION);
+            this.playerRbCapsule.body.setAngularFactor(new Ammo.btVector3(0, 1, 0));
+            this.playerRbCapsule.body.isEnvironment = false;
+            APP.physicsWorld.addRigidBody(this.playerRbCapsule.body, colGroupPlayer, colMaskPlayer);
 
-            this.rigidBodies.push({ mesh: capsule, rigidBody: rbCapsule });
+            this.rigidBodies.push({ mesh: capsule, rigidBody: this.playerRbCapsule });
 
             this.fpsCamera = new FirstPersonCamera(
               this.camera,
-              rbCapsule,
+              this.playerRbCapsule,
               Ammo,
               joyStickData,
             );
@@ -692,8 +703,8 @@ const gamePromise = new Promise((res, rej) => {
                 gravityEnabled: true,
                 position: {
                   x: 0,
-                  y: -0.245,
-                  z: 5,
+                  y: -20,
+                  z: 0
                 },
                 color: color,
                 inputEnabled: inputEnabled,
@@ -704,13 +715,13 @@ const gamePromise = new Promise((res, rej) => {
               //update appropriate game variables
               if (inputEnabled) {
                 this.player = _newPlayer;
-                if(this.roundManager == undefined){
+                if (this.roundManager == undefined) {
                   //create the round manager
                   this.roundManager = new RoundManager(this.clientId);
                 };
               } else {
                 this.enemy = _newPlayer;
-                if(this.roundManager == undefined){
+                if (this.roundManager == undefined) {
                   this.roundManager = new RoundManager(this.clientId);
                 }
               }
@@ -719,7 +730,7 @@ const gamePromise = new Promise((res, rej) => {
               //console.log(this.players);
               this.scene.add(_newPlayer);
               //try {
-                this.roundManager.addKeyValToMap(id, 0);
+              this.roundManager.addKeyValToMap(id, 0);
               //}
               // catch {
               //   alert("A Fatal error occured returning to landing page, please try again");

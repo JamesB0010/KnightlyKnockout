@@ -143,12 +143,12 @@ gamePromise.then((promise) => {
       //try to send the player position however if the player hasnt loaded in yet just send a default position
       try {
         socket.emit("UpdatePlayerMovement", {
-          position: game.player.position,
+          position: new THREE.Vector3(game.playerRbCapsule.body.getCenterOfMassTransform().getOrigin().x(), game.playerRbCapsule.body.getCenterOfMassTransform().getOrigin().y(), game.playerRbCapsule.body.getCenterOfMassTransform().getOrigin().z()),
           id: game.clientId,
         });
       } catch {
         socket.emit("UpdatePlayerMovement", {
-          position: new THREE.Vector3(0, -0.245, 5),
+          position: new THREE.Vector3(0, -5, 5),
           id: game.clientId,
         });
       }
@@ -220,7 +220,7 @@ gamePromise.then((promise) => {
 
     socket.on("NetworkedSwordHit", ()=>{
       try{
-        if (game.players.get(info.id).FindIsDying()) return;
+        if (game.player.FindIsDying()) return;
       }
       catch{};
       let playerDead = game.player.Damage(25);
@@ -245,7 +245,7 @@ gamePromise.then((promise) => {
       game.player.SetAnimationFromVelocities(e.detail);
       try {
         socket.emit("UpdatePlayerMovement", {
-          position: game.player.position,
+          position: new THREE.Vector3(game.playerRbCapsule.body.getCenterOfMassTransform().getOrigin().x(), game.playerRbCapsule.body.getCenterOfMassTransform().getOrigin().y(), game.playerRbCapsule.body.getCenterOfMassTransform().getOrigin().z()),
           id: game.clientId,
           velocities: e.detail,
         });
@@ -329,6 +329,10 @@ gamePromise.then((promise) => {
       game.enemy.PlayBlockReactAnim();
       socket.emit("clientBlockCollision");
     })
+
+    document.addEventListener("OnResetPositions", e =>{
+      game.ResetPlayerLocation();
+    });
 
     function ClientDeath() {
       game.onClientDeath();

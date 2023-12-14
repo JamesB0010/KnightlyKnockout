@@ -22,14 +22,15 @@ class InputController {
         this.previousKeys = {};
         this.touchDown = false;
         this.prevTouchDown = false;
+        this.timeSinceLastAttack = 0.0;
 
         //add event listeners for mousemove events
 
         //credits for the if statement https://github.com/bobboteck/JoyStick/blob/master/joy.js
-        if("ontouchstart" in document.documentElement){
+        if ("ontouchstart" in document.documentElement) {
 
         }
-        else{
+        else {
             document.addEventListener("mousedown", e => this.onMouseDown_(e), false);
             document.addEventListener("mouseup", e => this.onMouseUp_(e), false);
             document.addEventListener("mousemove", e => this.onMouseMove_(e), false);
@@ -48,7 +49,7 @@ class InputController {
                 e.button = 0;
                 this.onMouseDown_(e);
             }
-            else if(e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")){
+            else if (e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")) {
                 e.button = 2;
                 this.onMouseDown_(e);
             }
@@ -62,7 +63,7 @@ class InputController {
                 e.button = 0;
                 this.onMouseUp_(e);
             }
-            else if(e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")){
+            else if (e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")) {
                 e.button = 2;
                 this.onMouseUp_(e);
             }
@@ -92,12 +93,17 @@ class InputController {
     onMouseUp_(e) {
         switch (e.button) {
             case 0: {
+                if (this.timeSinceLastAttack < 2.5) {
+                    this.current_.leftButton = false;
+                    this.current_.leftButtonDownTimer = 0;
+                    return;
+                }
                 let attackTypeThreshold = 0.5;
-                console.log(this.current_.leftButtonDownTimer >= attackTypeThreshold ? 4 : 7);
                 const attack = new CustomEvent("Attack", { detail: { attackName: this.current_.leftButtonDownTimer >= attackTypeThreshold ? "heavyAttack" : "lightAttack" } });
+                document.dispatchEvent(attack);
+                this.timeSinceLastAttack = 0.0;
                 this.current_.leftButton = false;
                 this.current_.leftButtonDownTimer = 0;
-                document.dispatchEvent(attack);
                 break;
             }
             case 2: {
@@ -141,12 +147,12 @@ class InputController {
             this.previous_ = { ...this.current_ };
         }
 
-        if(this.prevTouchDown == false && this.touchDown == true){
+        if (this.prevTouchDown == false && this.touchDown == true) {
             this.current_.mouseXDelta = 0;
             this.current_.mouseYDelta = 0;
             this.prevTouchDown = true;
         }
-        else{
+        else {
             this.current_.mouseXDelta = differenceX;
             this.current_.mouseYDelta = differenceY;
         }
@@ -170,6 +176,9 @@ class InputController {
         }
         if (this.current_.leftButton) {
             this.current_.leftButtonDownTimer += deltaTime;
+        }
+        if (this.timeSinceLastAttack < 3) {
+            this.timeSinceLastAttack += deltaTime;
         }
     }
 

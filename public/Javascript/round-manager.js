@@ -1,6 +1,8 @@
 import serverAddress from "./serverAddress.js";
 const roundCounterDom = document.getElementById("roundCounter");
 
+const resetPositionsEvent = new CustomEvent("OnResetPositions");
+
 class RoundManager{
     //private:
     #roundNumber;
@@ -58,6 +60,7 @@ class RoundManager{
     }
 
     playerDead(Id){
+        document.dispatchEvent(resetPositionsEvent);
         for (let [key, value] of this.#playerScores){
             if(key != Id){
                 let newScore = this.#playerScores.get(key) + 1;
