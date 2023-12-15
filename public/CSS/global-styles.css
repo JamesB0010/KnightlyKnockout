@@ -115,6 +115,8 @@ p{
   border-bottom-style: solid;
   border-bottom-color: white;
   border-bottom-width: 2px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 #createAGameDiv{
@@ -138,7 +140,7 @@ p{
   background-color: #022b2f;
   height: 15%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   border-top-style: solid;
   border-bottom-style: solid;

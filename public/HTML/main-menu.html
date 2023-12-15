@@ -17,9 +17,12 @@
       <p>Create A Game</p>
       <div id = "createAGameDiv">
         <input type="text" id = "GameName" placeholder="Game Name">
+        <input list = "gameModes" placeholder="Game Mode">
+        <datalist id = "gameModes">
+          <option value="1v1"></option>
+        </datalist>
         <button id = "createGameButton">Create Game</button>
-      </div><br>
-      <button onclick = "redirectToMainGame()">Start game</button>
+      </div>
     </div>
     <script src="/socket.io/socket.io.js"></script> <!-- use the library -->
     <script type = "module" src="../Javascript/main-menu.js"></script>
