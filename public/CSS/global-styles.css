@@ -1,3 +1,38 @@
+@font-face {
+  font-family: myFont;
+  src: url(../GameAssets/Fonts/MedivalFont.ttf);
+}
+
+@font-face {
+  font-family: myFont2;
+  src: url(../GameAssets/Fonts/MedievalSharp-Book.ttf);
+}
+
+p{
+  font-family: myFont2;
+}
+
+h1{
+  font-family: myFont;
+}
+
+a{
+  font-family: myFont2;
+}
+
+label{
+  font-family: myFont2;
+}
+
+button{
+  font-family: myFont2;
+}
+
+input{
+  font-family: myFont2;
+}
+
+
 body{
   margin:0;
   padding:0;
@@ -61,4 +96,58 @@ p{
   background-repeat:   no-repeat;
   background-position: center center;
   object-fit: contain;
+}
+
+#serverListDiv{
+  width: 60vw;
+  height:45vh;
+  background-color: black;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-left-color: white;
+  border-right-color: white;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: white;
+  border-bottom-width: 2px;
+}
+
+#createAGameDiv{
+  width: 60vw;
+  height:15vh;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-style: solid;
+  border-color: white;
+  border-width: 2px;
+}
+
+#createAGameDiv input{
+  height: 40%;
+}
+
+.GameEntryDiv{
+  width: 100%;
+  background-color: #022b2f;
+  height: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-top-color: white;
+  border-bottom-color: white;
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.GameEntryDiv p{
+  padding-right: 2.5%;
 }

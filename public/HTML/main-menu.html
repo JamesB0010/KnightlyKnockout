@@ -5,13 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../GameAssets/Images/DefaultKnightFacingLeft.png">
     <title>Create/Join a Game</title>
-    <script src="../Javascript/main-menu.js" defer></script>
     <link rel="stylesheet" href="../CSS/global-styles.css">
-</head>
-<body>
-  <div id = "backgroundDiv">
-    <h1>Main Menu</h1>
-    <button onclick = "redirectToMainGame()">Start game</button>
-  </div>
+  </head>
+  <body>
+    <div id = "backgroundDiv">
+      <h1>Main Menu</h1>
+      <p>Find A Game</p>
+      <div id = "serverListDiv">
+        
+      </div><br>
+      <p>Create A Game</p>
+      <div id = "createAGameDiv">
+        <input type="text" id = "GameName" placeholder="Game Name">
+        <button id = "createGameButton">Create Game</button>
+      </div><br>
+      <button onclick = "redirectToMainGame()">Start game</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script> <!-- use the library -->
+    <script type = "module" src="../Javascript/main-menu.js"></script>
 </body>
 </html>

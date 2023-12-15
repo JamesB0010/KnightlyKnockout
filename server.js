@@ -28,6 +28,8 @@ const multer = require('multer');
 
 const fs = require('fs');
 
+let Games = new Map();
+
 
 //this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
 //so if you re enable these comments make sure there is an images folder in the project
@@ -75,7 +77,6 @@ let backgroundSongs;
 fs.promises.readdir("./ServerRescources/Sounds/BackgroundMusic").then((files) =>{
   backgroundSongs = files;
 })
-
 
 
 app.get("/randomSong", (req, res) => {
@@ -261,6 +262,25 @@ io.on("connection", socket => {
     playerUsernames.delete(socket.id);
   })
 });
+
+
+//---------Lobby namespace
+const lobby = io.of("/Lobby");
+
+lobby.on("connection", socket =>{
+  console.log("someone connected to the lobby");
+  socket.emit("updateLobbyList", Object.fromEntries(Games));
+
+
+  socket.on("CreateNewGame", gameName =>{
+    Games.set(gameName, {gameMode: "1v1", playersInGame: "0/2"});
+    lobby.emit("updateLobbyList", Object.fromEntries(Games));
+  })
+
+  socket.on('disconnect', ()=>{
+    console.log("someone dissconnected from the lobby");
+  })
+})
 
 
 
