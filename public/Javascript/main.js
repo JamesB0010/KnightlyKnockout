@@ -21,6 +21,18 @@ gamePromise.then((promise) => {
     let usernamesMap = new Map();
     let latestClient;
 
+    socket.on("getStoredLobbyId", ()=>{
+      console.log(sessionStorage);
+      socket.emit("returnStoredLobbyId", sessionStorage.getItem("lobbyId"));
+    })
+
+    socket.on("errorReturnToMenu", ()=>{
+      alert("error loading in please join a different game");
+      setTimeout(()=>{
+        window.location.href = serverAddress;
+      }, 3000);
+    })
+
     //setup socket listeners
     //when a client joins the server a setId message will be sent to the client, they set their client id and connection array and make a new player
     socket.on("setId", info => {

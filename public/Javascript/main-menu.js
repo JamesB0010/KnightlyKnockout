@@ -49,9 +49,23 @@ socket.on("updateLobbyList", lobbyList => {
   DisplayGames(lobbyList);
 })
 
+let lobbyIdIsStored = false;
+sessionStorage.removeItem("lobbyId");
+socket.on("lobbyId", lobbyId=>{
+  try{
+    sessionStorage.setItem("lobbyId", lobbyId);
+    lobbyIdIsStored = true;
+  }
+  catch{
+    alert("something went wrong with the session storage :(");
+  }
+});
+
 
 socket.on("permissionToJoinGameGranted", ()=>{
-  window.location.href = "./game.html";
+  if(lobbyIdIsStored){
+    window.location.href = "./game.html";
+  }
 })
 
 socket.on("permissionToJoinGameRejected", ()=>{
