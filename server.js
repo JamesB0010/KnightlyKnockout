@@ -199,7 +199,9 @@ io.on("connection", socket => {
       catch{
         socket.emit("errorReturnToMenu");
       }
-      res();
+      setTimeout(()=>{
+        res();
+      }, 10000);
     })
   }).then(()=>{
     console.log(lobbySocketIdMap);
