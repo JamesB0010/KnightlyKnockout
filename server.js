@@ -277,6 +277,20 @@ lobby.on("connection", socket =>{
     lobby.emit("updateLobbyList", Object.fromEntries(Games));
   })
 
+  socket.on("joiningGame", gameName =>{
+    let gameSettings = Games.get(gameName);
+    let numPlayersInGame = gameSettings["playersInGame"].substring(0, 1);
+    if(numPlayersInGame >= 2){
+      socket.emit("permissionToJoinGameRejected");
+    }
+    else{
+      numPlayersInGame ++;
+      gameSettings["playersInGame"] = `${numPlayersInGame}/2`;
+      lobby.emit("updateLobbyList", Object.fromEntries(Games));
+      socket.emit("permissionToJoinGameGranted");
+    }
+  })
+
   socket.on('disconnect', ()=>{
     console.log("someone dissconnected from the lobby");
   })

@@ -20,8 +20,14 @@ function DisplayGames(gamesMap) {
     serverListDiv.children[i].innerHTML += `<p>|</p>`;
     serverListDiv.children[i].innerHTML += `<p>Players in Game: ${value.playersInGame}</p>`;
     serverListDiv.children[i].innerHTML += `<p>|</p>`;
-    serverListDiv.children[i].innerHTML += `<button onclick = 'window.location.href = "./game.html";'>Join Game</button>`;
+    serverListDiv.children[i].innerHTML += `<button class = "joinGameButton">Join Game</button>`;
     i++;
+    
+    Array.from(document.getElementsByClassName("joinGameButton")).forEach(button => {
+      button.addEventListener("click", ()=>{
+        socket.emit("joiningGame", key);
+      })
+    });
   }
 }
 
@@ -43,3 +49,11 @@ socket.on("updateLobbyList", lobbyList => {
   DisplayGames(lobbyList);
 })
 
+
+socket.on("permissionToJoinGameGranted", ()=>{
+  window.location.href = "./game.html";
+})
+
+socket.on("permissionToJoinGameRejected", ()=>{
+  alert("Your request to join a game was rejected, this may be bacuase the lobby is already full");
+})
