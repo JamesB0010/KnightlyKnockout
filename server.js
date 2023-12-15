@@ -266,8 +266,7 @@ io.on("connection", socket => {
   
     socket.on("PlayerDeath", info => {
       socket.broadcast.to(roomName).emit("NetworkedPlayerDeath", info);
-      socket.to(roomName).emit("ResetClientHealth");
-      socket.broadcast.to(roomName).emit("ResetClientHealth");
+      io.to(roomName).emit("ResetClientHealth");
     })
   
     //on disconnect
