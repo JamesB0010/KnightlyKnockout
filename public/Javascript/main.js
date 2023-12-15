@@ -9,8 +9,7 @@ console.log(serverAddress);
 let gamePromise = import("./game.js");
 gamePromise.then((promise) => {
   promise.gamePromise.then((Game) => {
-    let game = new Game();
-    game.Init();
+    let game;
 
     const socket = io(); // create new socket instance
 
@@ -24,6 +23,8 @@ gamePromise.then((promise) => {
     socket.on("getStoredLobbyId", ()=>{
       console.log(sessionStorage);
       socket.emit("returnStoredLobbyId", sessionStorage.getItem("lobbyId"));
+      game = new Game();
+      game.Init();
     })
 
     socket.on("errorReturnToMenu", ()=>{
@@ -352,7 +353,9 @@ gamePromise.then((promise) => {
     //game loop
     function Animate() {
       requestAnimationFrame((t) => {
-        game.Update();
+        if(game != undefined){
+          game.Update();
+        }
         Animate();
       });
     }
