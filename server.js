@@ -178,6 +178,7 @@ app.put("/updateScore/:username/:password/:gamesPlayed/:gamesWon", (req, res) =>
 app.use(function (req, res, next) {
   res.status(404).sendFile(path.join(__dirname, "views", "404.html"))
 });
+//
 
 //connections holds the socket id's of all clients connected to the server
 //this is the objectivley correct, which will be sent to clients to update their local lists
