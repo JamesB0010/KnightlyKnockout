@@ -39,6 +39,7 @@ gamePromise.then((promise) => {
     //setup socket listeners
     //when a client joins the server a setId message will be sent to the client, they set their client id and connection array and make a new player
     socket.on("setId", info => {
+      document.getElementById("progressText").innerText = "initialising game...";
       game = new Game();
       game.Init();
       game.clientId = info.id;

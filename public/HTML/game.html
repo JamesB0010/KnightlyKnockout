@@ -21,9 +21,10 @@
     <link rel="stylesheet" href="../CSS/global-styles.css">
 	</head>
   <div class = "loadingScreen">
-    <h1>Loading screen</h1>
+    <h1>Loading...</h1>
     <!-- reference https://www.w3schools.com/tags/tag_comment.asp-->
-    <div class="loader"></div>
+    <div class="loader"></div><br>
+    <p id = "progressText" style="color: black;">Waiting for players...</p>
   </div>
   <!--credits to https://www.youtube.com/watch?v=leAbQ0yfVX0 for how to use pointer lock-->
   <div class = "gameUi" onclick="if('ontouchstart' in document.documentElement){}else{document.body.requestPointerLock()}">
