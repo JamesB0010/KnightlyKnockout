@@ -657,7 +657,7 @@ const gamePromise = new Promise((res, rej) => {
               new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
               new THREE.MeshStandardMaterial({ color: 0x808080 }),
             );
-            if (playerIndex == 0) {
+            if (playerIndex == 1) {
               this.playerStartPosition = new THREE.Vector3(0,-0.1,15);
               capsule.position.set(0, -0.1, 15);
             }

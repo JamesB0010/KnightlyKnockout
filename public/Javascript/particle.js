@@ -21,7 +21,6 @@ class Particle{
     }
 
     update(dt){
-        console.log(this.points.scale);
         this.points.scale.set(this.points.scale.x + dt * this.scalingFactor, this.points.scale.y + dt * this.scalingFactor, this.points.scale.z + dt * this.scalingFactor)
         if (this.points.scale.x > 40){
             return true;
