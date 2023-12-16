@@ -181,7 +181,7 @@ app.use(function (req, res, next) {
 
 //connections holds the socket id's of all clients connected to the server
 //this is the objectivley correct, which will be sent to clients to update their local lists
-let connections = [];
+let connections = new Map();
 let playerUsernames = new Map();
 
 
@@ -207,13 +207,18 @@ io.on("connection", socket => {
     console.log(lobbySocketIdMap);
     //when someone joins send their socket id to the client to be saved
     console.log("someone joined with id " + socket.id);
-    socket.to(roomName).emit('setId', {id: socket.id, playerIndex: connections.length});
+    //add this new clients id to the connections array
+    if(connections.get(roomName)){
+      connections.get(roomName).push(socket.id);
+    }
+    else{
+      connections.set(roomName, [socket.id]);
+    }
+    socket.to(roomName).emit('setId', {id: socket.id, playerIndex: connections.get(roomName).length});
     io.to(roomName).emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
   
-    //add this new clients id to the connections array
-    connections.push(socket.id);
     //update all clients using new list of connections
-    io.to(roomName).emit("updateConnectionsArr", connections);
+    io.to(roomName).emit("updateConnectionsArr", connections.get(roomName));
   
     socket.on("profileInfo", username => {
       playerUsernames.set(socket.id, username);
@@ -273,7 +278,7 @@ io.on("connection", socket => {
     socket.on('disconnect', () => {
       console.log(socket.id + " Disconnected");
       //remove current socket from server
-      connections = connections.filter(connection => { connection != socket.id });
+      connections.delete(roomName);
       io.to(roomName).emit("removeId", socket.id);
       playerUsernames.delete(socket.id);
     })
