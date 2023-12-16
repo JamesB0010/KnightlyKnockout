@@ -20,11 +20,13 @@ gamePromise.then((promise) => {
     let usernamesMap = new Map();
     let latestClient;
 
+    socket.on("replyIfReady", ()=>{
+      socket.emit("clientReady");
+    })
+
     socket.on("getStoredLobbyId", ()=>{
       console.log(sessionStorage);
       socket.emit("returnStoredLobbyId", sessionStorage.getItem("lobbyId"));
-      game = new Game();
-      game.Init();
     })
 
     socket.on("errorReturnToMenu", ()=>{
@@ -37,6 +39,8 @@ gamePromise.then((promise) => {
     //setup socket listeners
     //when a client joins the server a setId message will be sent to the client, they set their client id and connection array and make a new player
     socket.on("setId", info => {
+      game = new Game();
+      game.Init();
       game.clientId = info.id;
       game.connectionArray.push(info.id);
       let _playerPromise = game.NewPlayer(info.id, {

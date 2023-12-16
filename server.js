@@ -184,7 +184,7 @@ app.use(function (req, res, next) {
 //this is the objectivley correct, which will be sent to clients to update their local lists
 let connections = new Map();
 let playerUsernames = new Map();
-
+let roomCounts = new Map();
 
 io.on("connection", socket => {
   let roomName = "";
@@ -196,13 +196,22 @@ io.on("connection", socket => {
         lobbySocketIdMap.set(id, {gameName: lobbySocketIdMap.get(id).gameName, mappedId: socket.id});
         socket.join(lobbySocketIdMap.get(id).gameName);
         roomName = lobbySocketIdMap.get(id).gameName;
+
+        if(roomCounts.get(roomName)){
+          roomCounts.set(roomName, roomCounts.get(roomName) + 1);
+          io.to(roomName).emit("replyIfReady");
+        }
+        else{
+          roomCounts.set(roomName, 1);
+        }
       }
       catch{
         socket.emit("errorReturnToMenu");
       }
-      setTimeout(()=>{
-        res();
-      }, 10000);
+    })
+
+    socket.on("clientReady", ()=>{
+      res();
     })
   }).then(()=>{
     console.log(lobbySocketIdMap);

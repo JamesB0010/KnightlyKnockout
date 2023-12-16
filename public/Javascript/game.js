@@ -168,6 +168,7 @@ const gamePromise = new Promise((res, rej) => {
           this.renderer.shadowMap.enabled = true;
           this.renderer.setSize(window.innerWidth, window.innerHeight);
           document.body.appendChild(this.renderer.domElement);
+          this.renderer.domElement.style.saturation = "0";
           function PlayRandomSong(audioListener) {
             fetch(serverAddress + "/randomSong").then((response) => {
               response.json().then((json) => {

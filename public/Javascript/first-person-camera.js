@@ -145,7 +145,7 @@ class FirstPersonCamera{
       this.linearVelocity.setZ(0);
       this.linearVelocity.op_add(new this.Ammo.btVector3(forward.x, forward.y, forward.z));
       this.linearVelocity.op_add(new this.Ammo.btVector3(left.x, left.y, left.z));
-      this.linearVelocity.op_mul(3000 * timeElapsedS);
+      this.linearVelocity.op_mul(20000 * timeElapsedS);
 
       //if weve been moving then set head bob active to true
       if(forwardVelocity != 0 || strafeVelocity != 0){
