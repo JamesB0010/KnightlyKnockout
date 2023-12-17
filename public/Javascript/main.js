@@ -338,31 +338,18 @@ gamePromise.then((promise) => {
       });
     });
 
-    let scoreDamageMap = {
-      "0":{
-        light: 25,
-        heavy: 50
-      },
-      "1":{
-        light: 23,
-        heavy: 45
-      },
-      "2":{
-        light: 20,
-        heavy: 40
-      }
-    };
     document.addEventListener("OnSwordCollision", e => {
       console.log("sword Collision detected");
       let damage = 0;
       if (game.player.GetSWingingAnimName() == "lightAttack") {
         game.enemy.PlayHurtAnimation("lightAttack");
-        damage = 25;
+        damage = game.roundManager.GetLightDamage(game.clientId);
       }
       if (game.player.GetSWingingAnimName() == "heavyAttack") {
         game.enemy.PlayHurtAnimation("heavyAttack");
-        damage = 40;
+        damage = game.roundManager.GetHeavyDamage(game.clientId);
       }
+      console.log("damage is " + damage);
       socket.emit("clientSwordCollisionWithEnemy", damage);
     })
 

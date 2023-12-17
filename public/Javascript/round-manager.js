@@ -9,6 +9,20 @@ class RoundManager{
     #maxScore;
     #playerScores;
     #clientId;
+    #scoreDamageMap = {
+        "0":{
+          light: 25,
+          heavy: 50
+        },
+        "1":{
+          light: 23,
+          heavy: 45
+        },
+        "2":{
+          light: 20,
+          heavy: 40
+        }
+      };
     constructor(clientId){
         this.#roundNumber = 1;
         this.#maxScore = 3;
@@ -20,6 +34,14 @@ class RoundManager{
 
     addKeyValToMap(key, val){
         this.#playerScores.set(key,val);
+    }
+
+    GetLightDamage(clientId){
+        return this.#scoreDamageMap[this.#playerScores.get(clientId).toString()].light;
+    }
+
+    GetHeavyDamage(clientId){
+        return this.#scoreDamageMap[this.#playerScores.get(clientId).toString()].heavy;
     }
     
     #SaveStatsToServer(){
