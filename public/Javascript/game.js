@@ -738,13 +738,7 @@ const gamePromise = new Promise((res, rej) => {
               this.scene.add(_newPlayer);
               //try {
               this.roundManager.addKeyValToMap(id, 0);
-              //}
-              // catch {
-              //   alert("A Fatal error occured returning to landing page, please try again");
-              //   setTimeout(() => {
-              //     window.location.href = serverAddress;
-              //   }, 3000);
-              // }
+
               _newPlayer.add(
                 new PlayerAudio(
                   ["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],

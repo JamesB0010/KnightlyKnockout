@@ -56,6 +56,7 @@ gamePromise.then((promise) => {
       _playerPromise.then((player) => {
         console.log("player spawned");
       });
+      socket.emit("gameInitialized");
     });
 
     //whenever a player joins the server send the cupdateConnectionsArr message to all clients
