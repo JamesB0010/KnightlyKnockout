@@ -19,6 +19,8 @@ const io = require("socket.io")(server, {
   }
 }); // create instance of socketio
 
+let lobbySocketIdMap = new Map();
+
 
 //import sql library
 const mySql = require('mysql');
@@ -27,7 +29,6 @@ const mySql = require('mysql');
 const multer = require('multer');
 
 const fs = require('fs');
-
 
 //this commented out bit is for actually storing these images on the disk inside an images folder inside the project folder
 //so if you re enable these comments make sure there is an images folder in the project
@@ -72,16 +73,15 @@ app.use(cors());
 //how to get a list of all files in a directory
 let backgroundSongs;
 
-fs.promises.readdir("./ServerRescources/Sounds/BackgroundMusic").then((files) =>{
+fs.promises.readdir("./ServerRescources/Sounds/BackgroundMusic").then((files) => {
   backgroundSongs = files;
 })
-
 
 
 app.get("/randomSong", (req, res) => {
   let randomIndex = Math.floor(Math.random() * (backgroundSongs.length));
   let song = fs.readFileSync("./ServerRescources/Sounds/BackgroundMusic/" + backgroundSongs[randomIndex]);
-  res.send({song: song.toString('base64')});
+  res.send({ song: song.toString('base64') });
 })
 
 //database stuff
@@ -95,7 +95,7 @@ app.get("/getUser/:username/:password", (req, res) => {
         if (err) {
           throw err;
         }
-        res.send({ body: "Logged in!", profilePicture: data.toString('base64'), gamesPlayed:result[0].gamesPlayed, gamesWon: result[0].gamesWon });
+        res.send({ body: "Logged in!", profilePicture: data.toString('base64'), gamesPlayed: result[0].gamesPlayed, gamesWon: result[0].gamesWon });
 
       })
     }
@@ -160,13 +160,13 @@ app.post("/newUser", upload.array('image', 3), (req, res) => {
 
 })
 
-app.put("/updateScore/:username/:password/:gamesPlayed/:gamesWon", (req, res) =>{
+app.put("/updateScore/:username/:password/:gamesPlayed/:gamesWon", (req, res) => {
   let password = crypto.createHash('md5').update(req.params.password).digest('hex');
   let sql = `UPDATE users SET gamesPlayed = '${req.params.gamesPlayed}', gamesWon = '${req.params.gamesWon}' WHERE username = '${req.params.username}' AND password = '${password}'`;
   database.query(sql, (err, result) => {
     if (err) throw err;
     if (result.length != 0) {
-      res.send({body: "user score updated"});
+      res.send({ body: "user score updated" });
     }
     else {
       res.send({ error: "no user found" });
@@ -178,89 +178,170 @@ app.put("/updateScore/:username/:password/:gamesPlayed/:gamesWon", (req, res) =>
 app.use(function (req, res, next) {
   res.status(404).sendFile(path.join(__dirname, "views", "404.html"))
 });
+//
 
 //connections holds the socket id's of all clients connected to the server
 //this is the objectivley correct, which will be sent to clients to update their local lists
-let connections = [];
+let connections = new Map();
 let playerUsernames = new Map();
-
+let roomCounts = new Map();
 
 io.on("connection", socket => {
+  let roomName = "";
+  let lobbySocketId;
+  let mappedIdsPromise = new Promise((res, rej) => {
+    socket.emit("getStoredLobbyId");
 
-  //when someone joins send their socket id to the client to be saved
-  console.log("someone joined with id " + socket.id);
-  socket.emit('setId', {id: socket.id, playerIndex: connections.length});
-  io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+    socket.on("returnStoredLobbyId", id => {
+      try {
+        lobbySocketId = id;
+        lobbySocketIdMap.set(id, { gameName: lobbySocketIdMap.get(id).gameName, mappedId: socket.id });
+        socket.join(lobbySocketIdMap.get(id).gameName);
+        roomName = lobbySocketIdMap.get(id).gameName;
 
-  //add this new clients id to the connections array
-  connections.push(socket.id);
-  //update all clients using new list of connections
-  io.emit("updateConnectionsArr", connections);
+        if (roomCounts.get(roomName)) {
+          roomCounts.set(roomName, roomCounts.get(roomName) + 1);
+          io.to(roomName).emit("replyIfReady");
+        }
+        else {
+          roomCounts.set(roomName, 1);
+        }
+      }
+      catch {
+        socket.emit("errorReturnToMenu");
+      }
+    })
 
-  socket.on("profileInfo", username => {
-    playerUsernames.set(socket.id, username);
-    io.emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
-    console.log(playerUsernames);
+    socket.on("clientReady", () => {
+      res();
+    })
+  }).then(() => {
+    console.log(lobbySocketIdMap);
+    //when someone joins send their socket id to the client to be saved
+    console.log("someone joined with id " + socket.id);
+    //add this new clients id to the connections array
+    if (connections.get(roomName)) {
+      connections.get(roomName).push(socket.id);
+    }
+    else {
+      connections.set(roomName, [socket.id]);
+    }
+
+    socket.to(roomName).emit('setId', { id: socket.id, playerIndex: connections.get(roomName).length });
+    io.to(roomName).emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+
+
+    socket.on("gameInitialized", () => {
+      //update all clients using new list of connections
+      io.to(roomName).emit("updateConnectionsArr", connections.get(roomName));
+
+      socket.on("profileInfo", username => {
+        playerUsernames.set(socket.id, username);
+        io.to(roomName).emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+        console.log(playerUsernames);
+      })
+
+
+      socket.on("PlayerRotate", info => {
+        socket.broadcast.to(roomName).emit("NetworkedPlayerRotate", info);
+      })
+
+      socket.on("clientSwordCollisionWithEnemy", (damage) => {
+        socket.broadcast.to(roomName).emit("NetworkedSwordHit", damage);
+      })
+
+      socket.on("clientBlockCollision", () => {
+        socket.broadcast.to(roomName).emit("NetworkedBlockCollision");
+      })
+
+
+
+      //make every client send an update player movement to set all of the clients networked players (other player) to the correct position
+      io.to(roomName).emit("GetClientPlayerIdPosition");
+
+      //whenever a player moves their new position and id inside the info object will be sent to all clients except from the sender
+      socket.on("UpdatePlayerMovement", info => {
+        socket.broadcast.to(roomName).emit("UpdateNetworkedPlayerPos", info);
+      })
+
+      socket.on("clientStoppedMoving", id => {
+        socket.broadcast.to(roomName).emit("NetworkedPlayerStoppedMoving", id);
+      })
+
+      socket.on("PlayerAttack", info => {
+        socket.broadcast.to(roomName).emit("networkedAttack", info);
+      })
+
+      socket.on("startBlock", id => {
+        socket.broadcast.to(roomName).emit("networkedStartBlock", id);
+      })
+
+      socket.on("endBlock", id => {
+        socket.broadcast.to(roomName).emit("networkedEndBlock", id);
+      })
+
+      socket.on("PlayerInsult", (info) => {
+        socket.broadcast.to(roomName).emit("networkedPlayerInsult", info);
+      })
+
+      socket.on("PlayerDeath", info => {
+        socket.broadcast.to(roomName).emit("NetworkedPlayerDeath", info);
+        io.to(roomName).emit("ResetClientHealth");
+      })
+    });
+
+    //on disconnect
+    socket.on('disconnect', () => {
+      console.log(socket.id + " Disconnected");
+      //remove current socket from server
+      connections.delete(roomName);
+      io.to(roomName).emit("removeId", socket.id);
+      playerUsernames.delete(socket.id);
+      Games.delete(roomName);
+      lobbySocketIdMap.delete(lobbySocketId);
+      roomCounts.delete(roomName);
+    })
+  });
+})
+
+
+
+//---------Lobby namespace
+let Games = new Map();
+const lobby = io.of("/Lobby");
+
+lobby.on("connection", socket => {
+  console.log("someone connected to the lobby id: " + socket.id);
+  socket.emit("updateLobbyList", Object.fromEntries(Games));
+
+  socket.emit("lobbyId", socket.id);
+  lobbySocketIdMap.set(socket.id, { gameName: "", mappedId: "" });
+
+
+  socket.on("CreateNewGame", gameName => {
+    Games.set(gameName, { gameMode: "1v1", playersInGame: "0/2" });
+    lobby.emit("updateLobbyList", Object.fromEntries(Games));
   })
 
-
-  socket.on("PlayerRotate", info => {
-    socket.broadcast.emit("NetworkedPlayerRotate", info);
+  socket.on("joiningGame", gameName => {
+    let gameSettings = Games.get(gameName);
+    let numPlayersInGame = gameSettings["playersInGame"].substring(0, 1);
+    if (numPlayersInGame >= 2) {
+      socket.emit("permissionToJoinGameRejected");
+    }
+    else {
+      numPlayersInGame++;
+      gameSettings["playersInGame"] = `${numPlayersInGame}/2`;
+      lobbySocketIdMap.set(socket.id, { gameName: gameName, mappedId: "" });
+      lobby.emit("updateLobbyList", Object.fromEntries(Games));
+      socket.emit("permissionToJoinGameGranted");
+    }
   })
 
-  socket.on("clientSwordCollisionWithEnemy", (damage)=>{
-    socket.broadcast.emit("NetworkedSwordHit", damage);
-  })
-
-  socket.on("clientBlockCollision", ()=>{
-    socket.broadcast.emit("NetworkedBlockCollision");
-  })
-
-
-
-  //make every client send an update player movement to set all of the clients networked players (other player) to the correct position
-  io.emit("GetClientPlayerIdPosition");
-
-  //whenever a player moves their new position and id inside the info object will be sent to all clients except from the sender
-  socket.on("UpdatePlayerMovement", info => {
-    socket.broadcast.emit("UpdateNetworkedPlayerPos", info);
-  })
-
-  socket.on("clientStoppedMoving", id => {
-    socket.broadcast.emit("NetworkedPlayerStoppedMoving", id);
-  })
-
-  socket.on("PlayerAttack", info => {
-    socket.broadcast.emit("networkedAttack", info);
-  })
-
-  socket.on("startBlock", id => {
-    socket.broadcast.emit("networkedStartBlock", id);
-  })
-
-  socket.on("endBlock", id => {
-    socket.broadcast.emit("networkedEndBlock", id);
-  })
-
-  socket.on("PlayerInsult", (info) => {
-    socket.broadcast.emit("networkedPlayerInsult", info);
-  })
-
-  socket.on("PlayerDeath", info => {
-    socket.broadcast.emit("NetworkedPlayerDeath", info);
-    socket.emit("ResetClientHealth");
-    socket.broadcast.emit("ResetClientHealth");
-  })
-
-  //on disconnect
   socket.on('disconnect', () => {
-    console.log(socket.id + " Disconnected");
-    //remove current socket from server
-    connections = connections.filter(connection => { connection != socket.id });
-    io.emit("removeId", socket.id);
-    playerUsernames.delete(socket.id);
+    console.log("someone dissconnected from the lobby");
   })
-});
+})
 
 
 

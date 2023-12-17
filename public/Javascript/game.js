@@ -168,6 +168,7 @@ const gamePromise = new Promise((res, rej) => {
           this.renderer.shadowMap.enabled = true;
           this.renderer.setSize(window.innerWidth, window.innerHeight);
           document.body.appendChild(this.renderer.domElement);
+          this.renderer.domElement.style.saturation = "0";
           function PlayRandomSong(audioListener) {
             fetch(serverAddress + "/randomSong").then((response) => {
               response.json().then((json) => {
@@ -657,12 +658,12 @@ const gamePromise = new Promise((res, rej) => {
               new THREE.CapsuleGeometry(0.4, 0.8, 4, 16),
               new THREE.MeshStandardMaterial({ color: 0x808080 }),
             );
-            if (playerIndex == 0) {
-              this.playerStartPosition = new THREE.Vector3(0,5,15);
+            if (playerIndex == 1) {
+              this.playerStartPosition = new THREE.Vector3(0,-0.1,15);
               capsule.position.set(0, -0.1, 15);
             }
             else {
-              this.playerStartPosition = new THREE.Vector3(0,5,-15);
+              this.playerStartPosition = new THREE.Vector3(0,-0.1,-15);
               capsule.position.set(0, -0.1, -15);
             }
             // this.scene.add(capsule);
@@ -737,13 +738,7 @@ const gamePromise = new Promise((res, rej) => {
               this.scene.add(_newPlayer);
               //try {
               this.roundManager.addKeyValToMap(id, 0);
-              //}
-              // catch {
-              //   alert("A Fatal error occured returning to landing page, please try again");
-              //   setTimeout(() => {
-              //     window.location.href = serverAddress;
-              //   }, 3000);
-              // }
+
               _newPlayer.add(
                 new PlayerAudio(
                   ["AttackSound1.wav", "AttackSound2.wav", "AttackSound3.wav"],
