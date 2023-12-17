@@ -76,8 +76,9 @@ The game takes inspiration from games like <a href = "https://www.ubisoft.com/en
 <ul>
 <li>The game is built to run in the browser on the web. </li>
 <li>The game is a 3d game and so uses Three.js for its rendering</li>
-<li>The game will be served from a server which also handles player networking </li>
-<li>Nodemon was used during the development of the server code to make the development experience easier</li>
+<li>The game uses Ammo.js for its physics calculations</li>
+<li>The game will be served from an express server which also handles player networking using socket.io</li>
+<li>Nodemon and postman was used during the development of the server code to make the development experience easier</li>
 </ul>
 <br>
 
