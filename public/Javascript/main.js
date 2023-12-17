@@ -89,6 +89,7 @@ gamePromise.then((promise) => {
     });
 
     socket.on("updatePlayerUsernames", (usernames) => {
+      console.log(usernames);
       usernamesMap = new Map();
       usernames = JSON.parse(usernames);
 
@@ -96,9 +97,12 @@ gamePromise.then((promise) => {
         usernamesMap.set(list[0], list[1]);
       });
       try {
+        console.log(game.connectionArray);
         fetch(
           `${serverAddress}/getProfilePicture/${usernamesMap.get(
-            latestClient[0],
+            game.connectionArray.find((value)=>{
+              return value == game.clientId;
+            }),
           )}`,
         ).then((response) => {
           response.json().then((json) => {

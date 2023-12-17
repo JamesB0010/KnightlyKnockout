@@ -212,6 +212,12 @@ io.on("connection", socket => {
       }
     })
 
+    socket.on("profileInfo", username => {
+      playerUsernames.set(socket.id, username);
+      io.to(roomName).emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
+      console.log(playerUsernames);
+    })
+
     socket.on("clientReady", () => {
       res();
     })
@@ -234,13 +240,6 @@ io.on("connection", socket => {
     socket.on("gameInitialized", () => {
       //update all clients using new list of connections
       io.to(roomName).emit("updateConnectionsArr", connections.get(roomName));
-
-      socket.on("profileInfo", username => {
-        playerUsernames.set(socket.id, username);
-        io.to(roomName).emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
-        console.log(playerUsernames);
-      })
-
 
       socket.on("PlayerRotate", info => {
         socket.broadcast.to(roomName).emit("NetworkedPlayerRotate", info);
