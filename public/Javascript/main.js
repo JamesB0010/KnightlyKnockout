@@ -293,9 +293,15 @@ gamePromise.then((promise) => {
       });
     });
 
+    let endBlockEvent = new Event("endBlock");
+
     document.addEventListener("startBlock", (e) => {
+      if(game.player.getIsAttacking()) return;
       game.player.StartBlock();
       socket.emit("startBlock", game.clientId);
+      setTimeout(()=>{
+        document.dispatchEvent(endBlockEvent);
+      }, 700)
     });
 
     document.addEventListener("endBlock", (e) => {
@@ -332,6 +338,20 @@ gamePromise.then((promise) => {
       });
     });
 
+    let scoreDamageMap = {
+      "0":{
+        light: 25,
+        heavy: 50
+      },
+      "1":{
+        light: 23,
+        heavy: 45
+      },
+      "2":{
+        light: 20,
+        heavy: 40
+      }
+    };
     document.addEventListener("OnSwordCollision", e => {
       console.log("sword Collision detected");
       let damage = 0;
@@ -354,6 +374,7 @@ gamePromise.then((promise) => {
 
     document.addEventListener("OnResetPositions", e => {
       game.ResetPlayerLocation();
+      game
     });
 
     //how to lock game to 60 fps https://chriscourses.com/blog/standardize-your-javascript-games-framerate-for-different-monitors

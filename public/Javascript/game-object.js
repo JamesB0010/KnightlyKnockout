@@ -183,6 +183,10 @@ class GameObject extends THREE.Mesh {
         this.#ChangeAdditiveAnimation("blockIdle");
     }
 
+    getIsAttacking(){
+        return this.#additiveActions["lightAttack"].weight == 1 || this.#additiveActions["heavyAttack"].weight == 1;
+    }
+
     EndBlock() {
         this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
     }
