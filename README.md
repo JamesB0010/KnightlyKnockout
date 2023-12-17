@@ -21,7 +21,7 @@
     A first person 1 vs 1 sword fighting game
     <br />
     <br />
-    <a href="">View Demo</a>
+    <a href="https://replit.com/@JamesBland/Year2UniWebGame">View Demo</a>
     ·
     <a href="">Git Repo</a>
   </p>
