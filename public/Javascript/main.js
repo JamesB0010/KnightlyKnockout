@@ -20,18 +20,18 @@ gamePromise.then((promise) => {
     let usernamesMap = new Map();
     let latestClient;
 
-    socket.on("replyIfReady", ()=>{
+    socket.on("replyIfReady", () => {
       socket.emit("clientReady");
     })
 
-    socket.on("getStoredLobbyId", ()=>{
+    socket.on("getStoredLobbyId", () => {
       console.log(sessionStorage);
       socket.emit("returnStoredLobbyId", sessionStorage.getItem("lobbyId"));
     })
 
-    socket.on("errorReturnToMenu", ()=>{
+    socket.on("errorReturnToMenu", () => {
       alert("error loading in please join a different game");
-      setTimeout(()=>{
+      setTimeout(() => {
         window.location.href = serverAddress;
       }, 3000);
     })
@@ -109,14 +109,14 @@ gamePromise.then((promise) => {
             }
           });
         });
-      } catch {}
+      } catch { }
     });
 
     socket.on("UpdateNetworkedPlayerPos", (info) => {
-      try{
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       //use info.id to find a player and then update its position using info.position
       game.UpdateNetworkedPlayer(info.id, info.position);
       if (game.players.get(info.id)) {
@@ -125,10 +125,10 @@ gamePromise.then((promise) => {
     });
 
     socket.on("NetworkedPlayerRotate", (info) => {
-      try{
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       //how to isolate y axis
       //reference https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation
       let theta_y = Math.atan2(info.rotation[1], info.rotation[3]);
@@ -142,20 +142,20 @@ gamePromise.then((promise) => {
             yRotation[2],
             yRotation[3],
           );
-      } catch {}
+      } catch { }
     });
 
     socket.on("NetworkedPlayerStoppedMoving", (id) => {
-      try{
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       try {
         game.players.get(id).SetAnimationFromVelocities({
           forwardVelocity: 0,
           sidewaysVelocity: 0,
         });
-      } catch {}
+      } catch { }
     });
 
     socket.on("GetClientPlayerIdPosition", () => {
@@ -178,7 +178,7 @@ gamePromise.then((promise) => {
         connection != id;
       });
       alert("enemy left returning to landing page...");
-      setTimeout(()=>{
+      setTimeout(() => {
         window.location.href = serverAddress;
       }, 3000);
     });
@@ -195,31 +195,31 @@ gamePromise.then((promise) => {
     });
 
     socket.on("networkedAttack", (info) => {
-      try{
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       console.log(info);
       try {
         game.players.get(info.id).children[0].PlayRandomAttack();
         game.players.get(info.id).Attack(info.attackName);
-      } catch {}
+      } catch { }
     });
 
     socket.on("networkedStartBlock", (id) => {
-      try{
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       game.players.get(id).StartBlock();
       game.players.get(id).SetIsBlocking(true);
     });
 
     socket.on("networkedEndBlock", (id) => {
-      try{
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       game.players.get(id).EndBlock();
       game.players.get(id).SetIsBlocking(false);
     });
@@ -234,29 +234,29 @@ gamePromise.then((promise) => {
         game.players
           .get(info.id)
           .children[0].PlayRandomInsult(info.insultIndex);
-      } catch {}
+      } catch { }
     });
 
-    socket.on("NetworkedSwordHit", (damage)=>{
-      try{
+    socket.on("NetworkedSwordHit", (damage) => {
+      try {
         if (game.player.FindIsDying()) return;
       }
-      catch{};
+      catch { };
       let playerDead = game.player.Damage(damage);
       game.particles.push(new Particle(game.player.position));
-      game.scene.add(game.particles[game.particles.length -1].points);
+      game.scene.add(game.particles[game.particles.length - 1].points);
       if (playerDead) {
         game.onClientDeath();
       }
     })
 
-    socket.on("NetworkedBlockCollision", ()=>{
-      try{
+    socket.on("NetworkedBlockCollision", () => {
+      try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
-      catch{};
+      catch { };
       game.particles.push(new Particle(game.player.position, "yellow"));
-      game.scene.add(game.particles[game.particles.length -1].points);
+      game.scene.add(game.particles[game.particles.length - 1].points);
     })
 
     //whenever the local player moves send it to the server
@@ -268,7 +268,7 @@ gamePromise.then((promise) => {
           id: game.clientId,
           velocities: e.detail,
         });
-      } catch {}
+      } catch { }
     });
 
     document.addEventListener("OnClientStop", (e) => {
@@ -317,54 +317,91 @@ gamePromise.then((promise) => {
     document.addEventListener("OnClientRotate", (e) => {
       let theta_y = Math.atan2(e.detail.rotation.y, e.detail.rotation.w);
       let yRotation = [0, Math.sin(theta_y), 0, Math.cos(theta_y)];
-      try{
+      try {
         game.player.gltfScene.quaternion.set(
-              yRotation[0],
-              yRotation[1],
-              yRotation[2],
-              yRotation[3],
-            );
+          yRotation[0],
+          yRotation[1],
+          yRotation[2],
+          yRotation[3],
+        );
       }
-      catch{}
+      catch { }
       socket.emit("PlayerRotate", {
         rotation: e.detail.rotation,
         id: game.clientId,
       });
     });
 
-    document.addEventListener("OnSwordCollision", e =>{
+    document.addEventListener("OnSwordCollision", e => {
       console.log("sword Collision detected");
       let damage = 0;
-      if(game.player.GetSWingingAnimName() == "lightAttack"){
+      if (game.player.GetSWingingAnimName() == "lightAttack") {
         game.enemy.PlayHurtAnimation("lightAttack");
         damage = 25;
       }
-      if(game.player.GetSWingingAnimName() == "heavyAttack"){
+      if (game.player.GetSWingingAnimName() == "heavyAttack") {
         game.enemy.PlayHurtAnimation("heavyAttack");
         damage = 40;
       }
       socket.emit("clientSwordCollisionWithEnemy", damage);
     })
 
-    document.addEventListener("OnSwordBlock", e=>{
+    document.addEventListener("OnSwordBlock", e => {
       console.log("Sword block detected");
       game.enemy.PlayBlockReactAnim();
       socket.emit("clientBlockCollision");
     })
 
-    document.addEventListener("OnResetPositions", e =>{
+    document.addEventListener("OnResetPositions", e => {
       game.ResetPlayerLocation();
     });
 
+    //how to lock game to 60 fps https://chriscourses.com/blog/standardize-your-javascript-games-framerate-for-different-monitors
+    let msPrev = window.performance.now()
+    const fps = 60
+    const msPerFrame = 1000 / fps
+    let frames = 0
     //game loop
     function Animate() {
-      requestAnimationFrame((t) => {
-        if(game != undefined){
-          game.Update();
-        }
-        Animate();
-      });
+      window.requestAnimationFrame(Animate);
+      const msNow = window.performance.now()
+      const msPassed = msNow - msPrev
+      
+      if (msPassed < msPerFrame) return
+      if (game != undefined) {
+        game.Update();
+      }
+
+      const excessTime = msPassed % msPerFrame
+      msPrev = msNow - excessTime
+
+      frames++
     }
+
+
+
+
+    // function Animate() {
+    //   requestAnimationFrame((t) => {
+    //     if (game != undefined) {
+    //       game.Update();
+    //     }
+    //     Animate();
+    //     const msNow = window.performance.now()
+    //     const msPassed = msNow - msPrev
+
+    //     if (msPassed < msPerFrame) return
+
+    //     const excessTime = msPassed % msPerFrame
+    //     msPrev = msNow - excessTime
+
+    //     frames++
+    //   });
+    // }
+
+    setInterval(() => {
+      console.log(frames)
+    }, 1000)
 
     Animate();
 

@@ -5,12 +5,15 @@ let createGameButton = document.getElementById("createGameButton");
 let gameNameInputField = document.getElementById("GameName");
 let serverListDiv = document.getElementById("serverListDiv");
 
+let GamesMap = {};
+
 function ClearGameNames() {
   serverListDiv.innerHTML = '';
 }
 
 function DisplayGames(gamesMap) {
   ClearGameNames();
+  GamesMap = gamesMap;
   let i = 0;
   for (const [key, value] of Object.entries(gamesMap)) {
     serverListDiv.innerHTML += `<div id = ${key} class = 'GameEntryDiv'></div>`;
@@ -41,6 +44,10 @@ gameNameInputField.addEventListener("keyup", (e) => {
 const socket = io(`${serverAddress}/Lobby`);
 
 createGameButton.addEventListener("click", e => {
+  if(GamesMap[gameNameInputField.value]){
+    alert("Error game already exists");
+    return;
+  }
   socket.emit("CreateNewGame", gameNameInputField.value);
 })
 
