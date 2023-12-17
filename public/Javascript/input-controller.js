@@ -46,10 +46,12 @@ class InputController {
             this.touchDown = true;
             console.log(e.target);
             if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
+                e.preventDefault();
                 e.button = 0;
                 this.onMouseDown_(e);
             }
             else if (e.target == document.getElementById("blockIconWrapper") || e.target == document.getElementById("blockIcon")) {
+                e.preventDefault();
                 e.button = 2;
                 this.onMouseDown_(e);
             }

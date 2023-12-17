@@ -20,7 +20,7 @@ class PlayerAudio extends THREE.PositionalAudio{
         soundsToLoad.forEach(sound => {
             audioLoader.load(soundsRootDirectory + sound, buffer =>{
                 this.#attackSoundBuffers.push(buffer);
-                this.setRefDistance(0.6);
+                this.setRefDistance(0.7);
             });
         });
         let i = 0;
@@ -47,7 +47,7 @@ class PlayerAudio extends THREE.PositionalAudio{
         }
         let buffer = this.#insultSoundBuffers[randNum];
         this.setBuffer(buffer);
-        this.setVolume(2);
+        this.setVolume(3);
         this.stop();
         this.play();
         return randNum;
