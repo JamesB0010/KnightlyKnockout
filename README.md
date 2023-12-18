@@ -7,10 +7,6 @@
 
 
 <!--https://github.com/JamesB0010/Year2UniWebGame-->
-
-![KnighlyKnockoutBanner](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/abf25dba-aa6c-4216-b98b-dd5593469ebe)
-
-
 <!------------------------------------------------------------------------------------------------->
 <!-- Credits for readme template https://github.com/othneildrew/Best-README-Template/blob/master/README.md -->
 <a name="readme-top"></a>
@@ -28,7 +24,7 @@
   </p>
 </div>
 
-
+![KnighlyKnockoutBanner](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/abf25dba-aa6c-4216-b98b-dd5593469ebe)
 
 <!-- TABLE OF CONTENTS -->
 <details>
