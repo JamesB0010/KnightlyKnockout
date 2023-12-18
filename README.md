@@ -195,6 +195,9 @@ You will see a log to the console saying "server running on http://localhost:300
 
 You can visit the sign up and log in pages and can type "/" then some giberish into the url bar to see the 404 page
 
+![404](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/2a803277-51c2-47bb-b791-d787338b2c78)
+
+
 Then one player can create a game and then both players should see the game (sometimes refered to as server or session or lobby) in the game list and can press join
 
 ![Making a new game](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/129fda79-609d-46f7-a866-10d090cbb814)
