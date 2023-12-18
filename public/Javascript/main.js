@@ -195,7 +195,9 @@ gamePromise.then((promise) => {
     });
 
     socket.on("ResetClientHealth", () => {
-      game.player.ResetHealth();
+      setTimeout(()=>{
+        game.player.ResetHealth();
+      }, 5000);
     });
 
     socket.on("networkedAttack", (info) => {

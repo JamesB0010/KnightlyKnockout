@@ -9,6 +9,10 @@ import { Cloud } from "./cloud.js";
 import { PlayerAudio } from "./player-audio.js";
 import serverAddress from "./serverAddress.js";
 import { Particle } from "./particle.js";
+import { EffectComposer } from './EffectComposer.js';
+import { RenderPass } from './RenderPass.js';
+import { LuminosityShader } from './LuminosityShader.js';
+import { ShaderPass } from "./ShaderPass.js";
 
 const swordCollisionEvent = new CustomEvent("OnSwordCollision");
 
@@ -22,14 +26,14 @@ let heavyAttackLength = 2299;
 let timeToCooldown = 2299;
 
 document.addEventListener("Attack", (e) => {
-  if(e.detail.attackName == "lightAttack"){
-    setTimeout(()=>{
+  if (e.detail.attackName == "lightAttack") {
+    setTimeout(() => {
       isSwinging = true;
       timeToCooldown = (lightAttackLength - 200) * 0.001;
     }, 200);
   }
-  else if(e.detail.attackName == "heavyAttack"){
-    setTimeout(()=>{
+  else if (e.detail.attackName == "heavyAttack") {
+    setTimeout(() => {
       isSwinging = true;
       timeToCooldown = (lightAttackLength - 800) * 0.001
     }, 800)
@@ -120,6 +124,8 @@ const gamePromise = new Promise((res, rej) => {
         }
       }
 
+      let deathPass = new ShaderPass(LuminosityShader);
+
       class Game {
         constructor() {
           this.scene;
@@ -140,6 +146,7 @@ const gamePromise = new Promise((res, rej) => {
           this.roundManager;
 
           this.particles = [];
+          this.playerAlive = true;
         }
         OnWindowResize(game) {
           //making window responsive
@@ -162,6 +169,10 @@ const gamePromise = new Promise((res, rej) => {
             antialias: true,
             alpha: true,
           });
+          //post processing three js https://www.youtube.com/watch?v=_da8WNeZZ4w
+          this.composer = new EffectComposer(this.renderer);
+          this.composer.addPass(new RenderPass(this.scene, this.camera));
+
           this.renderer.shadowMap.enabled = true;
           this.renderer.shadowMap.type = THREE.BasicShadowMap;
           this.camera.position.z = 5;
@@ -570,13 +581,15 @@ const gamePromise = new Promise((res, rej) => {
           }
           catch { };
           //if player isnt null then set their position and update the gltf position
-          if (this.player) {
+          if(this.player){
+            this.player.UpdateAnimMixer(deltaTime);
+          }
+          if (this.player && this.playerAlive) {
             this.player.position.set(
               this.camera.position.x,
               this.camera.position.y,
               this.camera.position.z,
             );
-            this.player.UpdateAnimMixer(deltaTime);
             this.player.updateGltfPosition();
 
             let boneWorldPos = new THREE.Vector3();
@@ -648,7 +661,8 @@ const gamePromise = new Promise((res, rej) => {
           document.dispatchEvent(new CustomEvent("OnClientMove"));
         }
         Render() {
-          this.renderer.render(this.scene, this.camera);
+          // this.renderer.render(this.scene, this.camera);
+          this.composer.render();
         }
         //this is how new players are created and added to the game. this includes the local player and any networked player
         //The function is called from the main.js script
@@ -659,11 +673,11 @@ const gamePromise = new Promise((res, rej) => {
               new THREE.MeshStandardMaterial({ color: 0x808080 }),
             );
             if (playerIndex == 1) {
-              this.playerStartPosition = new THREE.Vector3(0,-0.1,15);
+              this.playerStartPosition = new THREE.Vector3(0, -0.1, 15);
               capsule.position.set(0, -0.1, 15);
             }
             else {
-              this.playerStartPosition = new THREE.Vector3(0,-0.1,-15);
+              this.playerStartPosition = new THREE.Vector3(0, -0.1, -15);
               capsule.position.set(0, -0.1, -15);
             }
             // this.scene.add(capsule);
@@ -764,11 +778,24 @@ const gamePromise = new Promise((res, rej) => {
           } catch { }
         }
         onClientDeath() {
+          this.playerAlive = false;
+          this.composer.addPass(deathPass);
           document.dispatchEvent(playerDead);
+          this.player.PlayDeathAnimation();
           setTimeout(() => {
             this.roundManager.playerDead(this.clientId);
+            this.composer.removePass(deathPass);
+            this.playerAlive = true;
             // this.player.ResetToIdleAnim();
           }, 5000);
+          const audioLoader = new THREE.AudioLoader();
+          const sound = new THREE.Audio(this.listener);
+          audioLoader.load("../GameAssets/Sounds/DeathSound.wav", function(buffer){
+            sound.setBuffer(buffer);
+            sound.setLoop(false);
+            sound.setVolume(3);
+            sound.play();
+          })
         }
       }
       res(Game);
