@@ -117,7 +117,7 @@ after following the link press run and then open in new tab
 ![Screenshot 2023-12-18 002141](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/1f0ac05a-9768-44b5-b7ec-69acd8b8496c)
 
 
-###localhost
+##localhost
 
 This section will cover setting the project up locally
 
