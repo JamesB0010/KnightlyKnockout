@@ -215,13 +215,23 @@ after both tabs have been loaded you will be able to see both players are loaded
 
 <h3>Player Damage and rounds</h3>
 
-You can press the damage button to damage the player this will cause the blood effect around the screen to become less transparrent alerting the player to the health they have left
+players can do heavy attacks, light attacks and blocks,
 
-The heal button increases the players health and does the opposite of the damage button
+a block is performed by holding right click and lasts 0.7 seconds
 
-The die button instantly kills the player
+a light attack is performed by pressing the mouse button and a heavy attack is performed by holding the left button for half a second and then releasing
 
-the buttons are not intended for the final game and so using them can be weird. each time you click the button the game will attempt to capture the cursor so you must press esc to get the cursor back to click another button
+the light attack does 25 damage and the heavy attack does 50 damage on round 1.
+
+to make the game get more difficult as the players play damage is inversley linked to the number of rounds the player has won
+
+| Rounds won | Light attack damage | Heavy attack damage |
+| --- | --------------------- | ------------------- |
+| 0 | 25 | 50 |
+| 1 | 23 | 45 |
+| 2 | 20 | 40 |
+
+by doing this each round becomes longer and more stressfull and therefore increases in difficulty
 
 when a player dies the opposing player gets a point added to their score and the first player to get 3 points wins 
 
