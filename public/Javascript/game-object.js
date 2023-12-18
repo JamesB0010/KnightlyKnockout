@@ -201,7 +201,7 @@ class GameObject extends THREE.Mesh {
         }
         if (this.health < 100) {
             this.health += amount;
-            console.log(this.health);
+            // //console.log(this.health);
             this.UpdateBloodSpatterOpacity();
         }
     }
@@ -232,12 +232,12 @@ class GameObject extends THREE.Mesh {
         //return true if this damage caused the player to die
         if (this.health > 0) {
             this.health -= amount;
-            console.log(this.health);
+            //console.log(this.health);
             this.UpdateBloodSpatterOpacity();
         }
         if (this.health <= 0) {
             //player has died
-            console.log("player has died");
+            //console.log("player has died");
             return true;
         }
         else {
@@ -366,7 +366,7 @@ class GameObject extends THREE.Mesh {
 
         if (nonLoopAnim) {
             setTimeout(() => {
-                console.log("anim over");
+                //console.log("anim over");
                 if(animName != "blockReact"){
                     this.#ChangeAdditiveAnimation(this.#FindLinkedBaseAnimFromAdditive(this.#currentBaseAction), true);
                 }
@@ -423,7 +423,7 @@ class GameObject extends THREE.Mesh {
             }
         }
         else if (right) {
-            console.log("walk right");
+            //console.log("walk right");
             if (this.#currentBaseAction != "walkRightBase") {
                 this.#ChangeAdditiveAnimation("walkRightAdditive");
                 this.#PrepareCrossFade(this.#baseActions[this.#currentBaseAction].action, this.#baseActions["walkRightBase"].action, 0.35);

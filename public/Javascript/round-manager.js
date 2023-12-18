@@ -57,13 +57,13 @@ class RoundManager{
                     document.getElementsByClassName("playerWonGame")[0].style["display"] = "flex";
                     sessionStorage.setItem("gamesWon", parseInt(sessionStorage.getItem("gamesWon")) + 1);
                     sessionStorage.setItem("gamesPlayed", parseInt(sessionStorage.getItem("gamesPlayed")) + 1);
-                    console.log(sessionStorage);
+                    //console.log(sessionStorage);
                     this.#SaveStatsToServer();
                 }
                 else{
                     document.getElementsByClassName("playerLostGame")[0].style["display"] = "flex";
                     sessionStorage.setItem("gamesPlayed", parseInt(sessionStorage.getItem("gamesPlayed")) + 1);
-                    console.log(sessionStorage);
+                    //console.log(sessionStorage);
                     this.#SaveStatsToServer();
                 }
                 //alert("Player won");
@@ -99,7 +99,7 @@ class RoundManager{
                         document.getElementsByClassName("playerWonRound")[0].style["display"] = "none";
                         this.#ShowNewRoundScreen();
                     }, 800)
-                    console.log(this.clientScoreP);
+                    //console.log(this.clientScoreP);
                     this.clientScoreP.innerText = newScore;
                     //alert("enemy dead");
                     this.#CheckPlayerHasWon();

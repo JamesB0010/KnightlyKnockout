@@ -4,7 +4,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.m
 import { Particle } from "./particle.js";
 
 import serverAddress from "./serverAddress.js";
-console.log(serverAddress);
+//console.log(serverAddress);
 
 let gamePromise = import("./game.js");
 gamePromise.then((promise) => {
@@ -25,7 +25,7 @@ gamePromise.then((promise) => {
     })
 
     socket.on("getStoredLobbyId", () => {
-      console.log(sessionStorage);
+      //console.log(sessionStorage);
       socket.emit("returnStoredLobbyId", sessionStorage.getItem("lobbyId"));
     })
 
@@ -54,7 +54,7 @@ gamePromise.then((promise) => {
         socket.emit("profileInfo", sessionStorage.username);
       }
       _playerPromise.then((player) => {
-        console.log("player spawned");
+        //console.log("player spawned");
       });
       socket.emit("gameInitialized");
     });
@@ -76,10 +76,10 @@ gamePromise.then((promise) => {
         latestClient = newClient;
 
         //do something with this info
-        console.log(game.clientId);
-        console.log("new client " + newClient);
+        //console.log(game.clientId);
+        //console.log("new client " + newClient);
         newClient.forEach((clientId) => {
-          console.log("new player");
+          //console.log("new player");
           game.NewPlayer(clientId, {});
         });
 
@@ -89,7 +89,7 @@ gamePromise.then((promise) => {
     });
 
     socket.on("updatePlayerUsernames", (usernames) => {
-      console.log(usernames);
+      //console.log(usernames);
       usernamesMap = new Map();
       usernames = JSON.parse(usernames);
 
@@ -97,7 +97,7 @@ gamePromise.then((promise) => {
         usernamesMap.set(list[0], list[1]);
       });
       try {
-        console.log(game.connectionArray);
+        //console.log(game.connectionArray);
         fetch(
           `${serverAddress}/getProfilePicture/${usernamesMap.get(
             game.connectionArray.find((value)=>{
@@ -106,7 +106,7 @@ gamePromise.then((promise) => {
           )}`,
         ).then((response) => {
           response.json().then((json) => {
-            console.log(json);
+            //console.log(json);
             if (json.error != "no user found") {
               document.getElementById("enemyProfilePicture").src =
                 "data:image/png;base64," + json.profilePicture;
@@ -205,7 +205,7 @@ gamePromise.then((promise) => {
         if (game.players.get(info.id).FindIsDying()) return;
       }
       catch { };
-      console.log(info);
+      //console.log(info);
       try {
         game.players.get(info.id).children[0].PlayRandomAttack();
         game.players.get(info.id).Attack(info.attackName);
@@ -231,7 +231,7 @@ gamePromise.then((promise) => {
     });
 
     socket.on("networkedPlayerInsult", (info) => {
-      console.log(info.insultIndex);
+      //console.log(info.insultIndex);
       if (info.insultIndex == -1) {
         game.players.get(info.id).children[0].PlayRandomInsult();
         return;
@@ -319,7 +319,7 @@ gamePromise.then((promise) => {
       let insultIndex = game.players
         .get(game.clientId)
         .children[0].PlayRandomInsult();
-      console.log(insultIndex);
+      //console.log(insultIndex);
       socket.emit("PlayerInsult", {
         id: game.clientId,
         insultIndex: insultIndex,
@@ -345,7 +345,7 @@ gamePromise.then((promise) => {
     });
 
     document.addEventListener("OnSwordCollision", e => {
-      console.log("sword Collision detected");
+      //console.log("sword Collision detected");
       let damage = 0;
       if (game.player.GetSWingingAnimName() == "lightAttack") {
         game.enemy.PlayHurtAnimation("lightAttack");
@@ -355,12 +355,12 @@ gamePromise.then((promise) => {
         game.enemy.PlayHurtAnimation("heavyAttack");
         damage = game.roundManager.GetHeavyDamage(game.clientId);
       }
-      console.log("damage is " + damage);
+      //console.log("damage is " + damage);
       socket.emit("clientSwordCollisionWithEnemy", damage);
     })
 
     document.addEventListener("OnSwordBlock", e => {
-      console.log("Sword block detected");
+      //console.log("Sword block detected");
       game.enemy.PlayBlockReactAnim();
       socket.emit("clientBlockCollision");
     })
@@ -414,7 +414,7 @@ gamePromise.then((promise) => {
     // }
 
     setInterval(() => {
-      console.log(frames)
+      //console.log(frames)
     }, 1000)
 
     Animate();
@@ -422,7 +422,7 @@ gamePromise.then((promise) => {
     if (sessionStorage.username) {
       document.getElementById("clientProfilePicture").src =
         `data:image/png;base64,${sessionStorage.profilePicture}`;
-      console.log(sessionStorage);
+      //console.log(sessionStorage);
     }
   });
 });

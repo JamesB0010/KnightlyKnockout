@@ -44,7 +44,7 @@ class InputController {
         window.addEventListener('touchstart', e => {
             this.prevTouchDown = this.touchDown;
             this.touchDown = true;
-            console.log(e.target);
+            //console.log(e.target);
             if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
                 e.preventDefault();
                 e.button = 0;
@@ -60,7 +60,7 @@ class InputController {
         window.addEventListener('touchend', e => {
             this.prevTouchDown = this.touchDown;
             this.touchDown = false;
-            console.log(this.touchDown);
+            //console.log(this.touchDown);
             if (e.target == document.getElementById("attackIconWrapper") || e.target == document.getElementById("attackIcon")) {
                 e.button = 0;
                 this.onMouseUp_(e);
@@ -87,7 +87,7 @@ class InputController {
             case 2: {
                 this.current_.leftButton = false;
                 document.dispatchEvent(startBlock);
-                console.log("start blocking");
+                //console.log("start blocking");
                 break;
             }
         }
@@ -111,7 +111,7 @@ class InputController {
             case 2: {
                 this.current_.leftButton = false;
                 document.dispatchEvent(endBlock);
-                console.log("end blocking");
+                //console.log("end blocking");
                 break;
             }
         }

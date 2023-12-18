@@ -215,16 +215,16 @@ io.on("connection", socket => {
     socket.on("profileInfo", username => {
       playerUsernames.set(socket.id, username);
       io.to(roomName).emit("updatePlayerUsernames", JSON.stringify([...playerUsernames]));
-      console.log(playerUsernames);
+      //console.log(playerUsernames);
     })
 
     socket.on("clientReady", () => {
       res();
     })
   }).then(() => {
-    console.log(lobbySocketIdMap);
+    //console.log(lobbySocketIdMap);
     //when someone joins send their socket id to the client to be saved
-    console.log("someone joined with id " + socket.id);
+    //console.log("someone joined with id " + socket.id);
     //add this new clients id to the connections array
     if (connections.get(roomName)) {
       connections.get(roomName).push(socket.id);
@@ -291,7 +291,7 @@ io.on("connection", socket => {
 
     //on disconnect
     socket.on('disconnect', () => {
-      console.log(socket.id + " Disconnected");
+      //console.log(socket.id + " Disconnected");
       //remove current socket from server
       connections.delete(roomName);
       io.to(roomName).emit("removeId", socket.id);
@@ -310,7 +310,7 @@ let Games = new Map();
 const lobby = io.of("/Lobby");
 
 lobby.on("connection", socket => {
-  console.log("someone connected to the lobby id: " + socket.id);
+  //console.log("someone connected to the lobby id: " + socket.id);
   socket.emit("updateLobbyList", Object.fromEntries(Games));
 
   socket.emit("lobbyId", socket.id);
@@ -338,7 +338,7 @@ lobby.on("connection", socket => {
   })
 
   socket.on('disconnect', () => {
-    console.log("someone dissconnected from the lobby");
+    //console.log("someone dissconnected from the lobby");
   })
 })
 
@@ -348,4 +348,4 @@ lobby.on("connection", socket => {
 
 
 server.listen(3000); // run server
-console.log("server running on http://localhost:3000");
+//console.log("server running on http://localhost:3000");

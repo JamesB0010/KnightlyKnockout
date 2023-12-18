@@ -565,7 +565,7 @@ const gamePromise = new Promise((res, rej) => {
             prevJoyStickData.x != joyStickData.x ||
             prevJoyStickData.y != joyStickData.y
           ) {
-            //console.log(joyStickData);
+            ////console.log(joyStickData);
             prevJoyStickData = {
               cardinalDirection: joyStickData.cardinalDirection,
               x: joyStickData.x,
@@ -748,7 +748,7 @@ const gamePromise = new Promise((res, rej) => {
               }
               this.gameObjects.push(_newPlayer);
               this.players.set(id, _newPlayer);
-              //console.log(this.players);
+              ////console.log(this.players);
               this.scene.add(_newPlayer);
               //try {
               this.roundManager.addKeyValToMap(id, 0);

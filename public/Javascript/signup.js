@@ -2,7 +2,7 @@
 //how to use multer https://www.youtube.com/watch?v=EVOFt8Its6I
 import serverAddress from "./serverAddress.js";
 
-console.log(sessionStorage);
+//console.log(sessionStorage);
 
 let profilePictureUpload = document.getElementById("profilePictureUpload");
 profilePictureUpload.addEventListener("change", processFile, false);
@@ -68,7 +68,7 @@ form.addEventListener("submit", e =>{
         })
     })
     .catch(err =>{
-        console.log(err.message);
+        //console.log(err.message);
     })
 });
 

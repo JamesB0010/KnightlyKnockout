@@ -52,7 +52,7 @@ createGameButton.addEventListener("click", e => {
 })
 
 socket.on("updateLobbyList", lobbyList => {
-  console.log(lobbyList);
+  //console.log(lobbyList);
   DisplayGames(lobbyList);
 })
 
