@@ -189,17 +189,21 @@ nodemon server.js
 
 You will see a log to the console saying "server running on http://localhost:3000" You can click the link or manually type the url into a web browser to see the landing page for the game website
 
-<img src = "https://northeurope1-mediap.svc.ms/transform/thumbnail?provider=spo&inputFormat=png&cs=MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDQ4MTcxMGE0fFNQTw&docid=https%3A%2F%2Fmy.microsoftpersonalcontent.com%2F_api%2Fv2.0%2Fdrives%2Fb!a72iQpK34EWhSXI3m85uAf2-WPNtqfxDu0_ndmi-io06Bt-0QiclQKREJRJ84W7Z%2Fitems%2F01HQDMLO7PA4AUIQMZYFC26MUFW3LJZIEL%3Ftempauth%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvbXkubWljcm9zb2Z0cGVyc29uYWxjb250ZW50LmNvbUA5MTg4MDQwZC02YzY3LTRjNWItYjExMi0zNmEzMDRiNjZkYWQiLCJpc3MiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAiLCJuYmYiOiIxNjk5NDY2NDAwIiwiZXhwIjoiMTY5OTQ4ODAwMCIsImVuZHBvaW50dXJsIjoiVFp6ZlAwS3VVNHQvNDJPdjFPYzdMdnM5UFN6YTJMYmVMWlphVXBvTDJ4OD0iLCJlbmRwb2ludHVybExlbmd0aCI6IjE2NCIsImlzbG9vcGJhY2siOiJUcnVlIiwidmVyIjoiaGFzaGVkcHJvb2Z0b2tlbiIsInNpdGVpZCI6Ik5ESmhNbUprTm1JdFlqYzVNaTAwTldVd0xXRXhORGt0TnpJek56bGlZMlUyWlRBeCIsImFwcGlkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDQ4MTcxMGE0IiwidGlkIjoiOTE4ODA0MGQtNmM2Ny00YzViLWIxMTItMzZhMzA0YjY2ZGFkIiwidXBuIjoiamFtbXlkb2RnZXI4ODg4QGdtYWlsLmNvbSIsInB1aWQiOiIwMDAzNDAwMUQzNDdCOUVEIiwiY2FjaGVrZXkiOiIwaC5mfG1lbWJlcnNoaXB8MDAwMzQwMDFkMzQ3YjllZEBsaXZlLmNvbSIsInNjcCI6ImFsbHNpdGVzLmZ1bGxjb250cm9sIiwic2lkIjoiMTE0MDE3NjAyMzk4NjkwOTU4OSIsInR0IjoiMiIsImlwYWRkciI6IjUyLjEwNS4zMi4xNTcifQ.CPi7ceODg5rLkX-xRXeW-HO8rtT4NzRdxKrV_XM0xwg%26version%3DPublished&cb=63835073554&encodeFailures=1&width=1869&height=834">
+
+![landingPage](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/bf24b81b-5150-4554-a57e-813d9b5fdaf1)
+
 
 You can visit the sign up and log in pages and can type "/" then some giberish into the url bar to see the 404 page
 
-Then you can press "Play Game" to navigate to the games main menu and can press play game on the main menu to be taken to the game.
+Then one player can create a game and then both players should see the game (sometimes refered to as server or session or lobby) in the game list and can press join
+
+![Making a new game](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/129fda79-609d-46f7-a866-10d090cbb814)
+
 
 At this point you should see a loading screen
 
-<img src = "https://northeurope1-mediap.svc.ms/transform/thumbnail?provider=spo&inputFormat=png&cs=MDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDQ4MTcxMGE0fFNQTw&docid=https%3A%2F%2Fmy.microsoftpersonalcontent.com%2F_api%2Fv2.0%2Fdrives%2Fb!a72iQpK34EWhSXI3m85uAf2-WPNtqfxDu0_ndmi-io06Bt-0QiclQKREJRJ84W7Z%2Fitems%2F01HQDMLO5W26EX2BNG35HJX3B3YJBINKQ4%3Ftempauth%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAvbXkubWljcm9zb2Z0cGVyc29uYWxjb250ZW50LmNvbUA5MTg4MDQwZC02YzY3LTRjNWItYjExMi0zNmEzMDRiNjZkYWQiLCJpc3MiOiIwMDAwMDAwMy0wMDAwLTBmZjEtY2UwMC0wMDAwMDAwMDAwMDAiLCJuYmYiOiIxNjk5NDY2NDAwIiwiZXhwIjoiMTY5OTQ4ODAwMCIsImVuZHBvaW50dXJsIjoiMkw1TmF1YnFya2NoanRBZzZsdnRxdEs5YU01a1FzcXR6WXJFM0pPSXBKVT0iLCJlbmRwb2ludHVybExlbmd0aCI6IjE2NCIsImlzbG9vcGJhY2siOiJUcnVlIiwidmVyIjoiaGFzaGVkcHJvb2Z0b2tlbiIsInNpdGVpZCI6Ik5ESmhNbUprTm1JdFlqYzVNaTAwTldVd0xXRXhORGt0TnpJek56bGlZMlUyWlRBeCIsImFwcGlkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDQ4MTcxMGE0IiwidGlkIjoiOTE4ODA0MGQtNmM2Ny00YzViLWIxMTItMzZhMzA0YjY2ZGFkIiwidXBuIjoiamFtbXlkb2RnZXI4ODg4QGdtYWlsLmNvbSIsInB1aWQiOiIwMDAzNDAwMUQzNDdCOUVEIiwiY2FjaGVrZXkiOiIwaC5mfG1lbWJlcnNoaXB8MDAwMzQwMDFkMzQ3YjllZEBsaXZlLmNvbSIsInNjcCI6ImFsbHNpdGVzLmZ1bGxjb250cm9sIiwic2lkIjoiMTE0MDE3NjAyMzk4NjkwOTU4OSIsInR0IjoiMiIsImlwYWRkciI6IjUyLjEwNS4zMi4zNiJ9.-HJmxNnkGpeJ_C1J1X76XTkS1IvqqJw1HmCgyUq9Lzw%26version%3DPublished&cb=63835073717&encodeFailures=1&width=1869&height=834">
+![Untitled video - Made with Clipchamp](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/c1190b93-17d6-4d29-a68e-7fa0451f5f3d)
 
-open the website again (http://localhost:3000) in another tab and follow the same steps to play the game and you will be met with another loading screen
 
 after both tabs have been loaded you will be able to see both players are loaded into the game and their movements are replicated to each other
 
@@ -235,6 +239,10 @@ The file structure of the project is as follows
     * Other files (such as gitignore, readme, package.json etc...)
     * node_modules/
         * libraries imported by npm
+    * images/
+        * profile picture images of signed up accounts
+    * ServerRescources/Sounds/BackgroundMusic/
+          * Contains background music to be served to the clients
     * Presentation/
         * GamePresentation.pptx
     * public/
