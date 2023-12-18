@@ -275,7 +275,7 @@ The file structure of the project is as follows
 ## NamingConventions
 <h3>File naming</h3>
 
-HTML, CSS and Javascript files all follow the convention of being all lowercase and seperating words with a hyphen except for the Game.js file
+HTML, CSS and Javascript files all follow the convention of being all lowercase and seperating words with a hyphen
 
 <h3>Code naming</h3>
 
@@ -344,14 +344,26 @@ Here are references to rescources used in the project
 
 * [Readme Template](https://github.com/othneildrew/Best-README-Template)
 * [Img Shields/Badges](https://github.com/Ileriayo/markdown-badges)
-* [Creating express server article](https://replit.com/talk/learn/SocketIO-Tutorial-What-its-for-and-how-to-use/143781)
+* [Using socket io tutorial](https://replit.com/talk/learn/SocketIO-Tutorial-What-its-for-and-how-to-use/143781)
 * [How to respond to a 404 with express](https://www.youtube.com/watch?v=OKGMhFgR7RY)
 * [How to send a html file in response to a 404](https://www.youtube.com/watch?v=JbwlM1Gu5aE)
+* [How to use multer](https://www.youtube.com/watch?v=EVOFt8Its6I)
 * [Loader wheel for loading page](https://www.w3schools.com/howto/howto_css_loader.asp)
 * [Pointer lock tutorial video](https://www.youtube.com/watch?v=leAbQ0yfVX0)
 * [Log in and sign up form base](https://www.w3schools.com/html/tryit.asp?filename=tryhtml_form_submit)
 * [Randomize matrix function used in the process of creating clouds using random spheres](https://github.com/mrdoob/three.js/blob/dev/examples/webgl_instancing_performance.html)
 * [Fps controller and Input controller](https://www.youtube.com/watch?v=oqKzxPMLWxo)
+* [how to setup ammo.js](https://www.youtube.com/watch?v=puDiCbrjIzc)
+* [intro to ammo js](https://medium.com/@bluemagnificent/intro-to-javascript-3d-physics-using-ammo-js-and-three-js-dd48df81f591)
+* [moving objects in ammo js](https://medium.com/@bluemagnificent/moving-objects-in-javascript-3d-physics-using-ammo-js-and-three-js-6e39eff6d9e5)
+* [Collision Detection in ammo js](https://medium.com/@bluemagnificent/collision-detection-in-javascript-3d-physics-using-ammo-js-and-three-js-31a5569291ef)
+*  [how to set position of dynamic ammo/bullet physics rigidbody](https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=6252)
+*  [how to detect if a device has a touchscreen](https://github.com/bobboteck/JoyStick/blob/master/joy.js)
+*  [how to submit a form with js](https://www.freecodecamp.org/news/how-to-submit-a-form-with-javascript/#:~:text=To%20submit%20a%20form%20using,if%20any%20data%20is%20submitted)
+*  [attack icon](https://www.flaticon.com/free-icon/slash_4334055?term=attack&page=2&position=19&origin=tag&related_id=4334055)
+*  [how to isolate the Y axis of a quaternion rotation](https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation)
+*  [how to limit request animation frame to 60 fps](https://chriscourses.com/blog/standardize-your-javascript-games-framerate-for-different-monitors)
+*  [mobile controls joystick library (Joystick 2)](https://github.com/bobboteck/JoyStick)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
