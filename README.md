@@ -83,7 +83,9 @@ The game takes inspiration from games like <a href = "https://www.ubisoft.com/en
 <br>
 
 * [![Three][Three.js]][Three-url]
+* ![Static Badge](https://img.shields.io/badge/Ammo%20js-orange)
 * [![Express][Express.js]][Express-url]
+* ![Static Badge](https://img.shields.io/badge/Multer-red?logo=express&labelColor=black)
 * [![Socket.io][Socket.io]][Socket.io-url]
 * [![Node.js][Node.js]][Node-url]
 * [![Nodemon][Nodemon]][Nodemon-url]
@@ -91,6 +93,12 @@ The game takes inspiration from games like <a href = "https://www.ubisoft.com/en
 * ![Html][Html]
 * ![JavaScript][Javascript]
 * ![CSS][CSS]
+* ![Static Badge](https://img.shields.io/badge/Cors-green)
+* ![Static Badge](https://img.shields.io/badge/Crypto-green)
+* ![Static Badge](https://img.shields.io/badge/Fs-blue)
+* ![Static Badge](https://img.shields.io/badge/My_SQL-white?logo=mysql&labelColor=white&color=orange)
+* ![Static Badge](https://img.shields.io/badge/Path_(Node)-white)
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
