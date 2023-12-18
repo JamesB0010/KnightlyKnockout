@@ -374,6 +374,7 @@ Here are references to rescources used in the project
 *  [how to isolate the Y axis of a quaternion rotation](https://stackoverflow.com/questions/54311982/how-to-isolate-the-x-and-z-components-of-a-quaternion-rotation)
 *  [how to limit request animation frame to 60 fps](https://chriscourses.com/blog/standardize-your-javascript-games-framerate-for-different-monitors)
 *  [mobile controls joystick library (Joystick 2)](https://github.com/bobboteck/JoyStick)
+*  [Three js post processing](https://www.youtube.com/watch?v=_da8WNeZZ4w)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
