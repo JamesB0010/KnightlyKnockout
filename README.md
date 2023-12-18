@@ -108,9 +108,20 @@ The game takes inspiration from games like <a href = "https://www.ubisoft.com/en
 <!-- GETTING STARTED -->
 ## Getting Started
 
+### Replit
+
+the code is hosted on the repl pointed to by <a href = "https://replit.com/@JamesBland/Year2UniWebGame">this</a> link
+
+after following the link press run and then open in new tab
+
+![Screenshot 2023-12-18 002141](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/1f0ac05a-9768-44b5-b7ec-69acd8b8496c)
+
+
+###localhost
+
 This section will cover setting the project up locally
 
-### Prerequisites
+#### Prerequisites
 
 First you will need <a href = "https://nodejs.org/en/">node</a> installed on your machine
 <br>
@@ -275,25 +286,25 @@ HTML, CSS and Javascript files all follow the convention of being all lowercase 
 - [x] Game ui which is fully functioning displaying score, health, rewards and penalties
 - [x] Responsive webpage design
 - [x] Responsive game page design
-- [ ] Game has a server side, and displays a 404 page correctly ✅ and is correctly deployed ❌
-- [ ] Game websites are fully working with correct login, register web interface
+- [X] Game has a server side, and displays a 404 page correctly and is correctly deployed
+- [X] Game websites are fully working with correct login, register web interface
 - [x] Game webpages are responsive to different screen sizes
-- [ ] Data storage implementation - user login data
-- [ ] Data storage implementation - game score/ stats
-- [ ] Game score for the players login data can be reloaded correctly
-- [ ] ·	Game data storage is secured and not able to be access without authentication.
-- [ ] ·	Complicated landscape and visual effect display and with a good loading speed: For example, particles ❌and use of instance.  ✅  
-- [ ] Game increases in difficulty as the user score increases
-- [ ] Game audio is working in the game
-- [ ] Game is working on the latest google chrome web browser for both pc and mobile devices
+- [X] Data storage implementation - user login data
+- [X] Data storage implementation - game score/ stats
+- [X] Game score for the players login data can be reloaded correctly
+- [X] ·	Game data storage is secured and not able to be access without authentication.
+- [X] ·	Complicated landscape and visual effect display and with a good loading speed: For example, particles and use of instance.   
+- [X] Game increases in difficulty as the user score increases
+- [X] Game audio is working in the game
+- [X] Game is working on the latest google chrome web browser for both pc and mobile devices
 - [x] Has a "Readme" documentation <sub>Yay thats me️!</sub>
-- [ ] User data is encrypted and stored securley
-- [ ] Has database design and implementation for game data
+- [X] User data is encrypted and stored securley
+- [X] Has database design and implementation for game data
 - [x] Multiple player allows at least two players to play in the same game at the same time
-- [ ] Using physics that affected the game
-- [ ] Has a systematic game messaging design. Passing the data using suitable client-server communication methods in a correct way
-- [ ] A youtube video has been made showing the game and demonstrating my work as a portfolio peice
-- [ ] A presentation has been created for the project
+- [X] Using physics that affected the game
+- [X] Has a systematic game messaging design. Passing the data using suitable client-server communication methods in a correct way
+- [X] A youtube video has been made showing the game and demonstrating my work as a portfolio peice
+- [X] A presentation has been created for the project
 
 
 See the [open issues](https://github.com/JamesB0010/Year2UniWebGame/issues) for a list of features which are being worked on/have been worked on.
@@ -317,9 +328,6 @@ Project Link: [https://github.com/JamesB0010/Year2UniWebGame](https://github.com
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-
-<!--Badges from https://github.com/Ileriayo/markdown-badges-->
-<!--Markdown template from https://github.com/othneildrew/Best-README-Template/blob/master/README.md-->
 
 Here are references to rescources used in the project
 
