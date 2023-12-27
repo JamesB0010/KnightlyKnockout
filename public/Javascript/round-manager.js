@@ -12,15 +12,18 @@ class RoundManager{
     #scoreDamageMap = {
         "0":{
           light: 25,
-          heavy: 50
+          heavy: 50,
+          block: 10
         },
         "1":{
           light: 23,
-          heavy: 45
+          heavy: 45,
+          block: 8,
         },
         "2":{
           light: 20,
-          heavy: 40
+          heavy: 40,
+          block: 6
         }
       };
     constructor(clientId){
@@ -42,6 +45,10 @@ class RoundManager{
 
     GetHeavyDamage(clientId){
         return this.#scoreDamageMap[this.#playerScores.get(clientId).toString()].heavy;
+    }
+
+    GetBlockDamage(clientId){
+        return this.#scoreDamageMap[this.#playerScores.get(clientId).toString()].block;
     }
     
     #SaveStatsToServer(){

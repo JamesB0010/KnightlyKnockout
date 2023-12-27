@@ -117,6 +117,9 @@ gamePromise.then((promise) => {
     });
 
     socket.on("UpdateNetworkedPlayerPos", (info) => {
+      if(game.enemyId == undefined){
+        game.enemyId = info.id;
+      }
       try {
         if (game.players.get(info.id).FindIsDying()) return;
       }
@@ -263,6 +266,12 @@ gamePromise.then((promise) => {
       catch { };
       game.particles.push(new Particle(game.player.position, "yellow"));
       game.scene.add(game.particles[game.particles.length - 1].points);
+      if(game.enemy.GetSWingingAnimName() == "heavyAttack"){
+        let playerDead = game.player.Damage(game.roundManager.GetLightDamage(game.enemyId));
+        if (playerDead) {
+          game.onClientDeath();
+        }
+      }
     })
 
     //whenever the local player moves send it to the server

@@ -143,6 +143,7 @@ const gamePromise = new Promise((res, rej) => {
           this.connectionArray = [];
           //this clients socket id
           this.clientId;
+          this.enemyId;
           this.roundManager;
 
           this.particles = [];
