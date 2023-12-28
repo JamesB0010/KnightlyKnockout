@@ -324,17 +324,20 @@ lobby.on("connection", socket => {
 
   socket.on("joiningGame", gameName => {
     let gameSettings = Games.get(gameName);
-    let numPlayersInGame = gameSettings["playersInGame"].substring(0, 1);
-    if (numPlayersInGame >= 2) {
-      socket.emit("permissionToJoinGameRejected");
+    try{
+      let numPlayersInGame = gameSettings["playersInGame"].substring(0, 1);
+      if (numPlayersInGame >= 2) {
+        socket.emit("permissionToJoinGameRejected");
+      }
+      else {
+        numPlayersInGame++;
+        gameSettings["playersInGame"] = `${numPlayersInGame}/2`;
+        lobbySocketIdMap.set(socket.id, { gameName: gameName, mappedId: "" });
+        lobby.emit("updateLobbyList", Object.fromEntries(Games));
+        socket.emit("permissionToJoinGameGranted");
+      }
     }
-    else {
-      numPlayersInGame++;
-      gameSettings["playersInGame"] = `${numPlayersInGame}/2`;
-      lobbySocketIdMap.set(socket.id, { gameName: gameName, mappedId: "" });
-      lobby.emit("updateLobbyList", Object.fromEntries(Games));
-      socket.emit("permissionToJoinGameGranted");
-    }
+    catch{};
   })
 
   socket.on('disconnect', () => {
