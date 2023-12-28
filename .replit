@@ -1,6 +1,6 @@
 
 hidden = [".config", "package-lock.json"]
-run = 'nodemon server.js'
+run = 'node server.js'
 entrypoint = "index.js"
 modules = ["nodejs-18:v3-20230608-f4cd419"]
 
