@@ -17,7 +17,7 @@ function DisplayGames(gamesMap) {
   let i = 0;
   for (const [key, value] of Object.entries(gamesMap)) {
     serverListDiv.innerHTML += `<div id = ${key} class = 'GameEntryDiv'></div>`;
-    serverListDiv.children[i].innerHTML += `<p>${key}</p>`;
+    serverListDiv.children[i].innerHTML += `<p id ='gameName'>${key}</p>`;
     serverListDiv.children[i].innerHTML += `<p>|</p>`;
     serverListDiv.children[i].innerHTML += `<p>Game Mode: ${value.gameMode}</p>`;
     serverListDiv.children[i].innerHTML += `<p>|</p>`;
@@ -28,7 +28,7 @@ function DisplayGames(gamesMap) {
     
     Array.from(document.getElementsByClassName("joinGameButton")).forEach(button => {
       button.addEventListener("click", ()=>{
-        socket.emit("joiningGame", key);
+        socket.emit("joiningGame", button.parentNode.querySelector("#gameName").innerText);
       })
     });
   }
