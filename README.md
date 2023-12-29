@@ -21,6 +21,8 @@
     <a href="https://replit.com/@JamesBland/Year2UniWebGame">View Demo</a>
     ·
     <a href="https://github.com/JamesB0010/Year2UniWebGame">Git Repo</a>
+    .
+    <a href="https://www.youtube.com/watch?v=CUpFgkzbn28">submission video</a>
   </p>
 </div>
 
@@ -64,10 +66,8 @@ This is the web game i have created as part of my course work at Birmingham City
 As mentioned above it is a networked multiplayer game, where two players fight 1 vs 1, the first to win 3 rounds wins!
 <br>
 The game takes inspiration from games like <a href = "https://www.ubisoft.com/en-gb/game/for-honor">For Honor</a> and <a href = "https://chivalry2.com">Chivalry 2</a>
-
-
 <br>
-<a href="https://www.youtube.com/watch?v=CUpFgkzbn28">Watch the submission video</a>
+You can watch the video for the submission of this module on my youtube channel https://www.youtube.com/watch?v=CUpFgkzbn28
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
