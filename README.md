@@ -22,7 +22,7 @@
     ·
     <a href="https://github.com/JamesB0010/Year2UniWebGame">Git Repo</a>
     .
-    <a href="https://www.youtube.com/watch?v=CUpFgkzbn28">submission video</a>
+    <a href="https://youtu.be/okefL1Rf-ZA">submission video</a>
   </p>
 </div>
 
