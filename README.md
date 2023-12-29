@@ -65,6 +65,10 @@ As mentioned above it is a networked multiplayer game, where two players fight 1
 <br>
 The game takes inspiration from games like <a href = "https://www.ubisoft.com/en-gb/game/for-honor">For Honor</a> and <a href = "https://chivalry2.com">Chivalry 2</a>
 
+
+<br>
+<a href="https://www.youtube.com/watch?v=CUpFgkzbn28">Watch the submission video</a>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
