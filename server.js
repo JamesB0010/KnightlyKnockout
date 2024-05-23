@@ -46,14 +46,14 @@ const upload = multer({
 });
 
 const database = mySql.createConnection({
-  host: "sql8.freemysqlhosting.net",
-  user: "sql8666464",
-  password: "es8gRGJxQN",
-  database: "sql8666464"
-  // host: "localhost",
-  // user:"root",
-  // password: "",
-  // database: "knightlyknockout"
+  //host: "sql8.freemysqlhosting.net",
+  //user: "sql8666464",
+  //password: "es8gRGJxQN",
+  //database: "sql8666464"
+   host: "localhost",
+   user:"root",
+   password: "",
+   database: "knightlyknockout"
 })
 
 //setting the directiories which we will serve to the client (static files)
