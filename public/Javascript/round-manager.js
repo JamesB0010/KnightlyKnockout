@@ -52,9 +52,6 @@ class RoundManager{
     }
     
     #SaveStatsToServer(){
-        fetch(`${serverAddress}/updateScore/${sessionStorage.getItem("username")}/${sessionStorage.getItem("password")}/${sessionStorage.getItem("gamesPlayed")}/${sessionStorage.getItem("gamesWon")}`, {
-            method: "PUT"
-        });
     }
 
     #CheckPlayerHasWon(){

@@ -45,17 +45,6 @@ const upload = multer({
   storage: fileStorageEngine
 });
 
-const database = mySql.createConnection({
-  //host: "sql8.freemysqlhosting.net",
-  //user: "sql8666464",
-  //password: "es8gRGJxQN",
-  //database: "sql8666464"
-   host: "localhost",
-   user:"root",
-   password: "",
-   database: "knightlyknockout"
-})
-
 //setting the directiories which we will serve to the client (static files)
 app.use(express.static("public/HTML"));
 app.use(express.static("public/CSS"));
@@ -84,94 +73,8 @@ app.get("/randomSong", (req, res) => {
   res.send({ song: song.toString('base64') });
 })
 
-//database stuff
-app.get("/getUser/:username/:password", (req, res) => {
-  let password = crypto.createHash('md5').update(req.params.password).digest('hex');
-  let sql = `SELECT * FROM users WHERE username = '${req.params.username}' AND password = '${password}'`;
-  database.query(sql, (err, result) => {
-    if (err) throw err;
-    if (result.length != 0) {
-      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data) {
-        if (err) {
-          throw err;
-        }
-        res.send({ body: "Logged in!", profilePicture: data.toString('base64'), gamesPlayed: result[0].gamesPlayed, gamesWon: result[0].gamesWon });
-
-      })
-    }
-    else {
-      res.send({ error: "no user found" });
-    }
-  })
-});
-
 app.get("/getProfilePicture/:username", (req, res) => {
-  let sql = `SELECT * FROM users WHERE username = '${req.params.username}'`;
-  database.query(sql, (err, result) => {
-    if (err) throw err;
-    if (result.length != 0) {
-      fs.readFile(path.join(__dirname, "images", result[0].profilePicture), function read(err, data) {
-        if (err) {
-          throw err;
-        }
-        res.send({ profilePicture: data.toString('base64') });
-      })
-    }
-    else {
       res.send({ error: "no user found" });
-    }
-  })
-})
-
-//how to hash a string https://stackoverflow.com/questions/5878682/node-js-hash-string
-app.post("/newUser", upload.array('image', 3), (req, res) => {
-  let username = req.body.image[0];
-  let password = req.body.image[1];
-  password = crypto.createHash('md5').update(password).digest('hex');
-  let profilePic = req.files[0];
-  let profilePicFileName = profilePic.filename;
-
-  let userExists = false;
-
-  let check = `SELECT * FROM users WHERE username = '${username}'`;
-
-  database.query(check, (err, result) => {
-    if (result.length > 0) {
-      res.send({ body: "user already exists" });
-      fs.unlink(path.join(__dirname, "images", profilePicFileName), err => {
-        if (err) throw err;
-      })
-      return;
-    }
-
-    if (profilePic.originalname == "default.png") {
-      fs.unlink(path.join(__dirname, "images", profilePicFileName), err => {
-        if (err) throw err;
-      })
-      profilePicFileName = "default.png";
-    }
-
-    let post = { username: username, password: password, profilePicture: profilePicFileName };
-    let sql = "INSERT INTO users SET ?"
-    database.query(sql, post, (err, result) => {
-    })
-    res.send({ body: "user created sucessfully" });
-  })
-
-})
-
-app.put("/updateScore/:username/:password/:gamesPlayed/:gamesWon", (req, res) => {
-  let password = crypto.createHash('md5').update(req.params.password).digest('hex');
-  let sql = `UPDATE users SET gamesPlayed = '${req.params.gamesPlayed}', gamesWon = '${req.params.gamesWon}' WHERE username = '${req.params.username}' AND password = '${password}'`;
-  database.query(sql, (err, result) => {
-    if (err) throw err;
-    if (result.length != 0) {
-      res.send({ body: "user score updated" });
-    }
-    else {
-      res.send({ error: "no user found" });
-    }
-  })
 })
 
 //configure 404 page
@@ -351,4 +254,4 @@ lobby.on("connection", socket => {
 
 
 server.listen(3000); // run server
-//console.log("server running on http://localhost:3000");
+console.log("server running on http://localhost:3000");
