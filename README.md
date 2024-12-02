@@ -18,7 +18,7 @@
     A first person 1 vs 1 sword fighting game
     <br />
     <br />
-    <a href="https://replit.com/@JamesBland/Year2UniWebGame">View Demo</a>
+    <a href="https://knightlyknockout.onrender.com">Play Game!</a>
     ·
     <a href="https://github.com/JamesB0010/Year2UniWebGame">Git Repo</a>
     .
