@@ -350,5 +350,5 @@ lobby.on("connection", socket => {
 
 let PORT = process.env.PORT || 3000;
 
-server.listen(3000); // run server
+server.listen(PORT); // run server
 //console.log("server running on http://localhost:3000");
