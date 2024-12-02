@@ -28,6 +28,8 @@
 
 ![KnighlyKnockoutBanner](https://github.com/JamesB0010/Year2UniWebGame/assets/98528984/abf25dba-aa6c-4216-b98b-dd5593469ebe)
 
+Quick note the game is hosted on the free teir of render so when you open the link if its broken dont worry, after a minute for the server should have started up. Reload the page and it should work 😄
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
