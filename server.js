@@ -15,7 +15,7 @@ const io = require("socket.io")(server, {
   cors: {
     //list trusted sources
     origin: [
-      "https://year2uniwebgame.jamesbland.repl.co", "http://localhost:3000", "http://localhost:5173"]
+      "https://year2uniwebgame.jamesbland.repl.co", "http://localhost:3000", "http://localhost:5173", "https://knightlyknockout.onrender.com"]
   }
 }); // create instance of socketio
 
@@ -348,7 +348,7 @@ lobby.on("connection", socket => {
 
 
 
-
+let PORT = process.env.PORT || 3000;
 
 server.listen(3000); // run server
 //console.log("server running on http://localhost:3000");
