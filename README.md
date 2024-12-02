@@ -20,7 +20,7 @@
     <br />
     <a href="https://replit.com/@JamesBland/Year2UniWebGame">View Demo</a>
     ·
-    <a href="https://github.com/JamesB0010/Year2UniWebGame">Git Repo</a>
+    <a href="https://knightlyknockout.onrender.com">Play Game!</a>
     .
     <a href="https://youtu.be/okefL1Rf-ZA">submission video</a>
   </p>
