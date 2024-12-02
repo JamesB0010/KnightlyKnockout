@@ -11,11 +11,12 @@ const path = require("path");
 const express = require("express"); // use express
 const app = express(); // create instance of express
 const server = require("http").Server(app); // create server
+const PORT = process.env.PORT || 3000;
 const io = require("socket.io")(server, {
   cors: {
     //list trusted sources
     origin: [
-      "https://year2uniwebgame.jamesbland.repl.co", "http://localhost:3000", "http://localhost:5173"]
+      "https://year2uniwebgame.jamesbland.repl.co", "http://localhost:3000", "http://localhost:5173", "https://knightlyknockout.onrender.com"]
   }
 }); // create instance of socketio
 
@@ -253,5 +254,5 @@ lobby.on("connection", socket => {
 
 
 
-server.listen(3000); // run server
-console.log("server running on http://localhost:3000");
+server.listen(PORT); // run server
+console.log("server running");
